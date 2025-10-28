@@ -1,21 +1,131 @@
-## TemplateDevEnv
-_For Kotlin see [TemplateDevEnvKt](https://github.com/CleanroomMC/TemplateDevEnvKt)_
+# 🏷️ Minecraft 1.12.2 Tag System
 
-Template workspace for modding Minecraft 1.12.2. Licensed under MIT, it is made for public use.
+A lightweight and extensible tag system for Minecraft mods, supporting **items**, **fluids**, and **blocks**.
+The system automatically syncs all Ore Dictionary entries.  
+**Please note: Block tags do not support different metadata variants of the same block.**
 
-This template runs on Java 21! Currently utilizies **Gradle 8.12** + **[RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 1.4.1** + **Forge 14.23.5.2847**.
+## 📦 Features
 
-With **coremod and mixin support** that is easy to configure.
+- ✅ Create and manage tags for **items**, **blocks**, and **fluids**
+- ✅ Automatically synchronize ore dictionary entries to the tag system
+- ✅ In-game command to check tags of held items
+- ✅ Fast lookup using key-based storage
 
-### Instructions:
+## 🛠️ Usage
 
-1. Click `use this template` at the top.
-2. Clone the repository that you have created with this template to your local machine.
-3. Make sure IDEA is using Java 21 for Gradle before you sync the project. Verify this by going to IDEA's `Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JVM`.
-4. Open the project folder in IDEA. When prompted, click "Load Gradle Project" as it detects the `build.gradle`, if you weren't prompted, right-click the project's `build.gradle` in IDEA, select `Link Gradle Project`, after completion, hit `Refresh All` in the gradle tab on the right.
-5. Run gradle tasks such as `runClient` and `runServer` in the IDEA gradle tab, or use the auto-imported run configurations like `1. Run Client`.
+### Creating Tags
 
-### Notes:
-- Dependencies script in [gradle/scripts/dependencies.gradle](gradle/scripts/dependencies.gradle), explanations are commented in the file.
-- Publishing script in [gradle/scripts/publishing.gradle](gradle/scripts/publishing.gradle).
-- When writing Mixins on IntelliJ, it is advisable to use latest [MinecraftDev Fork for RetroFuturaGradle](https://github.com/eigenraven/MinecraftDev/releases).
+#### Item Tags
+
+`TagBuilder.item("mymod:my_tag")`  
+`.add(new ItemStack(Items.APPLE))`  
+`.add(new ItemStack(Items.GOLDEN_APPLE));`
+
+#### Fluid Tags
+
+`TagBuilder.fluid("minecraft:lava")`  
+`.add(new FluidStack(FluidRegistry.LAVA, 1000));`
+
+#### Block Tags
+`TagBuilder.block("minecraft:stone_variants")`  
+`.add(Blocks.STONE)`  
+`.add(Blocks.ANDESITE);`
+
+### Querying Tags
+
+#### In-Game Command
+Use `/gettags` while holding an item to see its tags.
+
+#### Code API
+// Get all tags for an item  
+`Set<String> tags = TagHelper.getTags(itemStack);`
+
+// Check if an item has a tag  
+`boolean hasTag = TagHelper.hasTag(itemStack, "minecraft:food");`
+
+// Get all items with a tag  
+`Set<ItemStack> items = TagHelper.getItemStacks("minecraft:food");`
+
+### Ore Dictionary Sync
+
+The system automatically syncs all Ore Dictionary entries to the tag system during the post-initialization phase.
+
+## 🧩 Class Overview
+
+| Class        | Purpose                            |
+|--------------|------------------------------------|
+| `TagBuilder` | Main entry point for creating tags |
+| `TagHelper`  | Utility for querying tags          |
+| `TagManager` | Internal tag storage and lookup    |
+| `Tag`        | Generic tag container              |
+| `TagSync`    | Syncs Ore Dictionary to tags       |
+| `TagCommand` | In-game command for tag            |
+
+---
+
+# 🏷️ Minecraft 1.12.2 标签系统
+
+一个轻量级、可扩展的 Minecraft 模组标签系统，支持**物品**、**流体**和**方块**。
+标签系统会自动同步所有矿物词典条目。  
+**注意：方块标签无法支持同一方块的不同元数据变体。**
+
+## 📦 功能特性
+
+- ✅ 为**物品**、**方块**和**流体**创建和管理标签
+- ✅ 自动同步矿物词典条目到标签系统
+- ✅ 游戏内命令检查手持物品的标签
+- ✅ 使用键值存储实现快速查找
+
+## 🛠️ 使用方法
+
+### 创建标签
+
+#### 物品标签
+
+`TagBuilder.item("mymod:my_tag")`  
+`.add(new ItemStack(Items.APPLE))`  
+`.add(new ItemStack(Items.GOLDEN_APPLE));`
+
+#### 流体标签
+
+`TagBuilder.fluid("minecraft:lava")`  
+`.add(new FluidStack(FluidRegistry.LAVA, 1000));`
+
+#### 方块标签
+
+`TagBuilder.block("minecraft:stone_variants")`  
+`.add(Blocks.STONE)`  
+`.add(Blocks.ANDESITE);`
+
+### 查询标签
+
+#### 游戏内命令
+手持物品时使用 `/gettags` 查看其标签。
+
+#### 代码 API
+// 获取物品的所有标签  
+`Set<String> tags = TagHelper.getTags(itemStack);`
+
+// 检查物品是否有某个标签  
+`boolean hasTag = TagHelper.hasTag(itemStack, "minecraft:food");`
+
+// 获取拥有某个标签的所有物品  
+`Set<ItemStack> items = TagHelper.getItemStacks("minecraft:food");`
+
+### 矿物词典同步
+
+在FMLPostInitializationEvent阶段自动将所有矿物词典条目同步到标签系统。
+
+
+## 🧩 类概览
+
+| 类名           | 用途         |
+|--------------|------------|
+| `TagBuilder` | 创建标签的主要入口  |
+| `TagHelper`  | 查询标签的工具类   |
+| `TagManager` | 内部标签存储和查找  |
+| `Tag`        | 通用标签容器     |
+| `TagSync`    | 将矿物词典同步到标签 |
+| `TagCommand` | 游戏内标签命令    |
+
+---
