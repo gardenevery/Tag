@@ -2,7 +2,6 @@ package com.gardenevery.tag;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -56,25 +55,6 @@ public class TagCommand extends CommandBase {
                 player.sendMessage(new TextComponentString("§aItem tags: " + String.join(", ", itemTags)));
             } else {
                 player.sendMessage(new TextComponentString("§7This item has no tags."));
-            }
-
-            try {
-                var item = heldStack.getItem();
-                var block = Block.getBlockFromItem(item);
-
-                if (block != Block.getBlockById(0)) {
-                    var blockState = block.getDefaultState();
-                    var blockTags = TagHelper.getTags(blockState);
-                    if (!blockTags.isEmpty()) {
-                        player.sendMessage(new TextComponentString("§6Block tags: " + String.join(", ", blockTags)));
-                    } else {
-                        player.sendMessage(new TextComponentString("§7The block corresponding to this item has no tags."));
-                    }
-                } else {
-                    player.sendMessage(new TextComponentString("§7This item has no corresponding block form."));
-                }
-            } catch (Exception e) {
-                player.sendMessage(new TextComponentString("§7This item has no corresponding block form."));
             }
         }
     }

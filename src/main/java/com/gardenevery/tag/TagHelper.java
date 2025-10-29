@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.gardenevery.tag.key.BlockKey;
+import com.gardenevery.tag.key.BlockStateKey;
 import com.gardenevery.tag.key.FluidKey;
 import com.gardenevery.tag.key.ItemKey;
 
@@ -40,16 +41,17 @@ public final class TagHelper {
     /**
      * Get all tags of a block
      */
-    public static Set<String> getTags(IBlockState blockState) {
-        return getTags(blockState.getBlock());
+    public static Set<String> getTags(Block block) {
+        var key = BlockKey.from(block);
+        return MANAGER.blockTags.getTags(key);
     }
 
     /**
-     * Get all tags of a block
+     * Get all tags of a IBlockState
      */
-    public static Set<String> getTags(Block block) {
-        var key = BlockKey.from(block);
-        return key != null ? MANAGER.blockTags.getTags(key) : Collections.emptySet();
+    public static Set<String> getTags(IBlockState blockState) {
+        var key = BlockStateKey.from(blockState);
+        return MANAGER.blockStateTags.getTags(key);
     }
 
     /**
@@ -71,16 +73,17 @@ public final class TagHelper {
     /**
      * Check if a block has a specific tag
      */
-    public static boolean hasTag(IBlockState blockState, String tagName) {
-        return hasTag(blockState.getBlock(), tagName);
+    public static boolean hasTag(Block block, String tagName) {
+        var key = BlockKey.from(block);
+        return MANAGER.blockTags.hasTag(key, tagName);
     }
 
     /**
-     * Check if a block has a specific tag
+     * Check if a IBlockState has a specific tag
      */
-    public static boolean hasTag(Block block, String tagName) {
-        var key = BlockKey.from(block);
-        return key != null && MANAGER.blockTags.hasTag(key, tagName);
+    public static boolean hasTag(IBlockState blockState, String tagName) {
+        var key = BlockStateKey.from(blockState);
+        return MANAGER.blockStateTags.hasTag(key, tagName);
     }
 
     /**
@@ -118,25 +121,9 @@ public final class TagHelper {
     /**
      * Check if a block has any of the specified tags
      */
-    public static boolean hasTags(IBlockState blockState, String... tagNames) {
-        var key = BlockKey.from(blockState.getBlock());
-        return MANAGER.blockTags.hasAnyTag(key, tagNames);
-    }
-
-    /**
-     * Check if a block has any of the specified tags
-     */
-    public static boolean hasTags(IBlockState blockState, Collection<String> tagNames) {
-        var key = BlockKey.from(blockState.getBlock());
-        return MANAGER.blockTags.hasAnyTag(key, tagNames);
-    }
-
-    /**
-     * Check if a block has any of the specified tags
-     */
     public static boolean hasTags(Block block, String... tagNames) {
         var key = BlockKey.from(block);
-        return key != null && MANAGER.blockTags.hasAnyTag(key, tagNames);
+        return MANAGER.blockTags.hasAnyTag(key, tagNames);
     }
 
     /**
@@ -144,7 +131,23 @@ public final class TagHelper {
      */
     public static boolean hasTags(Block block, Collection<String> tagNames) {
         var key = BlockKey.from(block);
-        return key != null && MANAGER.blockTags.hasAnyTag(key, tagNames);
+        return MANAGER.blockTags.hasAnyTag(key, tagNames);
+    }
+
+    /**
+     * Check if a IBlockState has any of the specified tags
+     */
+    public static boolean hasTags(IBlockState blockState, String... tagNames) {
+        var key = BlockStateKey.from(blockState);
+        return MANAGER.blockStateTags.hasAnyTag(key, tagNames);
+    }
+
+    /**
+     * Check if a IBlockState has any of the specified tags
+     */
+    public static boolean hasTags(IBlockState blockState, Collection<String> tagNames) {
+        var key = BlockStateKey.from(blockState);
+        return MANAGER.blockStateTags.hasAnyTag(key, tagNames);
     }
 
     /**

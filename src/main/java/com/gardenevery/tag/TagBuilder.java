@@ -1,6 +1,7 @@
 package com.gardenevery.tag;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -8,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.gardenevery.tag.key.BlockKey;
+import com.gardenevery.tag.key.BlockStateKey;
 import com.gardenevery.tag.key.FluidKey;
 import com.gardenevery.tag.key.ItemKey;
 
@@ -53,6 +55,15 @@ public abstract class TagBuilder<T> {
      */
     public static BlockTagBuilder block(String tagName) {
         return new BlockTagBuilder(tagName);
+    }
+
+    /**
+     * Create a IBlockState tag
+     * @param tagName Tag name (only letters, :, _, / allowed)
+     * Example: TagBuilder.blockState("minecraft:stone").add(IBlockState).add(IBlockState);
+     */
+    public static BlockStateTagBuilder blockState(String tagName) {
+        return new BlockStateTagBuilder(tagName);
     }
 
     private static boolean validateTagName(String name) {
@@ -121,6 +132,25 @@ public abstract class TagBuilder<T> {
             var key = BlockKey.from(block);
             if (key != null) {
                 tagManager.blockTags.createTag(tagName, key);
+            }
+            return this;
+        }
+    }
+
+    public static class BlockStateTagBuilder extends TagBuilder<IBlockState> {
+
+        BlockStateTagBuilder(String tagName) {
+            super(tagName);
+        }
+
+        @Override
+        public BlockStateTagBuilder add(IBlockState state) {
+            if (!isValid) {
+                return this;
+            }
+            var key = BlockStateKey.from(state);
+            if (key != null) {
+                tagManager.blockStateTags.createTag(tagName, key);
             }
             return this;
         }
