@@ -185,28 +185,28 @@ public final class TagHelper {
     /**
      * Get all registered tag names for items
      */
-    public static Set<String> getAllItemTags() {
+    public static Set<String> getItemTagNames() {
         return MANAGER.itemTags.getAllTagNames();
     }
 
     /**
      * Get all registered tag names for fluids
      */
-    public static Set<String> getAllFluidTags() {
+    public static Set<String> getFluidTagNames() {
         return MANAGER.fluidTags.getAllTagNames();
     }
 
     /**
      * Get all registered tag names for blocks
      */
-    public static Set<String> getAllBlockTags() {
+    public static Set<String> getBlockTagNames() {
         return MANAGER.blockTags.getAllTagNames();
     }
 
     /**
      * Get all registered tag names for block states
      */
-    public static Set<String> getAllBlockStateTags() {
+    public static Set<String> getBlockStateTagNames() {
         return MANAGER.blockStateTags.getAllTagNames();
     }
 
