@@ -64,7 +64,10 @@ public final class TagHelper {
     /**
      * Check if an item has a specific tag
      */
-    public static boolean hasTags(ItemStack stack, String tag) {
+    public static boolean hasTag(ItemStack stack, String tag) {
+        if (tag == null || tag.isEmpty()) {
+            return false;
+        }
         var key = ItemKey.from(stack);
         return key != null && MANAGER.itemTags.hasTag(key, tag);
     }
@@ -72,7 +75,10 @@ public final class TagHelper {
     /**
      * Check if a fluid has a specific tag
      */
-    public static boolean hasTags(FluidStack stack, String tag) {
+    public static boolean hasTag(FluidStack stack, String tag) {
+        if (tag == null || tag.isEmpty()) {
+            return false;
+        }
         var key = FluidKey.from(stack);
         return key != null && MANAGER.fluidTags.hasTag(key, tag);
     }
@@ -80,7 +86,10 @@ public final class TagHelper {
     /**
      * Check if a block has a specific tag
      */
-    public static boolean hasTags(Block block, String tag) {
+    public static boolean hasTag(Block block, String tag) {
+        if (tag == null || tag.isEmpty()) {
+            return false;
+        }
         var key = BlockKey.from(block);
         return MANAGER.blockTags.hasTag(key, tag);
     }
@@ -88,7 +97,10 @@ public final class TagHelper {
     /**
      * Check if a IBlockState has a specific tag
      */
-    public static boolean hasTags(IBlockState blockState, String tag) {
+    public static boolean hasTag(IBlockState blockState, String tag) {
+        if (tag == null || tag.isEmpty()) {
+            return false;
+        }
         var key = BlockStateKey.from(blockState);
         return MANAGER.blockStateTags.hasTag(key, tag);
     }
@@ -97,6 +109,9 @@ public final class TagHelper {
      * Check if an item has any of the specified tags
      */
     public static boolean hasAnyTags(ItemStack stack, String... tags) {
+        if (tags == null || tags.length == 0) {
+            return false;
+        }
         var key = ItemKey.from(stack);
         return key != null && MANAGER.itemTags.hasAnyTag(key, tags);
     }
@@ -105,6 +120,9 @@ public final class TagHelper {
      * Check if an item has any of the specified tags
      */
     public static boolean hasAnyTags(ItemStack stack, Collection<String> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return false;
+        }
         var key = ItemKey.from(stack);
         return key != null && MANAGER.itemTags.hasAnyTag(key, tags);
     }
@@ -113,6 +131,9 @@ public final class TagHelper {
      * Check if a fluid has any of the specified tags
      */
     public static boolean hasAnyTags(FluidStack stack, String... tags) {
+        if (tags == null || tags.length == 0) {
+            return false;
+        }
         var key = FluidKey.from(stack);
         return key != null && MANAGER.fluidTags.hasAnyTag(key, tags);
     }
@@ -121,6 +142,9 @@ public final class TagHelper {
      * Check if a fluid has any of the specified tags
      */
     public static boolean hasAnyTags(FluidStack stack, Collection<String> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return false;
+        }
         var key = FluidKey.from(stack);
         return key != null && MANAGER.fluidTags.hasAnyTag(key, tags);
     }
@@ -129,6 +153,9 @@ public final class TagHelper {
      * Check if a block has any of the specified tags
      */
     public static boolean hasAnyTags(Block block, String... tags) {
+        if (tags == null || tags.length == 0) {
+            return false;
+        }
         var key = BlockKey.from(block);
         return MANAGER.blockTags.hasAnyTag(key, tags);
     }
@@ -137,6 +164,9 @@ public final class TagHelper {
      * Check if a block has any of the specified tags
      */
     public static boolean hasAnyTags(Block block, Collection<String> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return false;
+        }
         var key = BlockKey.from(block);
         return MANAGER.blockTags.hasAnyTag(key, tags);
     }
@@ -145,6 +175,9 @@ public final class TagHelper {
      * Check if a IBlockState has any of the specified tags
      */
     public static boolean hasAnyTags(IBlockState blockState, String... tags) {
+        if (tags == null || tags.length == 0) {
+            return false;
+        }
         var key = BlockStateKey.from(blockState);
         return MANAGER.blockStateTags.hasAnyTag(key, tags);
     }
@@ -153,6 +186,9 @@ public final class TagHelper {
      * Check if a IBlockState has any of the specified tags
      */
     public static boolean hasAnyTags(IBlockState blockState, Collection<String> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return false;
+        }
         var key = BlockStateKey.from(blockState);
         return MANAGER.blockStateTags.hasAnyTag(key, tags);
     }
