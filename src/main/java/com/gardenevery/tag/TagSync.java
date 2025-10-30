@@ -25,7 +25,9 @@ final class TagSync {
         LOGGER.info("Found {} ore dictionary categories", oreNames.length);
 
         for (var oreName : oreNames) {
-            if (oreName == null || oreName.isEmpty()) continue;
+            if (oreName == null || oreName.isEmpty()) {
+                continue;
+            }
 
             List<ItemStack> ores = OreDictionary.getOres(oreName);
 

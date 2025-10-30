@@ -59,4 +59,12 @@ public class Tag<T extends Key> {
         tagToKeys.computeIfAbsent(tag, k -> new ObjectOpenHashSet<>()).add(key);
         keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>()).add(tag);
     }
+
+    Set<String> getAllTagNames() {
+        return Collections.unmodifiableSet(tagToKeys.keySet());
+    }
+
+    boolean doesTagNameExist(String tagName) {
+        return tagToKeys.containsKey(tagName);
+    }
 }

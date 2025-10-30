@@ -33,7 +33,7 @@ public abstract class TagBuilder<T> {
     /**
      * Create a item tag
      * @param tagName Tag name (only letters, :, _, / allowed)
-     * Example: TagBuilder.item("minecraft:stones").add(ItemStack).add(ItemStack);
+     * Example: TagBuilder.item("name").add(ItemStack).add(ItemStack);
      */
     public static ItemTagBuilder item(String tagName) {
         return new ItemTagBuilder(tagName);
@@ -42,7 +42,7 @@ public abstract class TagBuilder<T> {
     /**
      * Create a fluid tag
      * @param tagName Tag name (only letters, :, _, / allowed)
-     * Example: TagBuilder.fluid("forge:lava").add(FluidStack).add(FluidStack);
+     * Example: TagBuilder.fluid("name").add(FluidStack).add(FluidStack);
      */
     public static FluidTagBuilder fluid(String tagName) {
         return new FluidTagBuilder(tagName);
@@ -51,7 +51,7 @@ public abstract class TagBuilder<T> {
     /**
      * Create a block tag
      * @param tagName Tag name (only letters, :, _, / allowed)
-     * Example: TagBuilder.block("minecraft:needs_stone_tool").add(Block).add(Block);
+     * Example: TagBuilder.block("name").add(Block).add(Block);
      */
     public static BlockTagBuilder block(String tagName) {
         return new BlockTagBuilder(tagName);
@@ -60,7 +60,7 @@ public abstract class TagBuilder<T> {
     /**
      * Create a IBlockState tag
      * @param tagName Tag name (only letters, :, _, / allowed)
-     * Example: TagBuilder.blockState("minecraft:stone").add(IBlockState).add(IBlockState);
+     * Example: TagBuilder.blockState("name").add(IBlockState).add(IBlockState);
      */
     public static BlockStateTagBuilder blockState(String tagName) {
         return new BlockStateTagBuilder(tagName);
@@ -73,7 +73,7 @@ public abstract class TagBuilder<T> {
         }
 
         if (!name.matches("[a-zA-Z:_/]+")) {
-            LOGGER.warn("Invalid tag name '{}'. Only letters, :, _, / are allowed. Example: 'minecraft:stones'", name);
+            LOGGER.warn("Invalid tag name '{}'. Only letters, :, _, / are allowed.", name);
             return false;
         }
 

@@ -181,4 +181,85 @@ public final class TagHelper {
         }
         return Collections.unmodifiableSet(result);
     }
+
+    /**
+     * Get all registered tag names for items
+     */
+    public static Set<String> getItemTagNames() {
+        return MANAGER.itemTags.getAllTagNames();
+    }
+
+    /**
+     * Get all registered tag names for fluids
+     */
+    public static Set<String> getFluidTagNames() {
+        return MANAGER.fluidTags.getAllTagNames();
+    }
+
+    /**
+     * Get all registered tag names for blocks
+     */
+    public static Set<String> getBlockTagNames() {
+        return MANAGER.blockTags.getAllTagNames();
+    }
+
+    /**
+     * Get all registered tag names for block states
+     */
+    public static Set<String> getBlockStateTagNames() {
+        return MANAGER.blockStateTags.getAllTagNames();
+    }
+
+    /**
+     * Check if a tag name exists specifically for items
+     */
+    public static boolean doesItemTagNameExist(String tagName) {
+        if (tagName == null || tagName.isEmpty()) {
+            return false;
+        }
+        return MANAGER.itemTags.doesTagNameExist(tagName);
+    }
+
+    /**
+     * Check if a tag name exists specifically for fluids
+     */
+    public static boolean doesFluidTagNameExist(String tagName) {
+        if (tagName == null || tagName.isEmpty()) {
+            return false;
+        }
+        return MANAGER.fluidTags.doesTagNameExist(tagName);
+    }
+
+    /**
+     * Check if a tag name exists specifically for blocks
+     */
+    public static boolean doesBlockTagNameExist(String tagName) {
+        if (tagName == null || tagName.isEmpty()) {
+            return false;
+        }
+        return MANAGER.blockTags.doesTagNameExist(tagName);
+    }
+
+    /**
+     * Check if a tag name exists specifically for block states
+     */
+    public static boolean doesBlockStateTagNameExist(String tagName) {
+        if (tagName == null || tagName.isEmpty()) {
+            return false;
+        }
+        return MANAGER.blockStateTags.doesTagNameExist(tagName);
+    }
+
+    /**
+     * Check if a tag name exists in any of the tag types
+     */
+    public static boolean doesTagNameExist(String tagName) {
+        if (tagName == null || tagName.isEmpty()) {
+            return false;
+        }
+        return MANAGER.itemTags.doesTagNameExist(tagName) ||
+                MANAGER.fluidTags.doesTagNameExist(tagName) ||
+                MANAGER.blockTags.doesTagNameExist(tagName) ||
+                MANAGER.blockStateTags.doesTagNameExist(tagName);
+    }
 }
