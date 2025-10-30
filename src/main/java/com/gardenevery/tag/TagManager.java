@@ -12,7 +12,7 @@ public final class TagManager {
     private TagManager() {
     }
 
-    static TagManager getInstance() {
+    static TagManager instance() {
         return INSTANCE;
     }
 

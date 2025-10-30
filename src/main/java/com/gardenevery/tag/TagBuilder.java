@@ -25,7 +25,7 @@ public abstract class TagBuilder<T> {
     protected TagBuilder(String tagName) {
         this.isValid = validateTagName(tagName);
         this.tagName = this.isValid ? tagName : null;
-        this.tagManager = TagManager.getInstance();
+        this.tagManager = TagManager.instance();
     }
 
     public abstract TagBuilder<T> add(T element);

@@ -20,7 +20,7 @@ public final class TagHelper {
     private TagHelper() {
     }
 
-    private static final TagManager MANAGER = TagManager.getInstance();
+    private static final TagManager MANAGER = TagManager.instance();
 
     /**
      * Get all tags of an item
