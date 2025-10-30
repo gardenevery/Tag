@@ -158,60 +158,35 @@ public final class TagHelper {
     }
 
     /**
-     * Get all entries under a specific tag for the given type
+     * Get all items under a specific tag
      */
-    @SuppressWarnings("unchecked")
-    public static <T> Set<T> getEntries(String tag, TagType type) {
-        if (tag == null || tag.isEmpty()) {
+    public static Set<ItemStack> getItemStacks(String tagName) {
+        var itemKeys = MANAGER.itemTags.getKeys(tagName);
+        if (itemKeys.isEmpty()) {
             return Collections.emptySet();
         }
 
-        return switch (type) {
-            case ITEM -> {
-                var itemKeys = MANAGER.itemTags.getKeys(tag);
-                if (itemKeys.isEmpty()) {
-                    yield (Set<T>) Collections.emptySet();
-                }
-                Set<ItemStack> result = new HashSet<>();
-                for (var key : itemKeys) {
-                    result.add(key.stack().copy());
-                }
-                yield (Set<T>) Collections.unmodifiableSet(result);
-            }
-            case FLUID -> {
-                var fluidKeys = MANAGER.fluidTags.getKeys(tag);
-                if (fluidKeys.isEmpty()) {
-                    yield (Set<T>) Collections.emptySet();
-                }
-                Set<FluidStack> result = new HashSet<>();
-                for (var key : fluidKeys) {
-                    result.add(key.stack().copy());
-                }
-                yield (Set<T>) Collections.unmodifiableSet(result);
-            }
-            case BLOCK -> {
-                var blockKeys = MANAGER.blockTags.getKeys(tag);
-                if (blockKeys.isEmpty()) {
-                    yield (Set<T>) Collections.emptySet();
-                }
-                Set<Block> result = new HashSet<>();
-                for (var key : blockKeys) {
-                    result.add(key.block());
-                }
-                yield (Set<T>) Collections.unmodifiableSet(result);
-            }
-            case BLOCK_STATE -> {
-                var blockStateKeys = MANAGER.blockStateTags.getKeys(tag);
-                if (blockStateKeys.isEmpty()) {
-                    yield (Set<T>) Collections.emptySet();
-                }
-                Set<IBlockState> result = new HashSet<>();
-                for (var key : blockStateKeys) {
-                    result.add(key.blockState());
-                }
-                yield (Set<T>) Collections.unmodifiableSet(result);
-            }
-        };
+        Set<ItemStack> result = new HashSet<>();
+        for (var key : itemKeys) {
+            result.add(key.stack().copy());
+        }
+        return Collections.unmodifiableSet(result);
+    }
+
+    /**
+     * Get all fluids under a specific tag
+     */
+    public static Set<FluidStack> getFluidStacks(String tagName) {
+        var fluidKeys = MANAGER.fluidTags.getKeys(tagName);
+        if (fluidKeys.isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        Set<FluidStack> result = new HashSet<>();
+        for (var key : fluidKeys) {
+            result.add(key.stack().copy());
+        }
+        return Collections.unmodifiableSet(result);
     }
 
     /**
