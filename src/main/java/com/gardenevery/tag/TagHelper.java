@@ -25,7 +25,7 @@ public final class TagHelper {
     /**
      * Get all tags of an item
      */
-    public static Set<String> getTags(ItemStack stack) {
+    public static Set<String> tags(ItemStack stack) {
         var key = ItemKey.from(stack);
         return key != null ? MANAGER.itemTags.getTags(key) : Collections.emptySet();
     }
@@ -33,7 +33,7 @@ public final class TagHelper {
     /**
      * Get all tags of a fluid
      */
-    public static Set<String> getTags(FluidStack stack) {
+    public static Set<String> tags(FluidStack stack) {
         var key = FluidKey.from(stack);
         return key != null ? MANAGER.fluidTags.getTags(key) : Collections.emptySet();
     }
@@ -41,7 +41,7 @@ public final class TagHelper {
     /**
      * Get all tags of a block
      */
-    public static Set<String> getTags(Block block) {
+    public static Set<String> tags(Block block) {
         var key = BlockKey.from(block);
         return MANAGER.blockTags.getTags(key);
     }
@@ -49,7 +49,7 @@ public final class TagHelper {
     /**
      * Get all tags of a IBlockState
      */
-    public static Set<String> getTags(IBlockState blockState) {
+    public static Set<String> tags(IBlockState blockState) {
         var key = BlockStateKey.from(blockState);
         return MANAGER.blockStateTags.getTags(key);
     }
@@ -57,104 +57,104 @@ public final class TagHelper {
     /**
      * Check if an item has a specific tag
      */
-    public static boolean hasTag(ItemStack stack, String tagName) {
+    public static boolean has(ItemStack stack, String tag) {
         var key = ItemKey.from(stack);
-        return key != null && MANAGER.itemTags.hasTag(key, tagName);
+        return key != null && MANAGER.itemTags.hasTag(key, tag);
     }
 
     /**
      * Check if a fluid has a specific tag
      */
-    public static boolean hasTag(FluidStack stack, String tagName) {
+    public static boolean has(FluidStack stack, String tag) {
         var key = FluidKey.from(stack);
-        return key != null && MANAGER.fluidTags.hasTag(key, tagName);
+        return key != null && MANAGER.fluidTags.hasTag(key, tag);
     }
 
     /**
      * Check if a block has a specific tag
      */
-    public static boolean hasTag(Block block, String tagName) {
+    public static boolean has(Block block, String tag) {
         var key = BlockKey.from(block);
-        return MANAGER.blockTags.hasTag(key, tagName);
+        return MANAGER.blockTags.hasTag(key, tag);
     }
 
     /**
      * Check if a IBlockState has a specific tag
      */
-    public static boolean hasTag(IBlockState blockState, String tagName) {
+    public static boolean has(IBlockState blockState, String tag) {
         var key = BlockStateKey.from(blockState);
-        return MANAGER.blockStateTags.hasTag(key, tagName);
+        return MANAGER.blockStateTags.hasTag(key, tag);
     }
 
     /**
      * Check if an item has any of the specified tags
      */
-    public static boolean hasTags(ItemStack stack, String... tagNames) {
+    public static boolean hasAny(ItemStack stack, String... tags) {
         var key = ItemKey.from(stack);
-        return key != null && MANAGER.itemTags.hasAnyTag(key, tagNames);
+        return key != null && MANAGER.itemTags.hasAnyTag(key, tags);
     }
 
     /**
      * Check if an item has any of the specified tags
      */
-    public static boolean hasTags(ItemStack stack, Collection<String> tagNames) {
+    public static boolean hasAny(ItemStack stack, Collection<String> tags) {
         var key = ItemKey.from(stack);
-        return key != null && MANAGER.itemTags.hasAnyTag(key, tagNames);
+        return key != null && MANAGER.itemTags.hasAnyTag(key, tags);
     }
 
     /**
      * Check if a fluid has any of the specified tags
      */
-    public static boolean hasTags(FluidStack stack, String... tagNames) {
+    public static boolean hasAny(FluidStack stack, String... tags) {
         var key = FluidKey.from(stack);
-        return key != null && MANAGER.fluidTags.hasAnyTag(key, tagNames);
+        return key != null && MANAGER.fluidTags.hasAnyTag(key, tags);
     }
 
     /**
      * Check if a fluid has any of the specified tags
      */
-    public static boolean hasTags(FluidStack stack, Collection<String> tagNames) {
+    public static boolean hasAny(FluidStack stack, Collection<String> tags) {
         var key = FluidKey.from(stack);
-        return key != null && MANAGER.fluidTags.hasAnyTag(key, tagNames);
+        return key != null && MANAGER.fluidTags.hasAnyTag(key, tags);
     }
 
     /**
      * Check if a block has any of the specified tags
      */
-    public static boolean hasTags(Block block, String... tagNames) {
+    public static boolean hasAny(Block block, String... tags) {
         var key = BlockKey.from(block);
-        return MANAGER.blockTags.hasAnyTag(key, tagNames);
+        return MANAGER.blockTags.hasAnyTag(key, tags);
     }
 
     /**
      * Check if a block has any of the specified tags
      */
-    public static boolean hasTags(Block block, Collection<String> tagNames) {
+    public static boolean hasAny(Block block, Collection<String> tags) {
         var key = BlockKey.from(block);
-        return MANAGER.blockTags.hasAnyTag(key, tagNames);
+        return MANAGER.blockTags.hasAnyTag(key, tags);
     }
 
     /**
      * Check if a IBlockState has any of the specified tags
      */
-    public static boolean hasTags(IBlockState blockState, String... tagNames) {
+    public static boolean hasAny(IBlockState blockState, String... tags) {
         var key = BlockStateKey.from(blockState);
-        return MANAGER.blockStateTags.hasAnyTag(key, tagNames);
+        return MANAGER.blockStateTags.hasAnyTag(key, tags);
     }
 
     /**
      * Check if a IBlockState has any of the specified tags
      */
-    public static boolean hasTags(IBlockState blockState, Collection<String> tagNames) {
+    public static boolean hasAny(IBlockState blockState, Collection<String> tags) {
         var key = BlockStateKey.from(blockState);
-        return MANAGER.blockStateTags.hasAnyTag(key, tagNames);
+        return MANAGER.blockStateTags.hasAnyTag(key, tags);
     }
 
     /**
      * Get all items under a specific tag
      */
-    public static Set<ItemStack> getItemStacks(String tagName) {
-        var itemKeys = MANAGER.itemTags.getKeys(tagName);
+    public static Set<ItemStack> itemStacks(String tag) {
+        var itemKeys = MANAGER.itemTags.getKeys(tag);
         if (itemKeys.isEmpty()) {
             return Collections.emptySet();
         }
@@ -169,8 +169,8 @@ public final class TagHelper {
     /**
      * Get all fluids under a specific tag
      */
-    public static Set<FluidStack> getFluidStacks(String tagName) {
-        var fluidKeys = MANAGER.fluidTags.getKeys(tagName);
+    public static Set<FluidStack> fluidStacks(String tag) {
+        var fluidKeys = MANAGER.fluidTags.getKeys(tag);
         if (fluidKeys.isEmpty()) {
             return Collections.emptySet();
         }
@@ -185,57 +185,72 @@ public final class TagHelper {
     /**
      * Get all registered tag names for items
      */
-    public static Set<String> getItemTagNames() {
+    public static Set<String> itemTags() {
         return MANAGER.itemTags.getAllTagNames();
     }
 
     /**
      * Get all registered tag names for fluids
      */
-    public static Set<String> getFluidTagNames() {
+    public static Set<String> fluidTags() {
         return MANAGER.fluidTags.getAllTagNames();
     }
 
     /**
      * Get all registered tag names for blocks
      */
-    public static Set<String> getBlockTagNames() {
+    public static Set<String> blockTags() {
         return MANAGER.blockTags.getAllTagNames();
     }
 
     /**
      * Get all registered tag names for block states
      */
-    public static Set<String> getBlockStateTagNames() {
+    public static Set<String> blockStateTags() {
         return MANAGER.blockStateTags.getAllTagNames();
     }
 
-    public static boolean itemTagExists(String name) {
-        return isValid(name) && MANAGER.itemTags.doesTagNameExist(name);
+    /**
+     * Check if an item tag exists
+     */
+    public static boolean hasItemTag(String tag) {
+        return isValid(tag) && MANAGER.itemTags.doesTagNameExist(tag);
     }
 
-    public static boolean fluidTagExists(String name) {
-        return isValid(name) && MANAGER.fluidTags.doesTagNameExist(name);
+    /**
+     * Check if a fluid tag exists
+     */
+    public static boolean hasFluidTag(String tag) {
+        return isValid(tag) && MANAGER.fluidTags.doesTagNameExist(tag);
     }
 
-    public static boolean blockTagExists(String name) {
-        return isValid(name) && MANAGER.blockTags.doesTagNameExist(name);
+    /**
+     * Check if a block tag exists
+     */
+    public static boolean hasBlockTag(String tag) {
+        return isValid(tag) && MANAGER.blockTags.doesTagNameExist(tag);
     }
 
-    public static boolean blockStateTagExists(String name) {
-        return isValid(name) && MANAGER.blockStateTags.doesTagNameExist(name);
+    /**
+     * Check if a blockState tag exists
+     */
+    public static boolean hasBlockStateTag(String tag) {
+        return isValid(tag) && MANAGER.blockStateTags.doesTagNameExist(tag);
     }
 
-    public static boolean anyTagExists(String name) {
-        return isValid(name) && (
-                MANAGER.itemTags.doesTagNameExist(name) ||
-                        MANAGER.fluidTags.doesTagNameExist(name) ||
-                        MANAGER.blockTags.doesTagNameExist(name) ||
-                        MANAGER.blockStateTags.doesTagNameExist(name)
+    /**
+     * Check if a tag exists
+     */
+    public static boolean exists(String tag) {
+        return isValid(tag) && (
+                MANAGER.itemTags.doesTagNameExist(tag) ||
+                        MANAGER.fluidTags.doesTagNameExist(tag) ||
+                        MANAGER.blockTags.doesTagNameExist(tag) ||
+                        MANAGER.blockStateTags.doesTagNameExist(tag)
         );
     }
 
-    private static boolean isValid(String name) {
-        return name != null && !name.isEmpty();
+    private static boolean isValid(String tag) {
+        return tag != null && !tag.isEmpty();
     }
 }

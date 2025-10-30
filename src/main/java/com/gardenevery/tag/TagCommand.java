@@ -39,7 +39,7 @@ public class TagCommand extends CommandBase {
                 if (fluidHandler != null) {
                     var fluid = fluidHandler.drain(1000, false);
                     if (fluid != null) {
-                        var fluidTags = TagHelper.getTags(fluid);
+                        var fluidTags = TagHelper.tags(fluid);
                         if (!fluidTags.isEmpty()) {
                             player.sendMessage(new TextComponentString("§aFluid tags: " + String.join(", ", fluidTags)));
                         } else {
@@ -50,7 +50,7 @@ public class TagCommand extends CommandBase {
                 }
             }
 
-            var itemTags = TagHelper.getTags(heldStack);
+            var itemTags = TagHelper.tags(heldStack);
             if (!itemTags.isEmpty()) {
                 player.sendMessage(new TextComponentString("§aItem tags: " + String.join(", ", itemTags)));
             } else {
