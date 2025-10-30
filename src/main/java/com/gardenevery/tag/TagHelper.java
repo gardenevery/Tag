@@ -185,81 +185,57 @@ public final class TagHelper {
     /**
      * Get all registered tag names for items
      */
-    public static Set<String> getItemTagNames() {
+    public static Set<String> getAllItemTags() {
         return MANAGER.itemTags.getAllTagNames();
     }
 
     /**
      * Get all registered tag names for fluids
      */
-    public static Set<String> getFluidTagNames() {
+    public static Set<String> getAllFluidTags() {
         return MANAGER.fluidTags.getAllTagNames();
     }
 
     /**
      * Get all registered tag names for blocks
      */
-    public static Set<String> getBlockTagNames() {
+    public static Set<String> getAllBlockTags() {
         return MANAGER.blockTags.getAllTagNames();
     }
 
     /**
      * Get all registered tag names for block states
      */
-    public static Set<String> getBlockStateTagNames() {
+    public static Set<String> getAllBlockStateTags() {
         return MANAGER.blockStateTags.getAllTagNames();
     }
 
-    /**
-     * Check if a tag name exists specifically for items
-     */
-    public static boolean doesItemTagNameExist(String tagName) {
-        if (tagName == null || tagName.isEmpty()) {
-            return false;
-        }
-        return MANAGER.itemTags.doesTagNameExist(tagName);
+    public static boolean itemTagExists(String name) {
+        return isValid(name) && MANAGER.itemTags.doesTagNameExist(name);
     }
 
-    /**
-     * Check if a tag name exists specifically for fluids
-     */
-    public static boolean doesFluidTagNameExist(String tagName) {
-        if (tagName == null || tagName.isEmpty()) {
-            return false;
-        }
-        return MANAGER.fluidTags.doesTagNameExist(tagName);
+    public static boolean fluidTagExists(String name) {
+        return isValid(name) && MANAGER.fluidTags.doesTagNameExist(name);
     }
 
-    /**
-     * Check if a tag name exists specifically for blocks
-     */
-    public static boolean doesBlockTagNameExist(String tagName) {
-        if (tagName == null || tagName.isEmpty()) {
-            return false;
-        }
-        return MANAGER.blockTags.doesTagNameExist(tagName);
+    public static boolean blockTagExists(String name) {
+        return isValid(name) && MANAGER.blockTags.doesTagNameExist(name);
     }
 
-    /**
-     * Check if a tag name exists specifically for block states
-     */
-    public static boolean doesBlockStateTagNameExist(String tagName) {
-        if (tagName == null || tagName.isEmpty()) {
-            return false;
-        }
-        return MANAGER.blockStateTags.doesTagNameExist(tagName);
+    public static boolean blockStateTagExists(String name) {
+        return isValid(name) && MANAGER.blockStateTags.doesTagNameExist(name);
     }
 
-    /**
-     * Check if a tag name exists in any of the tag types
-     */
-    public static boolean doesTagNameExist(String tagName) {
-        if (tagName == null || tagName.isEmpty()) {
-            return false;
-        }
-        return MANAGER.itemTags.doesTagNameExist(tagName) ||
-                MANAGER.fluidTags.doesTagNameExist(tagName) ||
-                MANAGER.blockTags.doesTagNameExist(tagName) ||
-                MANAGER.blockStateTags.doesTagNameExist(tagName);
+    public static boolean anyTagExists(String name) {
+        return isValid(name) && (
+                MANAGER.itemTags.doesTagNameExist(name) ||
+                        MANAGER.fluidTags.doesTagNameExist(name) ||
+                        MANAGER.blockTags.doesTagNameExist(name) ||
+                        MANAGER.blockStateTags.doesTagNameExist(name)
+        );
+    }
+
+    private static boolean isValid(String name) {
+        return name != null && !name.isEmpty();
     }
 }
