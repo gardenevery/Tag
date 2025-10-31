@@ -281,7 +281,7 @@ public final class TagHelper {
     /**
      * Gets the total number of tags across all types
      */
-    public static int getTotalTagCount() {
+    public static int getTagCount() {
         return TagManager.ITEM_TAGS.getTagCount() +
                 TagManager.FLUID_TAGS.getTagCount() +
                 TagManager.BLOCK_TAGS.getTagCount();
