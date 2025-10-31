@@ -71,16 +71,7 @@ public final class Tag<T extends Key> {
         return tagToKeys.containsKey(tagName);
     }
 
-    public <E> Set<E> getKeyCopies(String tagName, java.util.function.Function<T, E> copyFunction) {
-        var keys = tagToKeys.get(tagName);
-        if (keys == null || keys.isEmpty()) {
-            return Collections.emptySet();
-        }
-
-        Set<E> result = new ObjectOpenHashSet<>();
-        for (var key : keys) {
-            result.add(copyFunction.apply(key));
-        }
-        return Collections.unmodifiableSet(result);
+    int getTagCount() {
+        return tagToKeys.size();
     }
 }

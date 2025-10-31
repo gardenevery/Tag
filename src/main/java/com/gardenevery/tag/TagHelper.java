@@ -9,6 +9,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+
 import com.gardenevery.tag.key.BlockKey;
 import com.gardenevery.tag.key.FluidKey;
 import com.gardenevery.tag.key.ItemKey;
@@ -189,7 +191,12 @@ public final class TagHelper {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
-        return TagManager.ITEM_TAGS.getKeyCopies(tagName, key -> key.stack().copy());
+        Set<ItemKey> keys = TagManager.ITEM_TAGS.getKeys(tagName);
+        Set<ItemStack> result = new ObjectOpenHashSet<>();
+        for (var key : keys) {
+            result.add(key.stack().copy());
+        }
+        return Collections.unmodifiableSet(result);
     }
 
     /**
@@ -199,7 +206,12 @@ public final class TagHelper {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
-        return TagManager.FLUID_TAGS.getKeyCopies(tagName, key -> key.stack().copy());
+        Set<FluidKey> keys = TagManager.FLUID_TAGS.getKeys(tagName);
+        Set<FluidStack> result = new ObjectOpenHashSet<>();
+        for (var key : keys) {
+            result.add(key.stack().copy());
+        }
+        return Collections.unmodifiableSet(result);
     }
 
     /**
@@ -209,7 +221,12 @@ public final class TagHelper {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
-        return TagManager.BLOCK_TAGS.getKeyCopies(tagName, BlockKey::block);
+        Set<BlockKey> keys = TagManager.BLOCK_TAGS.getKeys(tagName);
+        Set<Block> result = new ObjectOpenHashSet<>();
+        for (var key : keys) {
+            result.add(key.block());
+        }
+        return Collections.unmodifiableSet(result);
     }
 
     /**
@@ -248,6 +265,26 @@ public final class TagHelper {
                 TagManager.FLUID_TAGS.doesTagNameExist(tag) ||
                 TagManager.BLOCK_TAGS.doesTagNameExist(tag)
         );
+    }
+
+    /**
+     * Gets the total number of tags of the specified type
+     */
+    public static int getTagCount(TagType type) {
+        return switch (type) {
+            case ITEM -> TagManager.ITEM_TAGS.getTagCount();
+            case FLUID -> TagManager.FLUID_TAGS.getTagCount();
+            case BLOCK -> TagManager.BLOCK_TAGS.getTagCount();
+        };
+    }
+
+    /**
+     * Gets the total number of tags across all types
+     */
+    public static int getTotalTagCount() {
+        return TagManager.ITEM_TAGS.getTagCount() +
+                TagManager.FLUID_TAGS.getTagCount() +
+                TagManager.BLOCK_TAGS.getTagCount();
     }
 
     private static boolean isTagInvalid(String tag) {
