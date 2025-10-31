@@ -6,12 +6,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.gardenevery.tag.key.BlockKey;
-import com.gardenevery.tag.key.BlockStateKey;
 import com.gardenevery.tag.key.FluidKey;
 import com.gardenevery.tag.key.ItemKey;
 
@@ -45,14 +43,6 @@ public final class TagHelper {
     }
 
     /**
-     * Get all tags of a IBlockState
-     */
-    public static Set<String> tags(IBlockState blockState) {
-        var key = BlockStateKey.from(blockState);
-        return TagManager.BLOCK_STATE_TAGS.getTags(key);
-    }
-
-    /**
      * Check if an item has a specific tag
      */
     public static boolean hasTag(ItemStack stack, String tag) {
@@ -83,17 +73,6 @@ public final class TagHelper {
         }
         var key = BlockKey.from(block);
         return TagManager.BLOCK_TAGS.hasTag(key, tag);
-    }
-
-    /**
-     * Check if a IBlockState has a specific tag
-     */
-    public static boolean hasTag(IBlockState blockState, String tag) {
-        if (isTagInvalid(tag)) {
-            return false;
-        }
-        var key = BlockStateKey.from(blockState);
-        return TagManager.BLOCK_STATE_TAGS.hasTag(key, tag);
     }
 
     /**
@@ -163,28 +142,6 @@ public final class TagHelper {
     }
 
     /**
-     * Check if a IBlockState has any of the specified tags
-     */
-    public static boolean hasAnyTags(IBlockState blockState, String... tags) {
-        if (areTagsInvalid(tags)) {
-            return false;
-        }
-        var key = BlockStateKey.from(blockState);
-        return TagManager.BLOCK_STATE_TAGS.hasAnyTag(key, tags);
-    }
-
-    /**
-     * Check if a IBlockState has any of the specified tags
-     */
-    public static boolean hasAnyTags(IBlockState blockState, Collection<String> tags) {
-        if (areTagsInvalid(tags)) {
-            return false;
-        }
-        var key = BlockStateKey.from(blockState);
-        return TagManager.BLOCK_STATE_TAGS.hasAnyTag(key, tags);
-    }
-
-    /**
      * Get all items under a specific tag
      */
     public static Set<ItemStack> getItemStacks(String tagName) {
@@ -224,7 +181,6 @@ public final class TagHelper {
             case ITEM -> TagManager.ITEM_TAGS.getAllTagNames();
             case FLUID -> TagManager.FLUID_TAGS.getAllTagNames();
             case BLOCK -> TagManager.BLOCK_TAGS.getAllTagNames();
-            case BLOCK_STATE -> TagManager.BLOCK_STATE_TAGS.getAllTagNames();
         };
     }
 
@@ -239,7 +195,6 @@ public final class TagHelper {
             case ITEM -> TagManager.ITEM_TAGS.doesTagNameExist(tag);
             case FLUID -> TagManager.FLUID_TAGS.doesTagNameExist(tag);
             case BLOCK -> TagManager.BLOCK_TAGS.doesTagNameExist(tag);
-            case BLOCK_STATE -> TagManager.BLOCK_STATE_TAGS.doesTagNameExist(tag);
         };
     }
 
@@ -252,8 +207,7 @@ public final class TagHelper {
         }
         return (TagManager.ITEM_TAGS.doesTagNameExist(tag) ||
                 TagManager.FLUID_TAGS.doesTagNameExist(tag) ||
-                TagManager.BLOCK_TAGS.doesTagNameExist(tag) ||
-                TagManager.BLOCK_STATE_TAGS.doesTagNameExist(tag)
+                TagManager.BLOCK_TAGS.doesTagNameExist(tag)
         );
     }
 

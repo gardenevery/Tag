@@ -6,7 +6,7 @@ The system automatically synchronizes all Ore Dictionary entries.
 
 ## 📦 Features
 
-- ✅ Create and manage tags for **items**, **fluids**, **blocks**, and **block states**
+- ✅ Create and manage tags for **items**, **fluids**,and **blocks**
 - ✅ Automatically synchronize all Ore Dictionary entries to the tag system
 - ✅ In-game command to check tags of held items/fluids
 - ✅ Tag name validation (only letters, `:`, `_`, `/` allowed)
@@ -33,11 +33,6 @@ The system automatically synchronizes all Ore Dictionary entries.
 `.add(Blocks.STONE)`  
 `.add(Blocks.ANDESITE);`
 
-#### Block State Tags
-`TagBuilder.blockState("mymod:powered_blocks")`  
-`.add(Blocks.REDSTONE_BLOCK.getDefaultState())`  
-`.add(Blocks.REDSTONE_LAMP.getDefaultState().withProperty(BlockRedstoneLight.LIT, true));`
-
 ### Querying Tags
 
 #### In-Game Command
@@ -56,9 +51,6 @@ Use `/gettags` while holding an item to see its tags:
 
 `// Get all tags for a block`  
 `Set<String> tags = TagHelper.tags(block);`
-
-`// Get all tags for a block state`  
-`Set<String> tags = TagHelper.tags(blockState);`
 
 ##### Check Specific Tag
 `// Check if an item has a specific tag`  
@@ -129,7 +121,7 @@ The system automatically synchronizes all Ore Dictionary entries during `FMLPost
 | `Tag`        | Generic tag container              | Uses generics to support different key types           |
 | `TagSync`    | Syncs Ore Dictionary to tags       | Handles Ore Dictionary synchronization logic           |
 | `TagCommand` | In-game tag command                | Implements `/gettags` command                          |
-| `TagType`    | Tag type enum                      | Defines ITEM, FLUID, BLOCK, BLOCK_STATE                |
+| `TagType`    | Tag type enum                      | Defines ITEM, FLUID, BLOCK                             |
 | `TagMod`     | Main mod class                     | Registers events and commands                          |
 
 ## 📁 Package Structure
@@ -147,13 +139,12 @@ The system automatically synchronizes all Ore Dictionary entries during `FMLPost
 `    ├── Key.java          # Key interface`  
 `    ├── ItemKey.java      # Item key`  
 `    ├── FluidKey.java     # Fluid key`  
-`    ├── BlockKey.java     # Block key`  
-`    └── BlockStateKey.java # Block state key`
+`    ├── BlockKey.java     # Block key`
 
 ## ⚠️ Important Notes
 
 1. **Registration Timing**: Ensure all tag registration is completed before `FMLLoadCompleteEvent`
-2. **Block Metadata**: Block tags do not support metadata variants, use block state tags instead
+2. **Block Metadata**: Block tags do not support metadata variants
 3. **Thread Safety**: Tag query operations are thread-safe, but registration should be done on the main thread
 
 ## 🔍 Debugging Tips
@@ -168,13 +159,13 @@ Use the `/gettags` command to quickly verify if tags are applied correctly, or c
 
 # 🏷️ Minecraft 1.12.2 标签系统
 
-一个轻量级的 Minecraft 模组标签系统，支持**物品**、**流体**、**方块**和**方块状态**。
+一个轻量级的 Minecraft 模组标签系统，支持**物品**、**流体**和**方块**。
 标签系统会自动同步所有矿物词典条目。  
 **注意：方块标签无法支持同一方块的不同元数据变体。**
 
 ## 📦 功能特性
 
-- ✅ 创建和管理**物品**、**流体**、**方块**、**方块状态**标签
+- ✅ 创建和管理**物品**、**流体**、**方块**标签
 - ✅ 自动同步所有矿物词典条目到标签系统
 - ✅ 游戏内命令检查手持物品/流体标签
 - ✅ 标签命名验证（仅允许字母、`:`、`_`、`/`）
@@ -201,11 +192,6 @@ Use the `/gettags` command to quickly verify if tags are applied correctly, or c
 `.add(Blocks.STONE)`  
 `.add(Blocks.ANDESITE);`
 
-#### 方块状态标签
-`TagBuilder.blockState("mymod:powered_blocks")`  
-`.add(Blocks.REDSTONE_BLOCK.getDefaultState())`  
-`.add(Blocks.REDSTONE_LAMP.getDefaultState().withProperty(BlockRedstoneLight.LIT, true));`
-
 ### 查询标签
 
 #### 游戏内命令
@@ -224,9 +210,6 @@ Use the `/gettags` command to quickly verify if tags are applied correctly, or c
 
 `// 获取方块的所有标签`  
 `Set<String> tags = TagHelper.tags(block);`
-
-`// 获取方块状态的所有标签`  
-`Set<String> tags = TagHelper.tags(blockState);`
 
 ##### 检查特定标签
 `// 检查物品是否有某个标签`  
@@ -272,7 +255,7 @@ Use the `/gettags` command to quickly verify if tags are applied correctly, or c
 ### 重要限制
 - **标签注册必须在 `FMLLoadCompleteEvent` 之前完成**
 - 在 `FMLPostInitializationEvent` 后尝试注册标签会抛出 `IllegalStateException`
-- **方块标签不支持元数据变体**（使用方块状态标签替代）
+- **方块标签不支持元数据变体**
 
 ## 🔧 集成说明
 
@@ -289,16 +272,16 @@ Use the `/gettags` command to quickly verify if tags are applied correctly, or c
 
 ## 🧩 类概览
 
-| 类名           | 用途         | 说明                                 |
-|--------------|------------|------------------------------------|
-| `TagBuilder` | 创建标签的主要入口  | 提供静态方法创建各类标签构建器                    |
-| `TagHelper`  | 查询标签的工具类   | 所有标签查询操作的入口点                       |
-| `TagManager` | 内部标签存储和查找  | 管理四种类型的 Tag 实例                     |
-| `Tag`        | 通用标签容器     | 使用泛型支持不同类型的键                       |
-| `TagSync`    | 将矿物词典同步到标签 | 处理 Ore Dictionary 同步逻辑             |
-| `TagCommand` | 游戏内标签命令    | 实现 `/gettags` 命令                   |
-| `TagType`    | 标签类型枚举     | 定义 ITEM, FLUID, BLOCK, BLOCK_STATE |
-| `TagMod`     | 模组主类       | 注册事件和命令                            |
+| 类名           | 用途         | 说明                     |
+|--------------|------------|------------------------|
+| `TagBuilder` | 创建标签的主要入口  | 提供静态方法创建各类标签构建器        |
+| `TagHelper`  | 查询标签的工具类   | 所有标签查询操作的入口点           |
+| `TagManager` | 内部标签存储和查找  | 管理四种类型的 Tag 实例         |
+| `Tag`        | 通用标签容器     | 使用泛型支持不同类型的键           |
+| `TagSync`    | 将矿物词典同步到标签 | 处理 Ore Dictionary 同步逻辑 |
+| `TagCommand` | 游戏内标签命令    | 实现 `/gettags` 命令       |
+| `TagType`    | 标签类型枚举     | 定义 ITEM, FLUID, BLOCK  |
+| `TagMod`     | 模组主类       | 注册事件和命令                |
 
 ## 📁 包结构
 
@@ -315,13 +298,12 @@ Use the `/gettags` command to quickly verify if tags are applied correctly, or c
 `    ├── Key.java          # 键接口`  
 `    ├── ItemKey.java      # 物品键`  
 `    ├── FluidKey.java     # 流体键`  
-`    ├── BlockKey.java     # 方块键`  
-`    └── BlockStateKey.java # 方块状态键`
+`    ├── BlockKey.java     # 方块键`
 
 ## ⚠️ 注意事项
 
 1. **注册时机**：确保在 `FMLLoadCompleteEvent` 前完成所有标签注册
-2. **方块元数据**：方块标签不支持元数据变体，请使用方块状态标签
+2. **方块元数据**：方块标签不支持元数据变体
 3. **线程安全**：标签查询操作是线程安全的，但注册操作应在主线程完成
 
 ## 🔍 调试技巧
