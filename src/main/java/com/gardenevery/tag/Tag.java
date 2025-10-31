@@ -9,7 +9,10 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import com.gardenevery.tag.key.Key;
 
-public class Tag<T extends Key> {
+public final class Tag<T extends Key> {
+
+    Tag() {
+    }
 
     private final Object2ReferenceOpenHashMap<String, ObjectOpenHashSet<T>> tagToKeys = new Object2ReferenceOpenHashMap<>();
     private final Object2ReferenceOpenHashMap<T, ObjectOpenHashSet<String>> keyToTags = new Object2ReferenceOpenHashMap<>();

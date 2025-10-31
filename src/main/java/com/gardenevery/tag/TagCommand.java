@@ -37,8 +37,8 @@ public class TagCommand extends CommandBase {
             if (heldStack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
                 var fluidHandler = heldStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
                 if (fluidHandler != null) {
-                    var fluid = fluidHandler.drain(1000, false);
-                    if (fluid != null) {
+                    var fluid = fluidHandler.drain(1, false);
+                    if (fluid != null && fluid.amount > 0) {
                         var fluidTags = TagHelper.tags(fluid);
                         if (!fluidTags.isEmpty()) {
                             player.sendMessage(new TextComponentString("§aFluid tags: " + String.join(", ", fluidTags)));

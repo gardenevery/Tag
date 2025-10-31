@@ -1,6 +1,7 @@
 package com.gardenevery.tag;
 
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
@@ -10,6 +11,11 @@ public class TagMod {
     @Mod.EventHandler
     public void init(FMLPostInitializationEvent event) {
         TagSync.oreDictionarySync();
+    }
+
+    @Mod.EventHandler
+    public void onFMLoadComplete(FMLLoadCompleteEvent event) {
+        TagBuilder.closeRegistration();
     }
 
     @Mod.EventHandler

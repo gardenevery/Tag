@@ -19,19 +19,25 @@ public abstract class TagBuilder<T> {
     private static final Logger LOGGER = LogManager.getLogger("TagBuilder");
 
     protected final String tagName;
-    protected final TagManager tagManager;
     protected final boolean isValid;
+    private static boolean registrationClosed = false;
 
     protected TagBuilder(String tagName) {
+        if (registrationClosed) {
+            throw new IllegalStateException("Tag registration is closed after FMLLoadCompleteEvent");
+        }
         this.isValid = validateTagName(tagName);
         this.tagName = this.isValid ? tagName : null;
-        this.tagManager = TagManager.instance();
     }
 
     public abstract TagBuilder<T> add(T element);
 
+    static void closeRegistration() {
+        registrationClosed = true;
+    }
+
     /**
-     * Create a item tag
+     * Create an item tag
      * @param tagName Tag name (only letters, :, _, / allowed)
      * Example: TagBuilder.item("name").add(ItemStack).add(ItemStack);
      */
@@ -93,7 +99,7 @@ public abstract class TagBuilder<T> {
             }
             var key = ItemKey.from(stack);
             if (key != null) {
-                tagManager.itemTags.createTag(tagName, key);
+                TagManager.ITEM_TAGS.createTag(tagName, key);
             }
             return this;
         }
@@ -112,7 +118,7 @@ public abstract class TagBuilder<T> {
             }
             var key = FluidKey.from(stack);
             if (key != null) {
-                tagManager.fluidTags.createTag(tagName, key);
+                TagManager.FLUID_TAGS.createTag(tagName, key);
             }
             return this;
         }
@@ -131,7 +137,7 @@ public abstract class TagBuilder<T> {
             }
             var key = BlockKey.from(block);
             if (key != null) {
-                tagManager.blockTags.createTag(tagName, key);
+                TagManager.BLOCK_TAGS.createTag(tagName, key);
             }
             return this;
         }
@@ -150,7 +156,7 @@ public abstract class TagBuilder<T> {
             }
             var key = BlockStateKey.from(state);
             if (key != null) {
-                tagManager.blockStateTags.createTag(tagName, key);
+                TagManager.BLOCK_STATE_TAGS.createTag(tagName, key);
             }
             return this;
         }
