@@ -2,10 +2,10 @@ package com.gardenevery.tag;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -43,6 +43,14 @@ public final class TagHelper {
     }
 
     /**
+     * Get all tags of a blockState
+     */
+    public static Set<String> tags(IBlockState blockState) {
+        var key = BlockKey.from(blockState.getBlock());
+        return TagManager.BLOCK_TAGS.getTags(key);
+    }
+
+    /**
      * Check if an item has a specific tag
      */
     public static boolean hasTag(ItemStack stack, String tag) {
@@ -72,6 +80,17 @@ public final class TagHelper {
             return false;
         }
         var key = BlockKey.from(block);
+        return TagManager.BLOCK_TAGS.hasTag(key, tag);
+    }
+
+    /**
+     * Check if a blockState has a specific tag
+     */
+    public static boolean hasTag(IBlockState blockState, String tag) {
+        if (isTagInvalid(tag)) {
+            return false;
+        }
+        var key = BlockKey.from(blockState.getBlock());
         return TagManager.BLOCK_TAGS.hasTag(key, tag);
     }
 
@@ -142,35 +161,55 @@ public final class TagHelper {
     }
 
     /**
+     * Check if a blockState has any of the specified tags
+     */
+    public static boolean hasAnyTags(IBlockState blockState, String... tags) {
+        if (areTagsInvalid(tags)) {
+            return false;
+        }
+        var key = BlockKey.from(blockState.getBlock());
+        return TagManager.BLOCK_TAGS.hasAnyTag(key, tags);
+    }
+
+    /**
+     * Check if a blockState has any of the specified tags
+     */
+    public static boolean hasAnyTags(IBlockState blockState, Collection<String> tags) {
+        if (areTagsInvalid(tags)) {
+            return false;
+        }
+        var key = BlockKey.from(blockState.getBlock());
+        return TagManager.BLOCK_TAGS.hasAnyTag(key, tags);
+    }
+
+    /**
      * Get all items under a specific tag
      */
     public static Set<ItemStack> getItemStacks(String tagName) {
-        var itemKeys = TagManager.ITEM_TAGS.getKeys(tagName);
-        if (itemKeys.isEmpty()) {
+        if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
-
-        Set<ItemStack> result = new HashSet<>();
-        for (var key : itemKeys) {
-            result.add(key.stack().copy());
-        }
-        return Collections.unmodifiableSet(result);
+        return TagManager.ITEM_TAGS.getKeyCopies(tagName, key -> key.stack().copy());
     }
 
     /**
      * Get all fluids under a specific tag
      */
     public static Set<FluidStack> getFluidStacks(String tagName) {
-        var fluidKeys = TagManager.FLUID_TAGS.getKeys(tagName);
-        if (fluidKeys.isEmpty()) {
+        if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
+        return TagManager.FLUID_TAGS.getKeyCopies(tagName, key -> key.stack().copy());
+    }
 
-        Set<FluidStack> result = new HashSet<>();
-        for (var key : fluidKeys) {
-            result.add(key.stack().copy());
+    /**
+     * Get all blocks under a specific tag
+     */
+    public static Set<Block> getBlocks(String tagName) {
+        if (isTagInvalid(tagName)) {
+            return Collections.emptySet();
         }
-        return Collections.unmodifiableSet(result);
+        return TagManager.BLOCK_TAGS.getKeyCopies(tagName, BlockKey::block);
     }
 
     /**

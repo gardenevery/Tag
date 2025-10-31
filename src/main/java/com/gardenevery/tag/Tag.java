@@ -3,6 +3,7 @@ package com.gardenevery.tag;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Function;
 
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -69,5 +70,18 @@ public final class Tag<T extends Key> {
 
     boolean doesTagNameExist(String tagName) {
         return tagToKeys.containsKey(tagName);
+    }
+
+    public <E> Set<E> getKeyCopies(String tagName, java.util.function.Function<T, E> copyFunction) {
+        var keys = tagToKeys.get(tagName);
+        if (keys == null || keys.isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        Set<E> result = new ObjectOpenHashSet<>();
+        for (var key : keys) {
+            result.add(copyFunction.apply(key));
+        }
+        return Collections.unmodifiableSet(result);
     }
 }
