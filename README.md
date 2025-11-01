@@ -9,7 +9,7 @@ The system automatically synchronizes all Ore Dictionary entries.
 - ✅ Create and manage tags for **items**, **fluids**,and **blocks**
 - ✅ Automatically synchronize all Ore Dictionary entries to the tag system
 - ✅ In-game command to check tags of held items/fluids
-- ✅ Tag name validation (only letters, `:`, `_`, `/` allowed)
+- ✅ Tag name validation (only letters, numbers, `:`, `_`, `/` allowed)
 - ✅ Registration timing protection (only before FMLLoadCompleteEvent)
 - ✅ High-performance lookups (based on fastutil collections)
 - ✅ Safe unmodifiable collection returns
@@ -91,7 +91,7 @@ Use `/gettags` while holding an item to see its tags:
 ### Tag Naming Rules
 - Can only contain: **letters**, **colon (`:`)**, **underscore (`_`)**, **slash (`/`)**
 - Cannot be empty or null
-- Examples: `"minecraft:food"`, `"forge:ores/iron"`, `"Special_items"`
+- Examples: `"minecraft:food"`, `"forge:ores/iron"`, `"Special_123"`
 
 ### Important Limitations
 - **Tag registration must be completed before `FMLLoadCompleteEvent`**
@@ -248,9 +248,9 @@ Use the `/gettags` command to quickly verify if tags are applied correctly, or c
 `Set<String> allFluidTags = TagHelper.getAllTags(TagType.FLUID);`
 
 ### 标签命名规则
-- 只能包含：**字母**、**冒号(`:`)**、**下划线(`_`)**、**斜杠(`/`)**
+- 只能包含：**字母**、**数字**、**冒号(`:`)**、**下划线(`_`)**、**斜杠(`/`)**
 - 不能为空或 null
-- 示例：`"minecraft:food"`、`"forge:ores/iron"`、`"Special_items"`
+- 示例：`"minecraft:food"`、`"forge:ores/iron"`、`"Special_123"`
 
 ### 重要限制
 - **标签注册必须在 `FMLLoadCompleteEvent` 之前完成**

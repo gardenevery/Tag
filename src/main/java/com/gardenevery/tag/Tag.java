@@ -63,7 +63,7 @@ public final class Tag<T extends Key> {
         keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>()).add(tag);
     }
 
-    Set<String> getAllTagNames() {
+    Set<String> getAllTag() {
         return Collections.unmodifiableSet(tagToKeys.keySet());
     }
 

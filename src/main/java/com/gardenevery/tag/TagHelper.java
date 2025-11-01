@@ -1,8 +1,6 @@
 package com.gardenevery.tag;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -21,7 +19,7 @@ public final class TagHelper {
     }
 
     /**
-     * Get all tags of an item
+     * Get all tags associated with an item
      */
     public static Set<String> tags(ItemStack stack) {
         var key = ItemKey.from(stack);
@@ -29,7 +27,7 @@ public final class TagHelper {
     }
 
     /**
-     * Get all tags of a fluid
+     * Get all tags associated with a fluid
      */
     public static Set<String> tags(FluidStack stack) {
         var key = FluidKey.from(stack);
@@ -37,7 +35,7 @@ public final class TagHelper {
     }
 
     /**
-     * Get all tags of a block
+     * Get all tags associated with a block
      */
     public static Set<String> tags(Block block) {
         var key = BlockKey.from(block);
@@ -45,7 +43,7 @@ public final class TagHelper {
     }
 
     /**
-     * Get all tags of a blockState
+     * Get all tags associated with a block state
      */
     public static Set<String> tags(IBlockState blockState) {
         var key = BlockKey.from(blockState.getBlock());
@@ -53,7 +51,7 @@ public final class TagHelper {
     }
 
     /**
-     * Check if an item has a specific tag
+     * Check if an item has the specified tag
      */
     public static boolean hasTag(ItemStack stack, String tag) {
         if (isTagInvalid(tag)) {
@@ -64,7 +62,7 @@ public final class TagHelper {
     }
 
     /**
-     * Check if a fluid has a specific tag
+     * Check if a fluid has the specified tag
      */
     public static boolean hasTag(FluidStack stack, String tag) {
         if (isTagInvalid(tag)) {
@@ -75,7 +73,7 @@ public final class TagHelper {
     }
 
     /**
-     * Check if a block has a specific tag
+     * Check if a block has the specified tag
      */
     public static boolean hasTag(Block block, String tag) {
         if (isTagInvalid(tag)) {
@@ -86,7 +84,7 @@ public final class TagHelper {
     }
 
     /**
-     * Check if a blockState has a specific tag
+     * Check if a block state has the specified tag
      */
     public static boolean hasTag(IBlockState blockState, String tag) {
         if (isTagInvalid(tag)) {
@@ -185,7 +183,7 @@ public final class TagHelper {
     }
 
     /**
-     * Get all items under a specific tag
+     * Get all items that have the specified tag
      */
     public static Set<ItemStack> getItemStacks(String tagName) {
         if (isTagInvalid(tagName)) {
@@ -200,7 +198,7 @@ public final class TagHelper {
     }
 
     /**
-     * Get all fluids under a specific tag
+     * Get all fluids that have the specified tag
      */
     public static Set<FluidStack> getFluidStacks(String tagName) {
         if (isTagInvalid(tagName)) {
@@ -215,7 +213,7 @@ public final class TagHelper {
     }
 
     /**
-     * Get all blocks under a specific tag
+     * Get all blocks that have the specified tag
      */
     public static Set<Block> getBlocks(String tagName) {
         if (isTagInvalid(tagName)) {
@@ -230,18 +228,29 @@ public final class TagHelper {
     }
 
     /**
-     * Get all registered tag names for corresponding type
+     * Get all registered tag names for the specified type
      */
     public static Set<String> getAllTags(TagType type) {
         return switch (type) {
-            case ITEM -> TagManager.ITEM_TAGS.getAllTagNames();
-            case FLUID -> TagManager.FLUID_TAGS.getAllTagNames();
-            case BLOCK -> TagManager.BLOCK_TAGS.getAllTagNames();
+            case ITEM -> TagManager.ITEM_TAGS.getAllTag();
+            case FLUID -> TagManager.FLUID_TAGS.getAllTag();
+            case BLOCK -> TagManager.BLOCK_TAGS.getAllTag();
         };
     }
 
     /**
-     * Check if the corresponding type of label exists
+     * Get all registered tag names grouped by type
+     */
+    public static Map<String, Set<String>> getAllTags() {
+        return Collections.unmodifiableMap(new HashMap<>() {{
+            put("item", new ObjectOpenHashSet<>(TagManager.ITEM_TAGS.getAllTag()));
+            put("fluid", new ObjectOpenHashSet<>(TagManager.FLUID_TAGS.getAllTag()));
+            put("block", new ObjectOpenHashSet<>(TagManager.BLOCK_TAGS.getAllTag()));
+        }});
+    }
+
+    /**
+     * Check if a tag exists for the specified type
      */
     public static boolean tagNameExist(String tag, TagType type) {
         if (isTagInvalid(tag)) {
@@ -255,7 +264,7 @@ public final class TagHelper {
     }
 
     /**
-     * Check if a tag exists
+     * Check if a tag exists in any type
      */
     public static boolean tagNameExist(String tag) {
         if (isTagInvalid(tag)) {
@@ -268,7 +277,7 @@ public final class TagHelper {
     }
 
     /**
-     * Gets the total number of tags of the specified type
+     * Get the total number of tags for the specified type
      */
     public static int getTagCount(TagType type) {
         return switch (type) {
@@ -279,7 +288,7 @@ public final class TagHelper {
     }
 
     /**
-     * Gets the total number of tags across all types
+     * Get the total number of tags across all types
      */
     public static int getTagCount() {
         return TagManager.ITEM_TAGS.getTagCount() +
