@@ -1,6 +1,8 @@
 package com.gardenevery.tag;
 
 import java.util.*;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -21,7 +23,8 @@ public final class TagHelper {
     /**
      * Get all tags associated with an item
      */
-    public static Set<String> tags(ItemStack stack) {
+    @Nonnull
+    public static Set<String> tags(@Nullable ItemStack stack) {
         var key = ItemKey.from(stack);
         return key != null ? TagManager.ITEM_TAGS.getTags(key) : Collections.emptySet();
     }
@@ -29,7 +32,8 @@ public final class TagHelper {
     /**
      * Get all tags associated with a fluid
      */
-    public static Set<String> tags(FluidStack stack) {
+    @Nonnull
+    public static Set<String> tags(@Nullable FluidStack stack) {
         var key = FluidKey.from(stack);
         return key != null ? TagManager.FLUID_TAGS.getTags(key) : Collections.emptySet();
     }
@@ -37,7 +41,8 @@ public final class TagHelper {
     /**
      * Get all tags associated with a block
      */
-    public static Set<String> tags(Block block) {
+    @Nonnull
+    public static Set<String> tags(@Nullable Block block) {
         var key = BlockKey.from(block);
         return key != null ? TagManager.BLOCK_TAGS.getTags(key) : Collections.emptySet();
     }
@@ -45,7 +50,8 @@ public final class TagHelper {
     /**
      * Get all tags associated with a block state
      */
-    public static Set<String> tags(IBlockState blockState) {
+    @Nonnull
+    public static Set<String> tags(@Nullable IBlockState blockState) {
         if (blockState == null) {
             return Collections.emptySet();
         }
@@ -56,7 +62,7 @@ public final class TagHelper {
     /**
      * Check if an item has the specified tag
      */
-    public static boolean hasTag(ItemStack stack, String tag) {
+    public static boolean hasTag(@Nullable ItemStack stack, @Nullable String tag) {
         if (isTagInvalid(tag)) {
             return false;
         }
@@ -67,7 +73,7 @@ public final class TagHelper {
     /**
      * Check if a fluid has the specified tag
      */
-    public static boolean hasTag(FluidStack stack, String tag) {
+    public static boolean hasTag(@Nullable FluidStack stack, @Nullable String tag) {
         if (isTagInvalid(tag)) {
             return false;
         }
@@ -78,7 +84,7 @@ public final class TagHelper {
     /**
      * Check if a block has the specified tag
      */
-    public static boolean hasTag(Block block, String tag) {
+    public static boolean hasTag(@Nullable Block block, @Nullable String tag) {
         if (isTagInvalid(tag)) {
             return false;
         }
@@ -89,8 +95,8 @@ public final class TagHelper {
     /**
      * Check if a block state has the specified tag
      */
-    public static boolean hasTag(IBlockState blockState, String tag) {
-        if (isTagInvalid(tag)) {
+    public static boolean hasTag(@Nullable IBlockState blockState, @Nullable String tag) {
+        if (isTagInvalid(tag) || blockState == null) {
             return false;
         }
         var key = BlockKey.from(blockState.getBlock());
@@ -100,7 +106,7 @@ public final class TagHelper {
     /**
      * Check if an item has any of the specified tags
      */
-    public static boolean hasAnyTags(ItemStack stack, String... tags) {
+    public static boolean hasAnyTags(@Nullable ItemStack stack, @Nullable String... tags) {
         if (areTagsInvalid(tags)) {
             return false;
         }
@@ -111,7 +117,7 @@ public final class TagHelper {
     /**
      * Check if an item has any of the specified tags
      */
-    public static boolean hasAnyTags(ItemStack stack, Collection<String> tags) {
+    public static boolean hasAnyTags(@Nullable ItemStack stack, @Nullable Collection<String> tags) {
         if (areTagsInvalid(tags)) {
             return false;
         }
@@ -122,7 +128,7 @@ public final class TagHelper {
     /**
      * Check if a fluid has any of the specified tags
      */
-    public static boolean hasAnyTags(FluidStack stack, String... tags) {
+    public static boolean hasAnyTags(@Nullable FluidStack stack, @Nullable String... tags) {
         if (areTagsInvalid(tags)) {
             return false;
         }
@@ -133,7 +139,7 @@ public final class TagHelper {
     /**
      * Check if a fluid has any of the specified tags
      */
-    public static boolean hasAnyTags(FluidStack stack, Collection<String> tags) {
+    public static boolean hasAnyTags(@Nullable FluidStack stack, @Nullable Collection<String> tags) {
         if (areTagsInvalid(tags)) {
             return false;
         }
@@ -144,7 +150,7 @@ public final class TagHelper {
     /**
      * Check if a block has any of the specified tags
      */
-    public static boolean hasAnyTags(Block block, String... tags) {
+    public static boolean hasAnyTags(@Nullable Block block, @Nullable String... tags) {
         if (areTagsInvalid(tags)) {
             return false;
         }
@@ -155,7 +161,7 @@ public final class TagHelper {
     /**
      * Check if a block has any of the specified tags
      */
-    public static boolean hasAnyTags(Block block, Collection<String> tags) {
+    public static boolean hasAnyTags(@Nullable Block block, @Nullable Collection<String> tags) {
         if (areTagsInvalid(tags)) {
             return false;
         }
@@ -166,8 +172,8 @@ public final class TagHelper {
     /**
      * Check if a blockState has any of the specified tags
      */
-    public static boolean hasAnyTags(IBlockState blockState, String... tags) {
-        if (areTagsInvalid(tags)) {
+    public static boolean hasAnyTags(@Nullable IBlockState blockState, @Nullable String... tags) {
+        if (areTagsInvalid(tags) || blockState == null) {
             return false;
         }
         var key = BlockKey.from(blockState.getBlock());
@@ -177,8 +183,8 @@ public final class TagHelper {
     /**
      * Check if a blockState has any of the specified tags
      */
-    public static boolean hasAnyTags(IBlockState blockState, Collection<String> tags) {
-        if (areTagsInvalid(tags)) {
+    public static boolean hasAnyTags(@Nullable IBlockState blockState, @Nullable Collection<String> tags) {
+        if (areTagsInvalid(tags) || blockState == null) {
             return false;
         }
         var key = BlockKey.from(blockState.getBlock());
@@ -188,7 +194,8 @@ public final class TagHelper {
     /**
      * Get all items that have the specified tag
      */
-    public static Set<ItemStack> getItemStacks(String tagName) {
+    @Nonnull
+    public static Set<ItemStack> getItemStacks(@Nullable String tagName) {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
@@ -203,7 +210,8 @@ public final class TagHelper {
     /**
      * Get all fluids that have the specified tag
      */
-    public static Set<FluidStack> getFluidStacks(String tagName) {
+    @Nonnull
+    public static Set<FluidStack> getFluidStacks(@Nullable String tagName) {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
@@ -218,7 +226,8 @@ public final class TagHelper {
     /**
      * Get all blocks that have the specified tag
      */
-    public static Set<Block> getBlocks(String tagName) {
+    @Nonnull
+    public static Set<Block> getBlocks(@Nullable String tagName) {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
@@ -233,7 +242,7 @@ public final class TagHelper {
     /**
      * Get all registered tag names for the specified type
      */
-    public static Set<String> getAllTags(TagType type) {
+    public static Set<String> getAllTags(@Nonnull TagType type) {
         return switch (type) {
             case ITEM -> TagManager.ITEM_TAGS.getAllTags();
             case FLUID -> TagManager.FLUID_TAGS.getAllTags();
@@ -255,7 +264,7 @@ public final class TagHelper {
     /**
      * Check if a tag exists for the specified type
      */
-    public static boolean tagNameExist(String tag, TagType type) {
+    public static boolean tagNameExist(@Nullable String tag, @Nonnull TagType type) {
         if (isTagInvalid(tag)) {
             return false;
         }
@@ -269,7 +278,7 @@ public final class TagHelper {
     /**
      * Check if a tag exists in any type
      */
-    public static boolean tagNameExist(String tag) {
+    public static boolean tagNameExist(@Nullable String tag) {
         if (isTagInvalid(tag)) {
             return false;
         }
@@ -282,7 +291,7 @@ public final class TagHelper {
     /**
      * Get the total number of tags for the specified type
      */
-    public static int getTagCount(TagType type) {
+    public static int getTagCount(@Nonnull TagType type) {
         return switch (type) {
             case ITEM -> TagManager.ITEM_TAGS.getTagCount();
             case FLUID -> TagManager.FLUID_TAGS.getTagCount();

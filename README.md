@@ -149,7 +149,7 @@ The system automatically synchronizes all Ore Dictionary entries during `FMLPost
 
 ## 🔍 Debugging Tips
 
-Use the `/gettags` command to quickly verify if tags are applied correctly, or check logs for Ore Dictionary sync results:
+Use the `/getTags` command to quickly verify if tags are applied correctly, or check logs for Ore Dictionary sync results:
 
 `[TagSync] === Starting Ore Dictionary Sync ===`  
 `[TagSync] Found 155 ore dictionary categories`  
@@ -308,7 +308,7 @@ Use the `/gettags` command to quickly verify if tags are applied correctly, or c
 
 ## 🔍 调试技巧
 
-使用 `/gettags` 命令快速验证标签是否正确应用，或通过日志查看 Ore Dictionary 同步结果：
+使用 `/getTags` 命令快速验证标签是否正确应用，或通过日志查看 Ore Dictionary 同步结果：
 
 `[TagSync] === Starting Ore Dictionary Sync ===`  
 `[TagSync] Found 155 ore dictionary categories`  

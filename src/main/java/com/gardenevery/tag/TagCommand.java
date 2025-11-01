@@ -15,13 +15,13 @@ public class TagCommand extends CommandBase {
     @Nonnull
     @Override
     public String getName() {
-        return "gettags";
+        return "getTags";
     }
 
     @Nonnull
     @Override
     public String getUsage(@Nonnull ICommandSender sender) {
-        return "gettags";
+        return "getTags";
     }
 
     @Override

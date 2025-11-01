@@ -1,5 +1,8 @@
 package com.gardenevery.tag;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -20,18 +23,20 @@ public abstract class TagBuilder<T> {
     protected final boolean isValid;
     private static boolean registrationClosed = false;
 
-    protected TagBuilder(String tagName) {
-        if (registrationClosed) {
-            throw new IllegalStateException("Tag registration is closed after FMLLoadCompleteEvent");
-        }
-        this.isValid = validateTagName(tagName);
+    protected TagBuilder(@Nullable String tagName) {
+        this.isValid = !registrationClosed && validateTagName(tagName);
         this.tagName = this.isValid ? tagName : null;
+
+        if (registrationClosed && validateTagName(tagName)) {
+            LOGGER.warn("Tag registration is closed after FMLLoadCompleteEvent. Tag '{}' will not be registered.", tagName);
+        }
     }
 
     /**
      * Add an element to the tag
      */
-    public abstract TagBuilder<T> add(T element);
+    @Nonnull
+    public abstract TagBuilder<T> add(@Nullable T element);
 
     static void closeRegistration() {
         registrationClosed = true;
@@ -42,7 +47,8 @@ public abstract class TagBuilder<T> {
      * @param tagName Tag name (only letters, numbers, :, _, / allowed)
      * Example: TagBuilder.item("minecraft:weapons").add(itemStack);
      */
-    public static ItemTagBuilder item(String tagName) {
+    @Nonnull
+    public static ItemTagBuilder item(@Nullable String tagName) {
         return new ItemTagBuilder(tagName);
     }
 
@@ -51,7 +57,8 @@ public abstract class TagBuilder<T> {
      * @param tagName Tag name (only letters, numbers, :, _, / allowed)
      * Example: TagBuilder.fluid("forge:lava").add(fluidStack);
      */
-    public static FluidTagBuilder fluid(String tagName) {
+    @Nonnull
+    public static FluidTagBuilder fluid(@Nullable String tagName) {
         return new FluidTagBuilder(tagName);
     }
 
@@ -60,11 +67,12 @@ public abstract class TagBuilder<T> {
      * @param tagName Tag name (only letters, numbers, :, _, / allowed)
      * Example: TagBuilder.block("minecraft:logs").add(block);
      */
-    public static BlockTagBuilder block(String tagName) {
+    @Nonnull
+    public static BlockTagBuilder block(@Nullable String tagName) {
         return new BlockTagBuilder(tagName);
     }
 
-    private static boolean validateTagName(String name) {
+    private static boolean validateTagName(@Nullable String name) {
         if (name == null || name.isEmpty()) {
             LOGGER.warn("Tag name cannot be null or empty");
             return false;
@@ -83,15 +91,16 @@ public abstract class TagBuilder<T> {
      */
     public static class ItemTagBuilder extends TagBuilder<ItemStack> {
 
-        ItemTagBuilder(String tagName) {
+        ItemTagBuilder(@Nullable String tagName) {
             super(tagName);
         }
 
         /**
          * Add an item stack to the tag
          */
+        @Nonnull
         @Override
-        public ItemTagBuilder add(ItemStack stack) {
+        public ItemTagBuilder add(@Nullable ItemStack stack) {
             if (!isValid) {
                 return this;
             }
@@ -108,15 +117,16 @@ public abstract class TagBuilder<T> {
      */
     public static class FluidTagBuilder extends TagBuilder<FluidStack> {
 
-        FluidTagBuilder(String tagName) {
+        FluidTagBuilder(@Nullable String tagName) {
             super(tagName);
         }
 
         /**
          * Add a fluid stack to the tag
          */
+        @Nonnull
         @Override
-        public FluidTagBuilder add(FluidStack stack) {
+        public FluidTagBuilder add(@Nullable FluidStack stack) {
             if (!isValid) {
                 return this;
             }
@@ -133,15 +143,16 @@ public abstract class TagBuilder<T> {
      */
     public static class BlockTagBuilder extends TagBuilder<Block> {
 
-        BlockTagBuilder(String tagName) {
+        BlockTagBuilder(@Nullable String tagName) {
             super(tagName);
         }
 
         /**
          * Add a block to the tag
          */
+        @Nonnull
         @Override
-        public BlockTagBuilder add(Block block) {
+        public BlockTagBuilder add(@Nullable Block block) {
             if (!isValid) {
                 return this;
             }
