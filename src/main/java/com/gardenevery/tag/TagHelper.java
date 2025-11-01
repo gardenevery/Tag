@@ -39,13 +39,16 @@ public final class TagHelper {
      */
     public static Set<String> tags(Block block) {
         var key = BlockKey.from(block);
-        return TagManager.BLOCK_TAGS.getTags(key);
+        return key != null ? TagManager.BLOCK_TAGS.getTags(key) : Collections.emptySet();
     }
 
     /**
      * Get all tags associated with a block state
      */
     public static Set<String> tags(IBlockState blockState) {
+        if (blockState == null) {
+            return Collections.emptySet();
+        }
         var key = BlockKey.from(blockState.getBlock());
         return TagManager.BLOCK_TAGS.getTags(key);
     }
@@ -80,7 +83,7 @@ public final class TagHelper {
             return false;
         }
         var key = BlockKey.from(block);
-        return TagManager.BLOCK_TAGS.hasTag(key, tag);
+        return key != null && TagManager.BLOCK_TAGS.hasTag(key, tag);
     }
 
     /**
@@ -146,7 +149,7 @@ public final class TagHelper {
             return false;
         }
         var key = BlockKey.from(block);
-        return TagManager.BLOCK_TAGS.hasAnyTag(key, tags);
+        return key != null && TagManager.BLOCK_TAGS.hasAnyTag(key, tags);
     }
 
     /**
@@ -157,7 +160,7 @@ public final class TagHelper {
             return false;
         }
         var key = BlockKey.from(block);
-        return TagManager.BLOCK_TAGS.hasAnyTag(key, tags);
+        return key != null && TagManager.BLOCK_TAGS.hasAnyTag(key, tags);
     }
 
     /**
@@ -232,9 +235,9 @@ public final class TagHelper {
      */
     public static Set<String> getAllTags(TagType type) {
         return switch (type) {
-            case ITEM -> TagManager.ITEM_TAGS.getAllTag();
-            case FLUID -> TagManager.FLUID_TAGS.getAllTag();
-            case BLOCK -> TagManager.BLOCK_TAGS.getAllTag();
+            case ITEM -> TagManager.ITEM_TAGS.getAllTags();
+            case FLUID -> TagManager.FLUID_TAGS.getAllTags();
+            case BLOCK -> TagManager.BLOCK_TAGS.getAllTags();
         };
     }
 
@@ -242,11 +245,11 @@ public final class TagHelper {
      * Get all registered tag names grouped by type
      */
     public static Map<String, Set<String>> getAllTags() {
-        return Collections.unmodifiableMap(new HashMap<>() {{
-            put("item", new ObjectOpenHashSet<>(TagManager.ITEM_TAGS.getAllTag()));
-            put("fluid", new ObjectOpenHashSet<>(TagManager.FLUID_TAGS.getAllTag()));
-            put("block", new ObjectOpenHashSet<>(TagManager.BLOCK_TAGS.getAllTag()));
-        }});
+        Map<String, Set<String>> map = new HashMap<>();
+        map.put("item", new ObjectOpenHashSet<>(TagManager.ITEM_TAGS.getAllTags()));
+        map.put("fluid", new ObjectOpenHashSet<>(TagManager.FLUID_TAGS.getAllTags()));
+        map.put("block", new ObjectOpenHashSet<>(TagManager.BLOCK_TAGS.getAllTags()));
+        return Collections.unmodifiableMap(map);
     }
 
     /**
