@@ -117,7 +117,7 @@ The system automatically synchronizes all Ore Dictionary entries during `FMLPost
 |--------------|------------------------------------|--------------------------------------------------------|
 | `TagBuilder` | Main entry point for creating tags | Provides static methods to create various tag builders |
 | `TagHelper`  | Utility class for querying tags    | Entry point for all tag query operations               |
-| `TagManager` | Internal tag storage and lookup    | Manages four types of Tag instances                    |
+| `TagManager` | Internal tag storage and lookup    | Manages three types of Tag instances                   |
 | `Tag`        | Generic tag container              | Uses generics to support different key types           |
 | `TagSync`    | Syncs Ore Dictionary to tags       | Handles Ore Dictionary synchronization logic           |
 | `TagCommand` | In-game tag command                | Implements `/gettags` command                          |
@@ -276,7 +276,7 @@ Use the `/gettags` command to quickly verify if tags are applied correctly, or c
 |--------------|------------|------------------------|
 | `TagBuilder` | 创建标签的主要入口  | 提供静态方法创建各类标签构建器        |
 | `TagHelper`  | 查询标签的工具类   | 所有标签查询操作的入口点           |
-| `TagManager` | 内部标签存储和查找  | 管理四种类型的 Tag 实例         |
+| `TagManager` | 内部标签存储和查找  | 管理三种类型的 Tag 实例         |
 | `Tag`        | 通用标签容器     | 使用泛型支持不同类型的键           |
 | `TagSync`    | 将矿物词典同步到标签 | 处理 Ore Dictionary 同步逻辑 |
 | `TagCommand` | 游戏内标签命令    | 实现 `/gettags` 命令       |
