@@ -202,7 +202,7 @@ public final class TagHelper {
         Set<ItemKey> keys = TagManager.ITEM_TAGS.getKeys(tagName);
         Set<ItemStack> result = new ObjectOpenHashSet<>();
         for (var key : keys) {
-            result.add(key.stack().copy());
+            result.add(key.stack());
         }
         return Collections.unmodifiableSet(result);
     }
@@ -218,7 +218,7 @@ public final class TagHelper {
         Set<FluidKey> keys = TagManager.FLUID_TAGS.getKeys(tagName);
         Set<FluidStack> result = new ObjectOpenHashSet<>();
         for (var key : keys) {
-            result.add(key.stack().copy());
+            result.add(key.stack());
         }
         return Collections.unmodifiableSet(result);
     }
