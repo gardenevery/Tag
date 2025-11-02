@@ -242,6 +242,7 @@ public final class TagHelper {
     /**
      * Get all registered tag names for the specified type
      */
+    @Nonnull
     public static Set<String> getAllTags(@Nonnull TagType type) {
         return switch (type) {
             case ITEM -> TagManager.ITEM_TAGS.getAllTags();
@@ -253,11 +254,11 @@ public final class TagHelper {
     /**
      * Get all registered tag names grouped by type
      */
-    public static Map<String, Set<String>> getAllTags() {
-        Map<String, Set<String>> map = new HashMap<>();
-        map.put("item", new ObjectOpenHashSet<>(TagManager.ITEM_TAGS.getAllTags()));
-        map.put("fluid", new ObjectOpenHashSet<>(TagManager.FLUID_TAGS.getAllTags()));
-        map.put("block", new ObjectOpenHashSet<>(TagManager.BLOCK_TAGS.getAllTags()));
+    public static Map<TagType, Set<String>> getAllTags() {
+        Map<TagType, Set<String>> map = new HashMap<>();
+        map.put(TagType.ITEM, new ObjectOpenHashSet<>(TagManager.ITEM_TAGS.getAllTags()));
+        map.put(TagType.FLUID, new ObjectOpenHashSet<>(TagManager.FLUID_TAGS.getAllTags()));
+        map.put(TagType.BLOCK, new ObjectOpenHashSet<>(TagManager.BLOCK_TAGS.getAllTags()));
         return Collections.unmodifiableMap(map);
     }
 

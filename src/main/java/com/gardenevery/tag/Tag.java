@@ -74,4 +74,16 @@ public final class Tag<T extends Key> {
     int getTagCount() {
         return tagToKeys.size();
     }
+
+    int getKeyCount() {
+        return keyToTags.size();
+    }
+
+    int getTotalAssociations() {
+        int count = 0;
+        for (var entry : tagToKeys.entrySet()) {
+            count += entry.getValue().size();
+        }
+        return count;
+    }
 }

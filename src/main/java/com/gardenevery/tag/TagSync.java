@@ -1,6 +1,8 @@
 package com.gardenevery.tag;
 
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +57,7 @@ final class TagSync {
         LOGGER.info("=== Sync completed: {} successful, {} failed ===", totalEntries, failedEntries);
     }
 
-    private static int syncWildcardEntry(Item item, String tagName) {
+    private static int syncWildcardEntry(@Nonnull Item item, @Nullable String tagName) {
         int synced = 0;
 
         for (int meta = 0; meta < 16; meta++) {
