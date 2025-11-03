@@ -309,6 +309,49 @@ public final class TagHelper {
                 TagManager.BLOCK_TAGS.getTagCount();
     }
 
+    /**
+     * Get the total number of associations for the specified type
+     * (sum of all keys across all tags)
+     */
+    public static int getTotalAssociations(@Nonnull TagType type) {
+        return switch (type) {
+            case ITEM -> TagManager.ITEM_TAGS.getTotalAssociations();
+            case FLUID -> TagManager.FLUID_TAGS.getTotalAssociations();
+            case BLOCK -> TagManager.BLOCK_TAGS.getTotalAssociations();
+        };
+    }
+
+    /**
+     * Get the total number of associations across all types
+     */
+    public static int getTotalAssociations() {
+        return TagManager.ITEM_TAGS.getTotalAssociations() +
+                TagManager.FLUID_TAGS.getTotalAssociations() +
+                TagManager.BLOCK_TAGS.getTotalAssociations();
+    }
+
+    /**
+     * Get the number of unique keys for the specified type
+     * (count of distinct keys across all tags)
+     */
+    public static int getUniqueKeyCount(@Nonnull TagType type) {
+        return switch (type) {
+            case ITEM -> TagManager.ITEM_TAGS.getUniqueKeyCount();
+            case FLUID -> TagManager.FLUID_TAGS.getUniqueKeyCount();
+            case BLOCK -> TagManager.BLOCK_TAGS.getUniqueKeyCount();
+        };
+    }
+
+    /**
+     * Get the total number of unique keys across all types
+     */
+    public static int getUniqueKeyCount() {
+        return TagManager.ITEM_TAGS.getUniqueKeyCount() +
+                TagManager.FLUID_TAGS.getUniqueKeyCount() +
+                TagManager.BLOCK_TAGS.getUniqueKeyCount();
+    }
+
+
     private static boolean isTagInvalid(String tag) {
         return tag == null || tag.isEmpty();
     }

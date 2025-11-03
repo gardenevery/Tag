@@ -75,7 +75,7 @@ public final class Tag<T extends Key> {
         return tagToKeys.size();
     }
 
-    int getKeyCount() {
+    int getUniqueKeyCount() {
         return keyToTags.size();
     }
 

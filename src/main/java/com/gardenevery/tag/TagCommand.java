@@ -79,26 +79,26 @@ public class TagCommand extends CommandBase {
     }
 
     private void showTagStatistics(@Nonnull ICommandSender sender) {
-        int itemTagCount = TagManager.ITEM_TAGS.getTagCount();
-        int fluidTagCount = TagManager.FLUID_TAGS.getTagCount();
-        int blockTagCount = TagManager.BLOCK_TAGS.getTagCount();
-        int totalTagCount = itemTagCount + fluidTagCount + blockTagCount;
+        int itemTagCount = TagHelper.getTagCount(TagType.ITEM);
+        int fluidTagCount = TagHelper.getTagCount(TagType.FLUID);
+        int blockTagCount = TagHelper.getTagCount(TagType.BLOCK);
+        int totalTagCount = TagHelper.getTagCount();
 
-        int itemAssociations = TagManager.ITEM_TAGS.getTotalAssociations();
-        int fluidAssociations = TagManager.FLUID_TAGS.getTotalAssociations();
-        int blockAssociations = TagManager.BLOCK_TAGS.getTotalAssociations();
-        int totalAssociations = itemAssociations + fluidAssociations + blockAssociations;
+        int itemElementCount = TagHelper.getTotalAssociations(TagType.ITEM);
+        int fluidElementCount = TagHelper.getTotalAssociations(TagType.FLUID);
+        int blockElementCount = TagHelper.getTotalAssociations(TagType.BLOCK);
+        int totalElementCount = TagHelper.getTotalAssociations();
 
-        int uniqueItems = TagManager.ITEM_TAGS.getKeyCount();
-        int uniqueFluids = TagManager.FLUID_TAGS.getKeyCount();
-        int uniqueBlocks = TagManager.BLOCK_TAGS.getKeyCount();
-        int totalUniqueElements = uniqueItems + uniqueFluids + uniqueBlocks;
+        int uniqueItemElements = TagHelper.getUniqueKeyCount(TagType.ITEM);
+        int uniqueFluidElements = TagHelper.getUniqueKeyCount(TagType.FLUID);
+        int uniqueBlockElements = TagHelper.getUniqueKeyCount(TagType.BLOCK);
+        int totalUniqueElements = TagHelper.getUniqueKeyCount();
 
         sender.sendMessage(new TextComponentString("§6=== Tag Statistics ==="));
-        sender.sendMessage(new TextComponentString("§aItem Tags: §f" + itemTagCount + " §7Associations: §f" + itemAssociations + " (§f" + uniqueItems + "§7 unique)"));
-        sender.sendMessage(new TextComponentString("§bFluid Tags: §f" + fluidTagCount + " §7Associations: §f" + fluidAssociations + " (§f" + uniqueFluids + "§7 unique)"));
-        sender.sendMessage(new TextComponentString("§eBlock Tags: §f" + blockTagCount + " §7Associations: §f" + blockAssociations + " (§f" + uniqueBlocks + "§7 unique)"));
-        sender.sendMessage(new TextComponentString("§6Total: §f" + totalTagCount + " tags, §f" + totalAssociations + " associations, §f" + totalUniqueElements + " unique elements"));
+        sender.sendMessage(new TextComponentString("§aItem Tags: §f" + itemTagCount + " §7Associations: §f" + itemElementCount + " (§f" + uniqueItemElements + "§7 unique)"));
+        sender.sendMessage(new TextComponentString("§bFluid Tags: §f" + fluidTagCount + " §7Associations: §f" + fluidElementCount + " (§f" + uniqueFluidElements + "§7 unique)"));
+        sender.sendMessage(new TextComponentString("§eBlock Tags: §f" + blockTagCount + " §7Associations: §f" + blockElementCount + " (§f" + uniqueBlockElements + "§7 unique)"));
+        sender.sendMessage(new TextComponentString("§6Total Tags: §f" + totalTagCount + " §7Total Associations: §f" + totalElementCount + " (§f" + totalUniqueElements + "§7 unique)"));
     }
 
     @Override
