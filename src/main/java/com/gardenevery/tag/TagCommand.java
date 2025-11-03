@@ -7,7 +7,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TagCommand extends CommandBase {
@@ -33,7 +33,7 @@ public class TagCommand extends CommandBase {
 
         if ("info".equalsIgnoreCase(args[0])) {
             if (!sender.canUseCommand(2, this.getName())) {
-                sender.sendMessage(new TextComponentString("§cYou do not have permission to use this command."));
+                sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.nopermission"));
                 return;
             }
             showTagStatistics(sender);
@@ -47,7 +47,7 @@ public class TagCommand extends CommandBase {
             var heldStack = player.getHeldItem(EnumHand.MAIN_HAND);
 
             if (heldStack.isEmpty()) {
-                player.sendMessage(new TextComponentString("§cYou are not holding any item."));
+                player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.noitem"));
                 return;
             }
 
@@ -58,22 +58,22 @@ public class TagCommand extends CommandBase {
                     if (fluid != null && fluid.amount > 0) {
                         var fluidTags = TagHelper.tags(fluid);
                         if (!fluidTags.isEmpty()) {
-                            player.sendMessage(new TextComponentString("§aFluid tags: " + String.join(", ", fluidTags)));
+                            player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.fluidtags", String.join(", ", fluidTags)));
                         } else {
-                            player.sendMessage(new TextComponentString("§7This fluid has no tags."));
+                            player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.nofluidtags"));
                         }
                         return;
                     } else {
-                        player.sendMessage(new TextComponentString("§eThis fluid container is empty."));
+                        player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.emptycontainer"));
                     }
                 }
             }
 
             var itemTags = TagHelper.tags(heldStack);
             if (!itemTags.isEmpty()) {
-                player.sendMessage(new TextComponentString("§aItem tags: " + String.join(", ", itemTags)));
+                player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.itemtags", String.join(", ", itemTags)));
             } else {
-                player.sendMessage(new TextComponentString("§7This item has no tags."));
+                player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.noitemtags"));
             }
         }
     }
@@ -94,11 +94,11 @@ public class TagCommand extends CommandBase {
         int uniqueBlockElements = TagHelper.getUniqueKeyCount(TagType.BLOCK);
         int totalUniqueElements = TagHelper.getUniqueKeyCount();
 
-        sender.sendMessage(new TextComponentString("§6=== Tag Statistics ==="));
-        sender.sendMessage(new TextComponentString("§aItem Tags: §f" + itemTagCount + " §7Associations: §f" + itemElementCount + " (§f" + uniqueItemElements + "§7 unique)"));
-        sender.sendMessage(new TextComponentString("§bFluid Tags: §f" + fluidTagCount + " §7Associations: §f" + fluidElementCount + " (§f" + uniqueFluidElements + "§7 unique)"));
-        sender.sendMessage(new TextComponentString("§eBlock Tags: §f" + blockTagCount + " §7Associations: §f" + blockElementCount + " (§f" + uniqueBlockElements + "§7 unique)"));
-        sender.sendMessage(new TextComponentString("§6Total Tags: §f" + totalTagCount + " §7Total Associations: §f" + totalElementCount + " (§f" + totalUniqueElements + "§7 unique)"));
+        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.title"));
+        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.items", itemTagCount, itemElementCount, uniqueItemElements));
+        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.fluids", fluidTagCount, fluidElementCount, uniqueFluidElements));
+        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.blocks", blockTagCount, blockElementCount, uniqueBlockElements));
+        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.total", totalTagCount, totalElementCount, totalUniqueElements));
     }
 
     @Override

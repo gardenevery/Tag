@@ -1,0 +1,13 @@
+# Tag 命令
+com.gardenevery.tag.nopermission=§c您没有权限使用此命令。
+com.gardenevery.tag.noitem=§c您没有手持任何物品。
+com.gardenevery.tag.fluidtags=§a流体标签：%s
+com.gardenevery.tag.nofluidtags=§7该流体没有标签。
+com.gardenevery.tag.emptycontainer=§e该流体容器为空。
+com.gardenevery.tag.itemtags=§a物品标签：%s
+com.gardenevery.tag.noitemtags=§7该物品没有标签。
+com.gardenevery.tag.statistics.title=§6=== 标签统计 ===
+com.gardenevery.tag.statistics.items=§a物品标签：§f%s §7关联数： §f%s（§f%s§7 个唯一物品）
+com.gardenevery.tag.statistics.fluids=§b流体标签：§f%s §7关联数： §f%s（§f%s§7 个唯一流体）
+com.gardenevery.tag.statistics.blocks=§e方块标签：§f%s §7关联数： §f%s（§f%s§7 个唯一方块）
+com.gardenevery.tag.statistics.total=§6总标签数：§f%s §7总关联数： §f%s（§f%s§7 个唯一元素）
