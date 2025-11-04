@@ -2,7 +2,7 @@
 
 A lightweight tag system for Minecraft mods, supporting items, fluids, and blocks.
 Automatically synchronizes with Ore Dictionary.
-**Note: Block tags do not support different metadata variants of the same block.**
+**Note: Block tags cannot distinguish between different metadata variants of the same block.**
 
 ## 📦 Features
 
