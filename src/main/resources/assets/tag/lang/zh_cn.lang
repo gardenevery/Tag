@@ -11,3 +11,6 @@ com.gardenevery.tag.statistics.items=§a物品标签：§f%s §7关联数：§f%
 com.gardenevery.tag.statistics.fluids=§b流体标签：§f%s §7关联数：§f%s （§f%s§7个唯一流体）
 com.gardenevery.tag.statistics.blocks=§e方块标签：§f%s §7关联数：§f%s （§f%s§7个唯一方块）
 com.gardenevery.tag.statistics.total=§6总标签数：§f%s §7总关联数：§f%s （§f%s§7个唯一元素）
+
+# 提示
+tooltip.hold_shift_for_tags=按 Shift 显示标签

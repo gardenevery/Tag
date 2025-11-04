@@ -11,3 +11,6 @@ com.gardenevery.tag.statistics.items=§aItem Tags: §f%s §7Associations: §f%s 
 com.gardenevery.tag.statistics.fluids=§bFluid Tags: §f%s §7Associations: §f%s  (§f%s§7unique)
 com.gardenevery.tag.statistics.blocks=§eBlock Tags: §f%s §7Associations: §f%s  (§f%s§7unique)
 com.gardenevery.tag.statistics.total=§6Total Tags: §f%s §7Total Associations: §f%s  (§f%s§7unique)
+
+#Tootlip
+tooltip.hold_shift_for_tags=Hold Shift to display labels
