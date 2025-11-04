@@ -98,3 +98,4 @@ Use `/tag` while holding an item to see its tags:
 
 ## Credit
 - [JEI Integration](https://github.com/SnowShock35/jei-integration/tree/1.12) [MIT]
+- [ForgeDevEnv](https://github.com/CleanroomMC/ForgeDevEnv) [MIT]
