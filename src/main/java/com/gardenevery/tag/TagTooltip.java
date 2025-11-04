@@ -39,10 +39,6 @@ public class TagTooltip {
 
     @SubscribeEvent
     public void onItemTooltip(ItemTooltipEvent event) {
-        if (event.getItemStack().isEmpty()) {
-            return;
-        }
-
         if (isShiftKeyDown()) {
             generateTagTooltip(event);
         } else {
