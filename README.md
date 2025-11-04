@@ -93,7 +93,6 @@ Use `/tag` while holding an item to see its tags:
 
 ### Important Limitations
 - **Tag registration must be completed before `FMLLoadCompleteEvent`**
-- Attempting to register tags after `FMLPostInitializationEvent` will throw `IllegalStateException`
 
 ---
 
