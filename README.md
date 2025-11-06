@@ -88,7 +88,7 @@ Use `/tag` while holding an item to see its tags:
 
 ### Tag Naming Rules
 - Can only contain: **letters**, **number**, **colon (`:`)**, **underscore (`_`)**, **slash (`/`)**
-- Cannot be empty or null
+- Cannot be null
 - Examples: `"minecraft:food"`, `"forge:ores/iron"`, `"Special_123"`
 
 ### Important Limitations
