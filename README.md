@@ -87,7 +87,7 @@ Use `/tag` while holding an item to see its tags:
 `Set<String> allFluidTags = TagHelper.getAllTags(TagType.FLUID);`
 
 ### Tag Naming Rules
-- Can only contain: **letters**, **colon (`:`)**, **underscore (`_`)**, **slash (`/`)**
+- Can only contain: **letters**, **number**, **colon (`:`)**, **underscore (`_`)**, **slash (`/`)**
 - Cannot be empty or null
 - Examples: `"minecraft:food"`, `"forge:ores/iron"`, `"Special_123"`
 
