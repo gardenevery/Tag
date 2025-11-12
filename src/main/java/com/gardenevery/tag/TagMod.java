@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 public class TagMod {
 
     @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent e) {
+    public void postInit(FMLPostInitializationEvent event) {
         var tooltipEventHandler = new TagTooltip();
         MinecraftForge.EVENT_BUS.register(tooltipEventHandler);
     }
