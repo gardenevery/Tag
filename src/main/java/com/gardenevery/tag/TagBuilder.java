@@ -4,8 +4,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.logging.log4j.LogManager;
@@ -98,6 +100,7 @@ public abstract class TagBuilder<T> {
 
         /**
          * Add an item stack to the tag
+         * @param stack The item stack to add to the tag
          */
         @Nonnull
         @Override
@@ -115,6 +118,25 @@ public abstract class TagBuilder<T> {
             }
             return this;
         }
+
+        /**
+         * Add an item to the tag
+         * @param item The item to add to the tag
+         */
+        @Nonnull
+        public ItemTagBuilder addItem(@Nullable Item item) {
+            return add(new ItemStack(item));
+        }
+
+        /**
+         * Add an item to the tag
+         * @param item The item to add to the tag
+         * @param metadata The metadata of the item
+         */
+        @Nonnull
+        public ItemTagBuilder addItem(@Nullable Item item, int metadata) {
+            return add(new ItemStack(item, 1, metadata));
+        }
     }
 
     /**
@@ -128,6 +150,7 @@ public abstract class TagBuilder<T> {
 
         /**
          * Add a fluid stack to the tag
+         * @param stack The fluid stack to add to the tag
          */
         @Nonnull
         @Override
@@ -145,6 +168,15 @@ public abstract class TagBuilder<T> {
             }
             return this;
         }
+
+        /**
+         * Add a fluid to the tag
+         * @param fluid The fluid to add to the tag
+         */
+        @Nonnull
+        public FluidTagBuilder addFluid(@Nullable Fluid fluid) {
+            return add(new FluidStack(fluid, 1000));
+        }
     }
 
     /**
@@ -158,6 +190,7 @@ public abstract class TagBuilder<T> {
 
         /**
          * Add a block to the tag
+         * @param block The block to add to the tag
          */
         @Nonnull
         @Override
