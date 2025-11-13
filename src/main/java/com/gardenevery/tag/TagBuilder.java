@@ -124,7 +124,7 @@ public abstract class TagBuilder<T> {
          * @param item The item to add to the tag
          */
         @Nonnull
-        public ItemTagBuilder addItem(@Nullable Item item) {
+        public ItemTagBuilder add(@Nullable Item item) {
             return add(new ItemStack(item));
         }
 
@@ -134,7 +134,7 @@ public abstract class TagBuilder<T> {
          * @param metadata The metadata of the item
          */
         @Nonnull
-        public ItemTagBuilder addItem(@Nullable Item item, int metadata) {
+        public ItemTagBuilder add(@Nullable Item item, int metadata) {
             return add(new ItemStack(item, 1, metadata));
         }
     }
@@ -174,7 +174,7 @@ public abstract class TagBuilder<T> {
          * @param fluid The fluid to add to the tag
          */
         @Nonnull
-        public FluidTagBuilder addFluid(@Nullable Fluid fluid) {
+        public FluidTagBuilder add(@Nullable Fluid fluid) {
             return add(new FluidStack(fluid, 1000));
         }
     }
