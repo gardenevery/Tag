@@ -50,6 +50,7 @@ public class TagTooltip {
         return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
     }
 
+
     private static void generateTagTooltip(ItemTooltipEvent event) {
         Set<String> tags = TagHelper.tags(event.getItemStack());
 

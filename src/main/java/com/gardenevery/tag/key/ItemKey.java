@@ -15,7 +15,6 @@ public record ItemKey(Item item, int metadata) implements Key {
         if (stack == null || stack.isEmpty()) {
             return null;
         }
-
         int metadata = stack.getHasSubtypes() ? stack.getMetadata() : 0;
         return new ItemKey(stack.getItem(), metadata);
     }

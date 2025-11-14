@@ -17,7 +17,6 @@ import com.gardenevery.tag.key.BlockKey;
 import com.gardenevery.tag.key.FluidKey;
 import com.gardenevery.tag.key.ItemKey;
 
-@SuppressWarnings("UnusedReturnValue")
 public abstract class TagBuilder<T> {
 
     private static final Logger LOGGER = LogManager.getLogger("TagBuilder");
@@ -110,7 +109,7 @@ public abstract class TagBuilder<T> {
             }
             var key = ItemKey.from(stack);
             if (key != null) {
-                var event = TagEvent.itemEvent(tagName, stack);
+                var event = ItemTagEvent.create(tagName, stack);
                 if (MinecraftForge.EVENT_BUS.post(event)) {
                     return this;
                 }
@@ -123,6 +122,7 @@ public abstract class TagBuilder<T> {
          * Add an item to the tag
          * @param item The item to add to the tag
          */
+        @SuppressWarnings("ConstantConditions")
         @Nonnull
         public ItemTagBuilder add(@Nullable Item item) {
             return add(new ItemStack(item));
@@ -133,6 +133,7 @@ public abstract class TagBuilder<T> {
          * @param item The item to add to the tag
          * @param metadata The metadata of the item
          */
+        @SuppressWarnings("ConstantConditions")
         @Nonnull
         public ItemTagBuilder add(@Nullable Item item, int metadata) {
             return add(new ItemStack(item, 1, metadata));
@@ -160,7 +161,7 @@ public abstract class TagBuilder<T> {
             }
             var key = FluidKey.from(stack);
             if (key != null) {
-                var event = TagEvent.fluidEvent(tagName, stack);
+                var event = FluidTagEvent.create(tagName, stack);
                 if (MinecraftForge.EVENT_BUS.post(event)) {
                     return this;
                 }
@@ -200,7 +201,7 @@ public abstract class TagBuilder<T> {
             }
             var key = BlockKey.from(block);
             if (key != null) {
-                var event = TagEvent.blockEvent(tagName, block);
+                var event = BlockTagEvent.create(tagName, block);
                 if (MinecraftForge.EVENT_BUS.post(event)) {
                     return this;
                 }
