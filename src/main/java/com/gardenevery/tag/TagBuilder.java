@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -109,10 +108,6 @@ public abstract class TagBuilder<T> {
             }
             var key = ItemKey.from(stack);
             if (key != null) {
-                var event = ItemTagEvent.create(tagName, stack);
-                if (MinecraftForge.EVENT_BUS.post(event)) {
-                    return this;
-                }
                 TagManager.ITEM_TAGS.createTag(tagName, key);
             }
             return this;
@@ -161,10 +156,6 @@ public abstract class TagBuilder<T> {
             }
             var key = FluidKey.from(stack);
             if (key != null) {
-                var event = FluidTagEvent.create(tagName, stack);
-                if (MinecraftForge.EVENT_BUS.post(event)) {
-                    return this;
-                }
                 TagManager.FLUID_TAGS.createTag(tagName, key);
             }
             return this;
@@ -201,10 +192,6 @@ public abstract class TagBuilder<T> {
             }
             var key = BlockKey.from(block);
             if (key != null) {
-                var event = BlockTagEvent.create(tagName, block);
-                if (MinecraftForge.EVENT_BUS.post(event)) {
-                    return this;
-                }
                 TagManager.BLOCK_TAGS.createTag(tagName, key);
             }
             return this;
