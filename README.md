@@ -19,14 +19,25 @@ Automatically synchronizes with Ore Dictionary.
 #### Item Tags
 `TagBuilder.item("mymod:my_tag")`  
 `.add(new ItemStack(Items.APPLE))`  
+`.add(new ItemStack(Items.GOLDEN_APPLE));`  
+
+`TagBuilder.item("mymod:my_tag1", "mymod:my_tag2")`  
+`.add(new ItemStack(Items.APPLE))`  
 `.add(new ItemStack(Items.GOLDEN_APPLE));`
 
 #### Fluid Tags
 `TagBuilder.fluid("minecraft:lava")`  
+`.add(new FluidStack(FluidRegistry.LAVA, 1000));`  
+
+`TagBuilder.fluid("minecraft:lava", "lava")`  
 `.add(new FluidStack(FluidRegistry.LAVA, 1000));`
 
 #### Block Tags
 `TagBuilder.block("minecraft:stone_variants")`  
+`.add(Blocks.STONE)`  
+`.add(Blocks.ANDESITE);`  
+
+`TagBuilder.block("minecraft:stone_variants", "stone_variants")`  
 `.add(Blocks.STONE)`  
 `.add(Blocks.ANDESITE);`
 

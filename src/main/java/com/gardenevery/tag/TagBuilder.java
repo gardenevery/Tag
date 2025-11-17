@@ -1,5 +1,8 @@
 package com.gardenevery.tag;
 
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -44,8 +47,8 @@ public abstract class TagBuilder {
      * Example: TagBuilder.item("minecraft:weapons").add(itemStack);
      */
     @Nonnull
-    public static InitialItemTagBuilder item(@Nullable String tagName) {
-        return new InitialItemTagBuilder(tagName);
+    public static ItemTagBuilder item(@Nullable String tagName) {
+        return new ItemTagBuilder(tagName);
     }
 
     /**
@@ -54,8 +57,8 @@ public abstract class TagBuilder {
      * Example: TagBuilder.fluid("forge:lava").add(fluidStack);
      */
     @Nonnull
-    public static InitialFluidTagBuilder fluid(@Nullable String tagName) {
-        return new InitialFluidTagBuilder(tagName);
+    public static FluidTagBuilder fluid(@Nullable String tagName) {
+        return new FluidTagBuilder(tagName);
     }
 
     /**
@@ -64,11 +67,41 @@ public abstract class TagBuilder {
      * Example: TagBuilder.block("minecraft:logs").add(block);
      */
     @Nonnull
-    public static InitialBlockTagBuilder block(@Nullable String tagName) {
-        return new InitialBlockTagBuilder(tagName);
+    public static BlockTagBuilder block(@Nullable String tagName) {
+        return new BlockTagBuilder(tagName);
     }
 
-    private static boolean validateTagName(@Nullable String name) {
+    /**
+     * Create an item tag builder with multiple tags
+     * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
+     * Example: TagBuilder.items("minecraft:tools", "minecraft:diggers", "mod:iron_tier")
+     */
+    @Nonnull
+    public static MultiItemTagBuilder items(@Nullable String... tagNames) {
+        return new MultiItemTagBuilder(tagNames);
+    }
+
+    /**
+     * Create a fluid tag builder with multiple tags
+     * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
+     * Example: TagBuilder.fluids("forge:liquids", "mod:coolant", "pack:hazardous")
+     */
+    @Nonnull
+    public static MultiFluidTagBuilder fluids(@Nullable String... tagNames) {
+        return new MultiFluidTagBuilder(tagNames);
+    }
+
+    /**
+     * Create a block tag builder with multiple tags
+     * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
+     * Example: TagBuilder.blocks("forge:ores", "mod:world_gen", "pack:rare_blocks")
+     */
+    @Nonnull
+    public static MultiBlockTagBuilder blocks(@Nullable String... tagNames) {
+        return new MultiBlockTagBuilder(tagNames);
+    }
+
+    static boolean validateTagName(@Nullable String name) {
         if (name == null || name.isEmpty()) {
             LOGGER.warn("Tag name cannot be null or empty");
             return false;
@@ -82,9 +115,41 @@ public abstract class TagBuilder {
         return true;
     }
 
+    static Set<String> validateMultiTagNames(@Nullable String[] names) {
+        if (names == null || names.length == 0) {
+            LOGGER.warn("Tag names array cannot be null or empty");
+            return null;
+        }
+
+        Set<String> validNames = new LinkedHashSet<>();
+        for (var name : names) {
+            if (validateTagName(name)) {
+                if (!validNames.add(name)) {
+                    LOGGER.debug("Duplicate tag name '{}' found and ignored", name);
+                }
+            }
+        }
+
+        if (validNames.isEmpty()) {
+            LOGGER.warn("No valid tag names provided");
+            return null;
+        }
+
+        if (validNames.size() < names.length) {
+            LOGGER.info("Filtered {} tag names to {} unique valid names", names.length, validNames.size());
+        }
+
+        return Collections.unmodifiableSet(validNames);
+    }
+
     public interface AddableState<T> {
         @Nonnull
-        AddableState<T> add(@Nullable T element);
+        AddableState<T> add(T element);
+    }
+
+    public interface MultiAddableState<T> {
+        @Nonnull
+        MultiAddableState<T> add(T element);
     }
 
     public interface RemovableState {
@@ -97,8 +162,8 @@ public abstract class TagBuilder {
     public interface CompletedState {
     }
 
-    public static class InitialItemTagBuilder extends TagBuilder implements InitialState<ItemStack> {
-        InitialItemTagBuilder(@Nullable String tagName) {
+    public static class ItemTagBuilder extends TagBuilder implements InitialState<ItemStack> {
+        ItemTagBuilder(@Nullable String tagName) {
             super(tagName);
         }
 
@@ -106,19 +171,19 @@ public abstract class TagBuilder {
         @Override
         public AddableState<ItemStack> add(@Nullable ItemStack stack) {
             if (!isValid) {
-                return new InvalidItemTagBuilder();
+                return new InvalidItemTag();
             }
 
             var key = ItemKey.from(stack);
             if (key != null) {
                 var event = ItemTagEvent.create(tagName, stack);
                 if (MinecraftForge.EVENT_BUS.post(event)) {
-                    return new InvalidItemTagBuilder();
+                    return new InvalidItemTag();
                 }
                 TagManager.ITEM_TAGS.createTag(tagName, key);
             }
 
-            return new AddableItemTagBuilder(tagName);
+            return new ItemTagAdder(tagName);
         }
 
         @Override
@@ -135,21 +200,21 @@ public abstract class TagBuilder {
 
         @SuppressWarnings("ConstantConditions")
         @Nonnull
-        public AddableState<ItemStack> add(@Nullable Item item) {
+        public AddableState<ItemStack> add(Item item) {
             return add(new ItemStack(item));
         }
 
         @SuppressWarnings("ConstantConditions")
         @Nonnull
-        public AddableState<ItemStack> add(@Nullable Item item, int metadata) {
+        public AddableState<ItemStack> add(Item item, int metadata) {
             return add(new ItemStack(item, 1, metadata));
         }
     }
 
-    public static class AddableItemTagBuilder implements AddableState<ItemStack>, CompletedState {
+    public static class ItemTagAdder implements AddableState<ItemStack>, CompletedState {
         private final String tagName;
 
-        AddableItemTagBuilder(String tagName) {
+        ItemTagAdder(@Nullable String tagName) {
             this.tagName = tagName;
         }
 
@@ -168,18 +233,18 @@ public abstract class TagBuilder {
 
         @SuppressWarnings("ConstantConditions")
         @Nonnull
-        public AddableState<ItemStack> add(@Nullable Item item) {
+        public AddableState<ItemStack> add(Item item) {
             return add(new ItemStack(item));
         }
 
         @SuppressWarnings("ConstantConditions")
         @Nonnull
-        public AddableState<ItemStack> add(@Nullable Item item, int metadata) {
+        public AddableState<ItemStack> add(Item item, int metadata) {
             return add(new ItemStack(item, 1, metadata));
         }
     }
 
-    public static class InvalidItemTagBuilder implements AddableState<ItemStack>, RemovableState, CompletedState {
+    public static class InvalidItemTag implements AddableState<ItemStack>, RemovableState, CompletedState {
         @Nonnull
         @Override
         public AddableState<ItemStack> add(@Nullable ItemStack stack) {
@@ -191,8 +256,8 @@ public abstract class TagBuilder {
         }
     }
 
-    public static class InitialFluidTagBuilder extends TagBuilder implements InitialState<FluidStack> {
-        InitialFluidTagBuilder(@Nullable String tagName) {
+    public static class FluidTagBuilder extends TagBuilder implements InitialState<FluidStack> {
+        FluidTagBuilder(@Nullable String tagName) {
             super(tagName);
         }
 
@@ -200,19 +265,19 @@ public abstract class TagBuilder {
         @Override
         public AddableState<FluidStack> add(@Nullable FluidStack stack) {
             if (!isValid) {
-                return new InvalidFluidTagBuilder();
+                return new InvalidFluidTag();
             }
 
             var key = FluidKey.from(stack);
             if (key != null) {
                 var event = FluidTagEvent.create(tagName, stack);
                 if (MinecraftForge.EVENT_BUS.post(event)) {
-                    return new InvalidFluidTagBuilder();
+                    return new InvalidFluidTag();
                 }
                 TagManager.FLUID_TAGS.createTag(tagName, key);
             }
 
-            return new AddableFluidTagBuilder(tagName);
+            return new FluidTagAdder(tagName);
         }
 
         @Override
@@ -228,15 +293,15 @@ public abstract class TagBuilder {
         }
 
         @Nonnull
-        public AddableState<FluidStack> add(@Nullable Fluid fluid) {
+        public AddableState<FluidStack> add(Fluid fluid) {
             return add(new FluidStack(fluid, 1000));
         }
     }
 
-    public static class AddableFluidTagBuilder implements AddableState<FluidStack>, CompletedState {
+    public static class FluidTagAdder implements AddableState<FluidStack>, CompletedState {
         private final String tagName;
 
-        AddableFluidTagBuilder(String tagName) {
+        FluidTagAdder(@Nullable String tagName) {
             this.tagName = tagName;
         }
 
@@ -254,12 +319,12 @@ public abstract class TagBuilder {
         }
 
         @Nonnull
-        public AddableState<FluidStack> add(@Nullable Fluid fluid) {
+        public AddableState<FluidStack> add(Fluid fluid) {
             return add(new FluidStack(fluid, 1000));
         }
     }
 
-    public static class InvalidFluidTagBuilder implements AddableState<FluidStack>, RemovableState, CompletedState {
+    public static class InvalidFluidTag implements AddableState<FluidStack>, RemovableState, CompletedState {
         @Nonnull
         @Override
         public AddableState<FluidStack> add(@Nullable FluidStack stack) {
@@ -271,28 +336,28 @@ public abstract class TagBuilder {
         }
     }
 
-    public static class InitialBlockTagBuilder extends TagBuilder implements InitialState<Block> {
-        InitialBlockTagBuilder(@Nullable String tagName) {
+    public static class BlockTagBuilder extends TagBuilder implements InitialState<Block> {
+        BlockTagBuilder(@Nullable String tagName) {
             super(tagName);
         }
 
         @Nonnull
         @Override
-        public AddableState<Block> add(@Nullable Block block) {
+        public AddableState<Block> add(Block block) {
             if (!isValid) {
-                return new InvalidBlockTagBuilder();
+                return new InvalidBlockTag();
             }
 
             var key = BlockKey.from(block);
             if (key != null) {
                 var event = BlockTagEvent.create(tagName, block);
                 if (MinecraftForge.EVENT_BUS.post(event)) {
-                    return new InvalidBlockTagBuilder();
+                    return new InvalidBlockTag();
                 }
                 TagManager.BLOCK_TAGS.createTag(tagName, key);
             }
 
-            return new AddableBlockTagBuilder(tagName);
+            return new BlockTagAdder(tagName);
         }
 
         @Override
@@ -308,16 +373,16 @@ public abstract class TagBuilder {
         }
     }
 
-    public static class AddableBlockTagBuilder implements AddableState<Block>, CompletedState {
+    public static class BlockTagAdder implements AddableState<Block>, CompletedState {
         private final String tagName;
 
-        AddableBlockTagBuilder(String tagName) {
+        BlockTagAdder(@Nullable String tagName) {
             this.tagName = tagName;
         }
 
         @Nonnull
         @Override
-        public AddableState<Block> add(@Nullable Block block) {
+        public AddableState<Block> add(Block block) {
             var key = BlockKey.from(block);
             if (key != null) {
                 var event = BlockTagEvent.create(tagName, block);
@@ -329,15 +394,235 @@ public abstract class TagBuilder {
         }
     }
 
-    public static class InvalidBlockTagBuilder implements AddableState<Block>, RemovableState, CompletedState {
+    public static class InvalidBlockTag implements AddableState<Block>, RemovableState, CompletedState {
         @Nonnull
         @Override
-        public AddableState<Block> add(@Nullable Block block) {
+        public AddableState<Block> add(Block block) {
             return this;
         }
 
         @Override
         public void remove() {
+        }
+    }
+
+    public static abstract class MultiTagBuilder {
+        protected final Set<String> tagNames;
+        protected final boolean isValid;
+
+        protected MultiTagBuilder(@Nullable String[] tagNames) {
+            Set<String> validNames = validateMultiTagNames(tagNames);
+            this.isValid = !registrationClosed && validNames != null;
+            this.tagNames = this.isValid ? validNames : Collections.emptySet();
+
+            if (registrationClosed && validNames != null) {
+                LOGGER.warn("Tag registration is closed after FMLLoadCompleteEvent. Tags '{}' will not be registered.",
+                        validNames);
+            }
+        }
+    }
+
+    public static class MultiItemTagBuilder extends MultiTagBuilder implements MultiAddableState<ItemStack> {
+        MultiItemTagBuilder(@Nullable String... tagNames) {
+            super(tagNames);
+        }
+
+        @Nonnull
+        @Override
+        public MultiAddableState<ItemStack> add(@Nullable ItemStack stack) {
+            if (!isValid) {
+                return new InvalidMultiItemTag();
+            }
+
+            var key = ItemKey.from(stack);
+            if (key != null) {
+                for (var tagName : tagNames) {
+                    var event = ItemTagEvent.create(tagName, stack);
+                    if (MinecraftForge.EVENT_BUS.post(event)) {
+                        continue;
+                    }
+                    TagManager.ITEM_TAGS.createTag(tagName, key);
+                }
+            }
+
+            return new MultiItemTagAdder(tagNames);
+        }
+
+        @Nonnull
+        public MultiAddableState<ItemStack> add(Item item) {
+            return add(new ItemStack(item));
+        }
+
+        @Nonnull
+        public MultiAddableState<ItemStack> add(Item item, int metadata) {
+            return add(new ItemStack(item, 1, metadata));
+        }
+    }
+
+    public static class MultiItemTagAdder implements MultiAddableState<ItemStack>, CompletedState {
+        private final Set<String> tagNames;
+
+        MultiItemTagAdder(Set<String> tagNames) {
+            this.tagNames = tagNames;
+        }
+
+        @Nonnull
+        @Override
+        public MultiAddableState<ItemStack> add(@Nullable ItemStack stack) {
+            var key = ItemKey.from(stack);
+            if (key != null) {
+                for (var tagName : tagNames) {
+                    var event = ItemTagEvent.create(tagName, stack);
+                    if (!MinecraftForge.EVENT_BUS.post(event)) {
+                        TagManager.ITEM_TAGS.createTag(tagName, key);
+                    }
+                }
+            }
+            return this;
+        }
+
+        @Nonnull
+        public MultiAddableState<ItemStack> add(Item item) {
+            return add(new ItemStack(item));
+        }
+
+        @Nonnull
+        public MultiAddableState<ItemStack> add(Item item, int metadata) {
+            return add(new ItemStack(item, 1, metadata));
+        }
+    }
+
+    public static class MultiFluidTagBuilder extends MultiTagBuilder implements MultiAddableState<FluidStack> {
+        MultiFluidTagBuilder(@Nullable String... tagNames) {
+            super(tagNames);
+        }
+
+        @Nonnull
+        @Override
+        public MultiAddableState<FluidStack> add(@Nullable FluidStack stack) {
+            if (!isValid) {
+                return new InvalidMultiFluidTag();
+            }
+
+            var key = FluidKey.from(stack);
+            if (key != null) {
+                for (var tagName : tagNames) {
+                    var event = FluidTagEvent.create(tagName, stack);
+                    if (MinecraftForge.EVENT_BUS.post(event)) {
+                        continue;
+                    }
+                    TagManager.FLUID_TAGS.createTag(tagName, key);
+                }
+            }
+
+            return new MultiFluidTagAdder(tagNames);
+        }
+
+        @Nonnull
+        public MultiAddableState<FluidStack> add(Fluid fluid) {
+            return add(new FluidStack(fluid, 1000));
+        }
+    }
+
+    public static class MultiFluidTagAdder implements MultiAddableState<FluidStack>, CompletedState {
+        private final Set<String> tagNames;
+
+        MultiFluidTagAdder(Set<String> tagNames) {
+            this.tagNames = tagNames;
+        }
+
+        @Nonnull
+        @Override
+        public MultiAddableState<FluidStack> add(@Nullable FluidStack stack) {
+            var key = FluidKey.from(stack);
+            if (key != null) {
+                for (var tagName : tagNames) {
+                    var event = FluidTagEvent.create(tagName, stack);
+                    if (!MinecraftForge.EVENT_BUS.post(event)) {
+                        TagManager.FLUID_TAGS.createTag(tagName, key);
+                    }
+                }
+            }
+            return this;
+        }
+
+        @Nonnull
+        public MultiAddableState<FluidStack> add(Fluid fluid) {
+            return add(new FluidStack(fluid, 1000));
+        }
+    }
+
+    public static class MultiBlockTagBuilder extends MultiTagBuilder implements MultiAddableState<Block> {
+        MultiBlockTagBuilder(@Nullable String... tagNames) {
+            super(tagNames);
+        }
+
+        @Nonnull
+        @Override
+        public MultiAddableState<Block> add(Block block) {
+            if (!isValid) {
+                return new InvalidMultiBlockTag();
+            }
+
+            var key = BlockKey.from(block);
+            if (key != null) {
+                for (var tagName : tagNames) {
+                    var event = BlockTagEvent.create(tagName, block);
+                    if (MinecraftForge.EVENT_BUS.post(event)) {
+                        continue;
+                    }
+                    TagManager.BLOCK_TAGS.createTag(tagName, key);
+                }
+            }
+
+            return new MultiBlockTagAdder(tagNames);
+        }
+    }
+
+    public static class MultiBlockTagAdder implements MultiAddableState<Block>, CompletedState {
+        private final Set<String> tagNames;
+
+        MultiBlockTagAdder(Set<String> tagNames) {
+            this.tagNames = tagNames;
+        }
+
+        @Nonnull
+        @Override
+        public MultiAddableState<Block> add(Block block) {
+            var key = BlockKey.from(block);
+            if (key != null) {
+                for (var tagName : tagNames) {
+                    var event = BlockTagEvent.create(tagName, block);
+                    if (!MinecraftForge.EVENT_BUS.post(event)) {
+                        TagManager.BLOCK_TAGS.createTag(tagName, key);
+                    }
+                }
+            }
+            return this;
+        }
+    }
+
+    public static class InvalidMultiItemTag implements MultiAddableState<ItemStack>, CompletedState {
+        @Nonnull
+        @Override
+        public MultiAddableState<ItemStack> add(@Nullable ItemStack stack) {
+            return this;
+        }
+    }
+
+    public static class InvalidMultiFluidTag implements MultiAddableState<FluidStack>, CompletedState {
+        @Nonnull
+        @Override
+        public MultiAddableState<FluidStack> add(@Nullable FluidStack stack) {
+            return this;
+        }
+    }
+
+    public static class InvalidMultiBlockTag implements MultiAddableState<Block>, CompletedState {
+        @Nonnull
+        @Override
+        public MultiAddableState<Block> add(Block block) {
+            return this;
         }
     }
 }
