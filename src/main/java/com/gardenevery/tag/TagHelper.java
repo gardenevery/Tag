@@ -11,9 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
-import com.gardenevery.tag.key.BlockKey;
-import com.gardenevery.tag.key.FluidKey;
-import com.gardenevery.tag.key.ItemKey;
+import com.gardenevery.tag.key.*;
 
 public final class TagHelper {
 
@@ -350,7 +348,6 @@ public final class TagHelper {
                 TagManager.FLUID_TAGS.getUniqueKeyCount() +
                 TagManager.BLOCK_TAGS.getUniqueKeyCount();
     }
-
 
     private static boolean isTagInvalid(String tag) {
         return tag == null || tag.isEmpty();

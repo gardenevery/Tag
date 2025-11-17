@@ -1,11 +1,12 @@
-package com.gardenevery.tag;
+package com.gardenevery.tag.event;
 
+import com.gardenevery.tag.TagType;
 import net.minecraft.block.Block;
 
 public class BlockTagEvent extends TagEvent {
     private final Block block;
 
-    public BlockTagEvent(String tagName, Block block) {
+    private BlockTagEvent(String tagName, Block block) {
         super(tagName, TagType.BLOCK);
         this.block = block;
     }
@@ -29,7 +30,11 @@ public class BlockTagEvent extends TagEvent {
         return true;
     }
 
-    static BlockTagEvent create(String tagName, Block block) {
+    /**
+     * Do not use this
+     */
+    @Deprecated
+    public static BlockTagEvent create(String tagName, Block block) {
         return new BlockTagEvent(tagName, block);
     }
 }

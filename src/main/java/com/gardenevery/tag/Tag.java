@@ -63,6 +63,23 @@ public final class Tag<T extends Key> {
         keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>()).add(tag);
     }
 
+    void removeTag(String tag) {
+        var keys = tagToKeys.remove(tag);
+        if (keys == null) {
+            return;
+        }
+
+        for (T key : keys) {
+            var tagsForKey = keyToTags.get(key);
+            if (tagsForKey != null) {
+                tagsForKey.remove(tag);
+                if (tagsForKey.isEmpty()) {
+                    keyToTags.remove(key);
+                }
+            }
+        }
+    }
+
     Set<String> getAllTags() {
         return Collections.unmodifiableSet(tagToKeys.keySet());
     }

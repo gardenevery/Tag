@@ -1,11 +1,13 @@
-package com.gardenevery.tag;
+package com.gardenevery.tag.event;
 
 import net.minecraft.item.ItemStack;
+
+import com.gardenevery.tag.TagType;
 
 public class ItemTagEvent extends TagEvent {
     private final ItemStack itemStack;
 
-    public ItemTagEvent(String tagName, ItemStack itemStack) {
+    private ItemTagEvent(String tagName, ItemStack itemStack) {
         super(tagName, TagType.ITEM);
         this.itemStack = itemStack != null ? itemStack.copy() : ItemStack.EMPTY;
     }
@@ -29,7 +31,11 @@ public class ItemTagEvent extends TagEvent {
         return false;
     }
 
-    static ItemTagEvent create(String tagName, ItemStack itemStack) {
+    /**
+     * Do not use this
+     */
+    @Deprecated
+    public static ItemTagEvent create(String tagName, ItemStack itemStack) {
         return new ItemTagEvent(tagName, itemStack);
     }
 }

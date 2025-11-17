@@ -1,11 +1,12 @@
-package com.gardenevery.tag;
+package com.gardenevery.tag.event;
 
+import com.gardenevery.tag.TagType;
 import net.minecraftforge.fluids.FluidStack;
 
 public class FluidTagEvent extends TagEvent {
     private final FluidStack fluidStack;
 
-    public FluidTagEvent(String tagName, FluidStack fluidStack) {
+    private FluidTagEvent(String tagName, FluidStack fluidStack) {
         super(tagName, TagType.FLUID);
         this.fluidStack = fluidStack != null ? fluidStack.copy() : null;
     }
@@ -29,7 +30,11 @@ public class FluidTagEvent extends TagEvent {
         return false;
     }
 
-    static FluidTagEvent create(String tagName, FluidStack fluidStack) {
+    /**
+     * Do not use this
+     */
+    @Deprecated
+    public static FluidTagEvent create(String tagName, FluidStack fluidStack) {
         return new FluidTagEvent(tagName, fluidStack);
     }
 }
