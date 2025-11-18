@@ -115,7 +115,7 @@ public final class TagHelper {
     /**
      * Check if an item has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable ItemStack stack, @Nullable Collection<String> tags) {
+    public static boolean hasAnyTags(@Nullable ItemStack stack, @Nullable Set<String> tags) {
         if (areTagsInvalid(tags)) {
             return false;
         }
@@ -137,7 +137,7 @@ public final class TagHelper {
     /**
      * Check if a fluid has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable FluidStack stack, @Nullable Collection<String> tags) {
+    public static boolean hasAnyTags(@Nullable FluidStack stack, @Nullable Set<String> tags) {
         if (areTagsInvalid(tags)) {
             return false;
         }
@@ -159,7 +159,7 @@ public final class TagHelper {
     /**
      * Check if a block has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable Block block, @Nullable Collection<String> tags) {
+    public static boolean hasAnyTags(@Nullable Block block, @Nullable Set<String> tags) {
         if (areTagsInvalid(tags)) {
             return false;
         }
@@ -181,7 +181,7 @@ public final class TagHelper {
     /**
      * Check if a blockState has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable IBlockState blockState, @Nullable Collection<String> tags) {
+    public static boolean hasAnyTags(@Nullable IBlockState blockState, @Nullable Set<String> tags) {
         if (areTagsInvalid(tags) || blockState == null) {
             return false;
         }

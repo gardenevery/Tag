@@ -1,8 +1,9 @@
 package com.gardenevery.tag;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nonnull;
 
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -17,22 +18,24 @@ public final class Tag<T extends Key> {
     private final Object2ReferenceOpenHashMap<String, ObjectOpenHashSet<T>> tagToKeys = new Object2ReferenceOpenHashMap<>();
     private final Object2ReferenceOpenHashMap<T, ObjectOpenHashSet<String>> keyToTags = new Object2ReferenceOpenHashMap<>();
 
-    Set<T> getKeys(String tag) {
+    @Nonnull
+    Set<T> getKeys(@Nonnull String tag) {
         var keys = tagToKeys.get(tag);
         return keys != null ? Collections.unmodifiableSet(keys) : Collections.emptySet();
     }
 
-    Set<String> getTags(T key) {
+    @Nonnull
+    Set<String> getTags(@Nonnull T key) {
         var tags = keyToTags.get(key);
         return tags != null ? Collections.unmodifiableSet(tags) : Collections.emptySet();
     }
 
-    boolean hasTag(T key, String tagName) {
+    boolean hasTag(@Nonnull T key, @Nonnull String tagName) {
         var tags = keyToTags.get(key);
         return tags != null && tags.contains(tagName);
     }
 
-    boolean hasAnyTag(T key, Collection<String> tagNames) {
+    boolean hasAnyTag(@Nonnull T key, @Nonnull Set<String> tagNames) {
         var tags = keyToTags.get(key);
         if (tags == null) {
             return false;
@@ -45,25 +48,30 @@ public final class Tag<T extends Key> {
         return false;
     }
 
-    boolean hasAnyTag(T key, String... tagNames) {
-        var tags = keyToTags.get(key);
-        if (tags == null) {
+    boolean hasAnyTag(@Nonnull T key, @Nonnull String... tagNames) {
+        if (tagNames.length == 0) {
             return false;
         }
-        for (var tagName : tagNames) {
-            if (tags.contains(tagName)) {
-                return true;
+        Set<String> tagSet = new HashSet<>();
+        for (var tag : tagNames) {
+            if (tag != null) {
+                tagSet.add(tag);
             }
         }
-        return false;
+        return hasAnyTag(key, tagSet);
     }
 
-    void createTag(String tag, T key) {
+    void createTag(@Nonnull String tag, @Nonnull T key) {
         tagToKeys.computeIfAbsent(tag, k -> new ObjectOpenHashSet<>()).add(key);
         keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>()).add(tag);
     }
 
-    void removeTag(String tag) {
+    void createTags(@Nonnull Set<String> tags, @Nonnull T key) {
+        tags.forEach(tag -> tagToKeys.computeIfAbsent(tag, k -> new ObjectOpenHashSet<>()).add(key));
+        keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>()).addAll(tags);
+    }
+
+    void removeTag(@Nonnull String tag) {
         var keys = tagToKeys.remove(tag);
         if (keys == null) {
             return;
@@ -80,11 +88,29 @@ public final class Tag<T extends Key> {
         }
     }
 
+    void removeTags(@Nonnull Set<String> tags) {
+        tags.forEach(tag -> {
+            var keys = tagToKeys.remove(tag);
+            if (keys != null) {
+                keys.forEach(key -> {
+                    var tagsForKey = keyToTags.get(key);
+                    if (tagsForKey != null) {
+                        tagsForKey.remove(tag);
+                        if (tagsForKey.isEmpty()) {
+                            keyToTags.remove(key);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    @Nonnull
     Set<String> getAllTags() {
         return Collections.unmodifiableSet(tagToKeys.keySet());
     }
 
-    boolean doesTagNameExist(String tagName) {
+    boolean doesTagNameExist(@Nonnull String tagName) {
         return tagToKeys.containsKey(tagName);
     }
 
