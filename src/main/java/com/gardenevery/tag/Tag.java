@@ -7,8 +7,7 @@ import javax.annotation.Nonnull;
 
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-
-import com.gardenevery.tag.key.Key;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
 
 public final class Tag<T extends Key> {
 
@@ -40,6 +39,7 @@ public final class Tag<T extends Key> {
         if (tags == null) {
             return false;
         }
+
         for (var tagName : tagNames) {
             if (tags.contains(tagName)) {
                 return true;
@@ -52,6 +52,7 @@ public final class Tag<T extends Key> {
         if (tagNames.length == 0) {
             return false;
         }
+
         Set<String> tagSet = new HashSet<>();
         for (var tag : tagNames) {
             if (tag != null) {
@@ -67,8 +68,12 @@ public final class Tag<T extends Key> {
     }
 
     void createTags(@Nonnull Set<String> tags, @Nonnull T key) {
-        tags.forEach(tag -> tagToKeys.computeIfAbsent(tag, k -> new ObjectOpenHashSet<>()).add(key));
-        keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>()).addAll(tags);
+        ObjectSet<String> keyTags = keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>());
+
+        for (var tag : tags) {
+            tagToKeys.computeIfAbsent(tag, k -> new ObjectOpenHashSet<>()).add(key);
+            keyTags.add(tag);
+        }
     }
 
     void removeTag(@Nonnull String tag) {
@@ -89,20 +94,22 @@ public final class Tag<T extends Key> {
     }
 
     void removeTags(@Nonnull Set<String> tags) {
-        tags.forEach(tag -> {
+        for (var tag : tags) {
             var keys = tagToKeys.remove(tag);
-            if (keys != null) {
-                keys.forEach(key -> {
-                    var tagsForKey = keyToTags.get(key);
-                    if (tagsForKey != null) {
-                        tagsForKey.remove(tag);
-                        if (tagsForKey.isEmpty()) {
-                            keyToTags.remove(key);
-                        }
-                    }
-                });
+            if (keys == null) {
+                continue;
             }
-        });
+
+            for (T key : keys) {
+                var tagsForKey = keyToTags.get(key);
+                if (tagsForKey != null) {
+                    tagsForKey.remove(tag);
+                    if (tagsForKey.isEmpty()) {
+                        keyToTags.remove(key);
+                    }
+                }
+            }
+        }
     }
 
     @Nonnull

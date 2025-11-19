@@ -3,6 +3,7 @@ package com.gardenevery.tag;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -12,10 +13,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.gardenevery.tag.key.*;
-
-import javax.annotation.Nullable;
 
 public abstract class TagBuilder {
 
@@ -119,21 +116,31 @@ public abstract class TagBuilder {
         }
 
         Set<String> validNames = new LinkedHashSet<>();
+        int invalidCount = 0;
+
         for (var name : names) {
-            if (validateTagName(name)) {
-                if (!validNames.add(name)) {
-                    LOGGER.debug("Duplicate tag name '{}' found and ignored", name);
-                }
+            if (name == null || name.isEmpty()) {
+                invalidCount++;
+                continue;
             }
+
+            if (!name.matches("[a-zA-Z0-9:_/]+")) {
+                invalidCount++;
+                continue;
+            }
+
+            validNames.add(name);
         }
 
         if (validNames.isEmpty()) {
-            LOGGER.warn("No valid tag names provided");
+            LOGGER.warn("No valid tag names provided. Total: {}, all invalid: {}",
+                    names.length, invalidCount);
             return null;
         }
 
-        if (validNames.size() < names.length) {
-            LOGGER.info("Filtered {} tag names to {} unique valid names", names.length, validNames.size());
+        if (invalidCount > 0) {
+            LOGGER.info("Tag names filtered. Total: {}, valid: {}, invalid: {}",
+                    names.length, validNames.size(), invalidCount);
         }
 
         return Collections.unmodifiableSet(validNames);
@@ -181,7 +188,7 @@ public abstract class TagBuilder {
                     return new InvalidItemTag();
                 }
 
-                var key = ItemKey.from(stack);
+                var key = Key.ItemKey.from(stack);
                 if (key != null) {
                     TagManager.ITEM_TAGS.createTag(tagName, key);
                 }
@@ -220,7 +227,7 @@ public abstract class TagBuilder {
 
         @Override
         public AddableState<ItemStack> add(@Nullable ItemStack stack) {
-            var key = ItemKey.from(stack);
+            var key = Key.ItemKey.from(stack);
             if (key != null) {
                 TagManager.ITEM_TAGS.createTag(tagName, key);
             }
@@ -263,7 +270,7 @@ public abstract class TagBuilder {
                     return new InvalidFluidTag();
                 }
 
-                var key = FluidKey.from(stack);
+                var key = Key.FluidKey.from(stack);
                 if (key != null) {
                     TagManager.FLUID_TAGS.createTag(tagName, key);
                 }
@@ -290,14 +297,14 @@ public abstract class TagBuilder {
     public static class FluidTagAdder implements AddableState<FluidStack>, CompletedState {
         private final String tagName;
 
-        FluidTagAdder( String tagName) {
+        FluidTagAdder(String tagName) {
             this.tagName = tagName;
         }
 
 
         @Override
         public AddableState<FluidStack> add(@Nullable FluidStack stack) {
-            var key = FluidKey.from(stack);
+            var key = Key.FluidKey.from(stack);
             if (key != null) {
                 TagManager.FLUID_TAGS.createTag(tagName, key);
             }
@@ -335,7 +342,7 @@ public abstract class TagBuilder {
                     return new InvalidBlockTag();
                 }
 
-                var key = BlockKey.from(block);
+                var key = Key.BlockKey.from(block);
                 if (key != null) {
                     TagManager.BLOCK_TAGS.createTag(tagName, key);
                 }
@@ -364,7 +371,7 @@ public abstract class TagBuilder {
 
         @Override
         public AddableState<Block> add( Block block) {
-            var key = BlockKey.from(block);
+            var key = Key.BlockKey.from(block);
             if (key != null) {
                 TagManager.BLOCK_TAGS.createTag(tagName, key);
             }
@@ -413,7 +420,7 @@ public abstract class TagBuilder {
                     return new InvalidMultiItemTag();
                 }
 
-                var key = ItemKey.from(stack);
+                var key = Key.ItemKey.from(stack);
                 if (key != null) {
                     TagManager.ITEM_TAGS.createTags(tagNames, key);
                 }
@@ -452,7 +459,7 @@ public abstract class TagBuilder {
 
         @Override
         public MultiAddableState<ItemStack> add(@Nullable ItemStack stack) {
-            var key = ItemKey.from(stack);
+            var key = Key.ItemKey.from(stack);
             if (key != null) {
                 TagManager.ITEM_TAGS.createTags(tagNames, key);
             }
@@ -483,7 +490,7 @@ public abstract class TagBuilder {
                     return new InvalidMultiFluidTag();
                 }
 
-                var key = FluidKey.from(stack);
+                var key = Key.FluidKey.from(stack);
                 if (key != null) {
                     TagManager.FLUID_TAGS.createTags(tagNames, key);
                 }
@@ -517,7 +524,7 @@ public abstract class TagBuilder {
 
         @Override
         public MultiAddableState<FluidStack> add(@Nullable FluidStack stack) {
-            var key = FluidKey.from(stack);
+            var key = Key.FluidKey.from(stack);
             if (key != null) {
                 TagManager.FLUID_TAGS.createTags(tagNames, key);
             }
@@ -531,7 +538,7 @@ public abstract class TagBuilder {
     }
 
     public static class MultiBlockTagBuilder extends MultiTagBuilder {
-        private MultiBlockTagBuilder( String... tagNames) {
+        private MultiBlockTagBuilder(String... tagNames) {
             super(tagNames);
         }
 
@@ -543,7 +550,7 @@ public abstract class TagBuilder {
                     return new InvalidMultiBlockTag();
                 }
 
-                var key = BlockKey.from(block);
+                var key = Key.BlockKey.from(block);
                 if (key != null) {
                     TagManager.BLOCK_TAGS.createTags(tagNames, key);
                 }
@@ -572,7 +579,7 @@ public abstract class TagBuilder {
 
         @Override
         public MultiAddableState<Block> add(@Nullable Block block) {
-            var key = BlockKey.from(block);
+            var key = Key.BlockKey.from(block);
             if (key != null) {
                 TagManager.BLOCK_TAGS.createTags(tagNames, key);
             }
