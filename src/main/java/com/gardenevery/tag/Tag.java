@@ -1,7 +1,6 @@
 package com.gardenevery.tag;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
 
@@ -46,20 +45,6 @@ public final class Tag<T extends Key> {
             }
         }
         return false;
-    }
-
-    boolean hasAnyTag(@Nonnull T key, @Nonnull String... tagNames) {
-        if (tagNames.length == 0) {
-            return false;
-        }
-
-        Set<String> tagSet = new HashSet<>();
-        for (var tag : tagNames) {
-            if (tag != null) {
-                tagSet.add(tag);
-            }
-        }
-        return hasAnyTag(key, tagSet);
     }
 
     void createTag(@Nonnull String tag, @Nonnull T key) {
