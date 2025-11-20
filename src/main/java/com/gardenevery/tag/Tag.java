@@ -10,8 +10,7 @@ import it.unimi.dsi.fastutil.objects.ObjectSet;
 
 public final class Tag<T extends Key> {
 
-    Tag() {
-    }
+    Tag() {}
 
     private final Object2ReferenceOpenHashMap<String, ObjectOpenHashSet<T>> tagToKeys = new Object2ReferenceOpenHashMap<>();
     private final Object2ReferenceOpenHashMap<T, ObjectOpenHashSet<String>> keyToTags = new Object2ReferenceOpenHashMap<>();
@@ -106,6 +105,10 @@ public final class Tag<T extends Key> {
         return tagToKeys.containsKey(tagName);
     }
 
+    boolean containsKey(@Nonnull T key) {
+        return keyToTags.containsKey(key);
+    }
+
     int getTagCount() {
         return tagToKeys.size();
     }
@@ -120,5 +123,10 @@ public final class Tag<T extends Key> {
             count += entry.getValue().size();
         }
         return count;
+    }
+
+    void clear() {
+        tagToKeys.clear();
+        keyToTags.clear();
     }
 }
