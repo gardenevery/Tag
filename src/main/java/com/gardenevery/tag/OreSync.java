@@ -13,7 +13,7 @@ final class OreSync {
 
     private OreSync() {}
 
-    private static final Logger LOGGER = LogManager.getLogger("TagOreSync");
+    private static final Logger LOGGER = LogManager.getLogger("OreSync");
 
     public static void oreDictionarySync() {
         var oreNames = OreDictionary.getOreNames();
