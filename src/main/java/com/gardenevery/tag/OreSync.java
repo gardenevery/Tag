@@ -9,18 +9,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-final class TagSync {
+final class OreSync {
 
-    private TagSync() {
-    }
+    private OreSync() {}
 
-    private static final Logger LOGGER = LogManager.getLogger("TagSync");
+    private static final Logger LOGGER = LogManager.getLogger("TagOreSync");
 
     public static void oreDictionarySync() {
         var oreNames = OreDictionary.getOreNames();
         int totalEntries = 0;
         int failedEntries = 0;
-
         LOGGER.info("=== Starting Ore Dictionary Sync ===");
         LOGGER.info("Found {} ore dictionary categories", oreNames.length);
 
@@ -30,7 +28,6 @@ final class TagSync {
             }
 
             List<ItemStack> ores = OreDictionary.getOres(oreName);
-
             for (var oreStack : ores) {
                 if (oreStack.isEmpty()) {
                     failedEntries++;
@@ -51,13 +48,11 @@ final class TagSync {
                 }
             }
         }
-
         LOGGER.info("=== Sync completed: {} successful, {} failed ===", totalEntries, failedEntries);
     }
 
     private static int syncWildcardEntry(Item item, String tagName) {
         int synced = 0;
-
         for (int meta = 0; meta < 16; meta++) {
             try {
                 var specificStack = new ItemStack(item, 1, meta);
@@ -75,7 +70,6 @@ final class TagSync {
             TagBuilder.item(tagName).add(wildcardStack);
             synced = 1;
         }
-
         return synced;
     }
 }

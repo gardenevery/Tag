@@ -59,6 +59,7 @@ public final class TagHelper {
         if (blockState == null) {
             return Collections.emptySet();
         }
+
         var key = BlockKey.from(blockState.getBlock());
         return key != null ? TagManager.BLOCK.getTags(key) : Collections.emptySet();
     }
@@ -66,133 +67,144 @@ public final class TagHelper {
     /**
      * Check if an item has the specified tag
      */
-    public static boolean hasTag(@Nullable ItemStack stack, @Nullable String tag) {
-        if (isTagInvalid(tag)) {
+    public static boolean hasTag(@Nullable ItemStack stack, @Nullable String tagName) {
+        if (isTagInvalid(tagName)) {
             return false;
         }
+
         var key = ItemKey.from(stack);
-        return key != null && TagManager.ITEM.hasTag(key, tag);
+        return key != null && TagManager.ITEM.hasTag(key, tagName);
     }
 
     /**
      * Check if a fluid has the specified tag
      */
-    public static boolean hasTag(@Nullable FluidStack stack, @Nullable String tag) {
-        if (isTagInvalid(tag)) {
+    public static boolean hasTag(@Nullable FluidStack stack, @Nullable String tagName) {
+        if (isTagInvalid(tagName)) {
             return false;
         }
+
         var key = FluidKey.from(stack);
-        return key != null && TagManager.FLUID.hasTag(key, tag);
+        return key != null && TagManager.FLUID.hasTag(key, tagName);
     }
 
     /**
      * Check if a block has the specified tag
      */
-    public static boolean hasTag(@Nullable Block block, @Nullable String tag) {
-        if (isTagInvalid(tag)) {
+    public static boolean hasTag(@Nullable Block block, @Nullable String tagName) {
+        if (isTagInvalid(tagName)) {
             return false;
         }
+
         var key = BlockKey.from(block);
-        return key != null && TagManager.BLOCK.hasTag(key, tag);
+        return key != null && TagManager.BLOCK.hasTag(key, tagName);
     }
 
     /**
      * Check if a block state has the specified tag
      */
-    public static boolean hasTag(@Nullable IBlockState blockState, @Nullable String tag) {
-        if (isTagInvalid(tag) || blockState == null) {
+    public static boolean hasTag(@Nullable IBlockState blockState, @Nullable String tagName) {
+        if (isTagInvalid(tagName) || blockState == null) {
             return false;
         }
+
         var key = BlockKey.from(blockState.getBlock());
-        return key != null && TagManager.BLOCK.hasTag(key, tag);
+        return key != null && TagManager.BLOCK.hasTag(key, tagName);
     }
 
     /**
      * Check if an item has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable ItemStack stack, @Nullable String... tags) {
-        if (areTagsInvalid(tags)) {
+    public static boolean hasAnyTags(@Nullable ItemStack stack, @Nullable String... tagNames) {
+        if (areTagsInvalid(tagNames)) {
             return false;
         }
         var key = ItemKey.from(stack);
-        return key != null && TagManager.ITEM.hasAnyTag(key, new HashSet<>(Arrays.asList(tags)));
+        return key != null && TagManager.ITEM.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
     }
 
     /**
      * Check if an item has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable ItemStack stack, @Nullable Set<String> tags) {
-        if (areTagsInvalid(tags)) {
+    public static boolean hasAnyTags(@Nullable ItemStack stack, @Nullable Set<String> tagNames) {
+        if (areTagsInvalid(tagNames)) {
             return false;
         }
+
         var key = ItemKey.from(stack);
-        return key != null && TagManager.ITEM.hasAnyTag(key, tags);
+        return key != null && TagManager.ITEM.hasAnyTag(key, tagNames);
     }
 
     /**
      * Check if a fluid has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable FluidStack stack, @Nullable String... tags) {
-        if (areTagsInvalid(tags)) {
+    public static boolean hasAnyTags(@Nullable FluidStack stack, @Nullable String... tagNames) {
+        if (areTagsInvalid(tagNames)) {
             return false;
         }
+
         var key = FluidKey.from(stack);
-        return key != null && TagManager.FLUID.hasAnyTag(key, new HashSet<>(Arrays.asList(tags)));
+        return key != null && TagManager.FLUID.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
     }
 
     /**
      * Check if a fluid has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable FluidStack stack, @Nullable Set<String> tags) {
-        if (areTagsInvalid(tags)) {
+    public static boolean hasAnyTags(@Nullable FluidStack stack, @Nullable Set<String> tagNames) {
+        if (areTagsInvalid(tagNames)) {
             return false;
         }
+
         var key = FluidKey.from(stack);
-        return key != null && TagManager.FLUID.hasAnyTag(key, tags);
+        return key != null && TagManager.FLUID.hasAnyTag(key, tagNames);
     }
 
     /**
      * Check if a block has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable Block block, @Nullable String... tags) {
-        if (areTagsInvalid(tags)) {
+    public static boolean hasAnyTags(@Nullable Block block, @Nullable String... tagNames) {
+        if (areTagsInvalid(tagNames)) {
             return false;
         }
+
         var key = BlockKey.from(block);
-        return key != null && TagManager.BLOCK.hasAnyTag(key, new HashSet<>(Arrays.asList(tags)));
+        return key != null && TagManager.BLOCK.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
     }
 
     /**
      * Check if a block has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable Block block, @Nullable Set<String> tags) {
-        if (areTagsInvalid(tags)) {
+    public static boolean hasAnyTags(@Nullable Block block, @Nullable Set<String> tagNames) {
+        if (areTagsInvalid(tagNames)) {
             return false;
         }
+
         var key = BlockKey.from(block);
-        return key != null && TagManager.BLOCK.hasAnyTag(key, tags);
+        return key != null && TagManager.BLOCK.hasAnyTag(key, tagNames);
     }
 
     /**
      * Check if a blockState has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable IBlockState blockState, @Nullable String... tags) {
-        if (areTagsInvalid(tags) || blockState == null) {
+    public static boolean hasAnyTags(@Nullable IBlockState blockState, @Nullable String... tagNames) {
+        if (areTagsInvalid(tagNames) || blockState == null) {
             return false;
         }
+
         var key = BlockKey.from(blockState.getBlock());
-        return key != null && TagManager.BLOCK.hasAnyTag(key, new HashSet<>(Arrays.asList(tags)));
+        return key != null && TagManager.BLOCK.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
     }
 
     /**
      * Check if a blockState has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable IBlockState blockState, @Nullable Set<String> tags) {
-        if (areTagsInvalid(tags) || blockState == null) {
+    public static boolean hasAnyTags(@Nullable IBlockState blockState, @Nullable Set<String> tagNames) {
+        if (areTagsInvalid(tagNames) || blockState == null) {
             return false;
         }
+
         var key = BlockKey.from(blockState.getBlock());
-        return key != null && TagManager.BLOCK.hasAnyTag(key, tags);
+        return key != null && TagManager.BLOCK.hasAnyTag(key, tagNames);
     }
 
     /**
@@ -203,10 +215,11 @@ public final class TagHelper {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
-        Set<Key.ItemKey> keys = TagManager.ITEM.getKeys(tagName);
+
+        Set<ItemKey> keys = TagManager.ITEM.getKeys(tagName);
         Set<ItemStack> result = new ObjectOpenHashSet<>();
         for (var key : keys) {
-            result.add(key.stack());
+            result.add(key.toStack());
         }
         return Collections.unmodifiableSet(result);
     }
@@ -219,10 +232,11 @@ public final class TagHelper {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
-        Set<Key.FluidKey> keys = TagManager.FLUID.getKeys(tagName);
+
+        Set<FluidKey> keys = TagManager.FLUID.getKeys(tagName);
         Set<FluidStack> result = new ObjectOpenHashSet<>();
         for (var key : keys) {
-            result.add(key.stack());
+            result.add(key.toStack());
         }
         return Collections.unmodifiableSet(result);
     }
@@ -235,7 +249,8 @@ public final class TagHelper {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
-        Set<Key.BlockKey> keys = TagManager.BLOCK.getKeys(tagName);
+
+        Set<BlockKey> keys = TagManager.BLOCK.getKeys(tagName);
         Set<Block> result = new ObjectOpenHashSet<>();
         for (var key : keys) {
             result.add(key.toBlock());
@@ -269,27 +284,29 @@ public final class TagHelper {
     /**
      * Check if a tag exists for the specified type
      */
-    public static boolean tagNameExist(@Nullable String tag, @Nonnull TagType type) {
-        if (isTagInvalid(tag)) {
+    public static boolean tagNameExist(@Nullable String tagName, @Nonnull TagType type) {
+        if (isTagInvalid(tagName)) {
             return false;
         }
+
         return switch (type) {
-            case ITEM -> TagManager.ITEM.doesTagNameExist(tag);
-            case FLUID -> TagManager.FLUID.doesTagNameExist(tag);
-            case BLOCK -> TagManager.BLOCK.doesTagNameExist(tag);
+            case ITEM -> TagManager.ITEM.doesTagName(tagName);
+            case FLUID -> TagManager.FLUID.doesTagName(tagName);
+            case BLOCK -> TagManager.BLOCK.doesTagName(tagName);
         };
     }
 
     /**
      * Check if a tag exists in any type
      */
-    public static boolean tagNameExist(@Nullable String tag) {
-        if (isTagInvalid(tag)) {
+    public static boolean tagNameExist(@Nullable String tagName) {
+        if (isTagInvalid(tagName)) {
             return false;
         }
-        return (TagManager.ITEM.doesTagNameExist(tag) ||
-                TagManager.FLUID.doesTagNameExist(tag) ||
-                TagManager.BLOCK.doesTagNameExist(tag)
+
+        return (TagManager.ITEM.doesTagName(tagName) ||
+                TagManager.FLUID.doesTagName(tagName) ||
+                TagManager.BLOCK.doesTagName(tagName)
         );
     }
 
@@ -324,6 +341,7 @@ public final class TagHelper {
         if (blockState == null) {
             return false;
         }
+
         var key = BlockKey.from(blockState.getBlock());
         return key != null && TagManager.BLOCK.containsKey(key);
     }
@@ -354,19 +372,19 @@ public final class TagHelper {
      */
     public static int getTotalAssociations(@Nonnull TagType type) {
         return switch (type) {
-            case ITEM -> TagManager.ITEM.getTotalAssociations();
-            case FLUID -> TagManager.FLUID.getTotalAssociations();
-            case BLOCK -> TagManager.BLOCK.getTotalAssociations();
+            case ITEM -> TagManager.ITEM.getAssociations();
+            case FLUID -> TagManager.FLUID.getAssociations();
+            case BLOCK -> TagManager.BLOCK.getAssociations();
         };
     }
 
     /**
      * Get the total number of associations across all types
      */
-    public static int getTotalAssociations() {
-        return TagManager.ITEM.getTotalAssociations() +
-                TagManager.FLUID.getTotalAssociations() +
-                TagManager.BLOCK.getTotalAssociations();
+    public static int getAssociations() {
+        return TagManager.ITEM.getAssociations() +
+                TagManager.FLUID.getAssociations() +
+                TagManager.BLOCK.getAssociations();
     }
 
     /**
@@ -375,30 +393,30 @@ public final class TagHelper {
      */
     public static int getUniqueKeyCount(@Nonnull TagType type) {
         return switch (type) {
-            case ITEM -> TagManager.ITEM.getUniqueKeyCount();
-            case FLUID -> TagManager.FLUID.getUniqueKeyCount();
-            case BLOCK -> TagManager.BLOCK.getUniqueKeyCount();
+            case ITEM -> TagManager.ITEM.getKeyCount();
+            case FLUID -> TagManager.FLUID.getKeyCount();
+            case BLOCK -> TagManager.BLOCK.getKeyCount();
         };
     }
 
     /**
      * Get the total number of unique keys across all types
      */
-    public static int getUniqueKeyCount() {
-        return TagManager.ITEM.getUniqueKeyCount() +
-                TagManager.FLUID.getUniqueKeyCount() +
-                TagManager.BLOCK.getUniqueKeyCount();
+    public static int getKeyCount() {
+        return TagManager.ITEM.getKeyCount() +
+                TagManager.FLUID.getKeyCount() +
+                TagManager.BLOCK.getKeyCount();
     }
 
-    private static boolean isTagInvalid(@Nullable String tag) {
-        return tag == null || tag.isEmpty();
+    private static boolean isTagInvalid(@Nullable String tagName) {
+        return tagName == null || tagName.isEmpty();
     }
 
-    private static boolean areTagsInvalid(@Nullable Set<String> tags) {
-        return tags == null || tags.isEmpty();
+    private static boolean areTagsInvalid(@Nullable Set<String> tagNames) {
+        return tagNames == null || tagNames.isEmpty();
     }
 
-    private static boolean areTagsInvalid(@Nullable String[] tags) {
-        return tags == null || tags.length == 0;
+    private static boolean areTagsInvalid(@Nullable String[] tagNames) {
+        return tagNames == null || tagNames.length == 0;
     }
 }

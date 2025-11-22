@@ -1,16 +1,21 @@
 # Tag Command
-com.gardenevery.tag.nopermission=§cYou do not have permission to use this command.
-com.gardenevery.tag.noitem=§cYou are not holding any item.
+com.gardenevery.tag.nopermission=§cDo not have permission to use this command.
+com.gardenevery.tag.noitem=§cNot holding any item.
 com.gardenevery.tag.fluidtags=§aFluid tags: %s
 com.gardenevery.tag.nofluidtags=§7This fluid has no tags.
 com.gardenevery.tag.emptycontainer=§eThis fluid container is empty.
 com.gardenevery.tag.itemtags=§aItem tags: %s
 com.gardenevery.tag.noitemtags=§7This item has no tags.
 com.gardenevery.tag.statistics.title=§6=== Tag Statistics ===
-com.gardenevery.tag.statistics.items=§aItem Tags: §f%s §7Associations: §f%s  (§f%s§7unique)
-com.gardenevery.tag.statistics.fluids=§bFluid Tags: §f%s §7Associations: §f%s  (§f%s§7unique)
-com.gardenevery.tag.statistics.blocks=§eBlock Tags: §f%s §7Associations: §f%s  (§f%s§7unique)
-com.gardenevery.tag.statistics.total=§6Total Tags: §f%s §7Total Associations: §f%s  (§f%s§7unique)
+com.gardenevery.tag.statistics.items=§aItem Tags: §f%s §7Associations: §f%s (§f%s§7 unique items)
+com.gardenevery.tag.statistics.fluids=§bFluid Tags: §f%s §7Associations: §f%s (§f%s§7 unique fluids)
+com.gardenevery.tag.statistics.blocks=§eBlock Tags: §f%s §7Associations: §f%s (§f%s§7 unique blocks)
+com.gardenevery.tag.statistics.total=§6Total Tags: §f%s §7Total Associations: §f%s (§f%s§7 unique elements)
+com.gardenevery.tag.help.title=§6=== Tag Command Help ===
+com.gardenevery.tag.help.hand=§a/tag hand §7- Show tags of held items
+com.gardenevery.tag.help.info=§b/tag info §7- Show tag statistics (requires permission level 2)
+com.gardenevery.tag.mainhand=§6[Main Hand]
+com.gardenevery.tag.offhand=§6[Off Hand]
 
-#Tootlip
-tooltip.hold_shift_for_tags=Hold Shift to display labels
+# Tooltip
+tooltip.hold_shift_for_tags=Hold Shift to display tags

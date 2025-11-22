@@ -27,7 +27,7 @@ interface Key {
         }
 
         @Nonnull
-        public ItemStack stack() {
+        public ItemStack toStack() {
             return new ItemStack(item, 1, metadata);
         }
     }
@@ -43,7 +43,7 @@ interface Key {
         }
 
         @Nonnull
-        public FluidStack stack() {
+        public FluidStack toStack() {
             return new FluidStack(fluid, 1000);
         }
     }
@@ -76,11 +76,12 @@ interface Key {
 //            if (registryName == null) {
 //                return null;
 //            }
+//
 //            int metadata = stack.getHasSubtypes() ? stack.getMetadata() : 0;
 //            return new ItemKey(registryName, metadata);
 //        }
 //
-//        public ItemStack stack() {
+//        public ItemStack toStack() {
 //            return new ItemStack(ForgeRegistries.ITEMS.getValue(item), 1, metadata);
 //        }
 //    }
@@ -100,7 +101,7 @@ interface Key {
 //            return new FluidKey(fluidName);
 //        }
 //
-//        public FluidStack stack() {
+//        public FluidStack toStack() {
 //            var fluidName = fluid();
 //            var fluid = FluidRegistry.getFluid(fluidName);
 //            if (fluid == null) {

@@ -16,8 +16,8 @@ public final class Tag<T extends Key> {
     private final Object2ReferenceOpenHashMap<T, ObjectOpenHashSet<String>> keyToTags = new Object2ReferenceOpenHashMap<>();
 
     @Nonnull
-    Set<T> getKeys(@Nonnull String tag) {
-        var keys = tagToKeys.get(tag);
+    Set<T> getKeys(@Nonnull String tagName) {
+        var keys = tagToKeys.get(tagName);
         return keys != null ? Collections.unmodifiableSet(keys) : Collections.emptySet();
     }
 
@@ -46,22 +46,22 @@ public final class Tag<T extends Key> {
         return false;
     }
 
-    void createTag(@Nonnull String tag, @Nonnull T key) {
-        tagToKeys.computeIfAbsent(tag, k -> new ObjectOpenHashSet<>()).add(key);
-        keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>()).add(tag);
+    void createTag(@Nonnull String tagName, @Nonnull T key) {
+        tagToKeys.computeIfAbsent(tagName, k -> new ObjectOpenHashSet<>()).add(key);
+        keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>()).add(tagName);
     }
 
-    void createTags(@Nonnull Set<String> tags, @Nonnull T key) {
+    void createTags(@Nonnull Set<String> tagNames, @Nonnull T key) {
         ObjectSet<String> keyTags = keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>());
 
-        for (var tag : tags) {
+        for (var tag : tagNames) {
             tagToKeys.computeIfAbsent(tag, k -> new ObjectOpenHashSet<>()).add(key);
             keyTags.add(tag);
         }
     }
 
-    void removeTag(@Nonnull String tag) {
-        var keys = tagToKeys.remove(tag);
+    void removeTag(@Nonnull String tagName) {
+        var keys = tagToKeys.remove(tagName);
         if (keys == null) {
             return;
         }
@@ -69,7 +69,7 @@ public final class Tag<T extends Key> {
         for (T key : keys) {
             var tagsForKey = keyToTags.get(key);
             if (tagsForKey != null) {
-                tagsForKey.remove(tag);
+                tagsForKey.remove(tagName);
                 if (tagsForKey.isEmpty()) {
                     keyToTags.remove(key);
                 }
@@ -77,8 +77,8 @@ public final class Tag<T extends Key> {
         }
     }
 
-    void removeTags(@Nonnull Set<String> tags) {
-        for (var tag : tags) {
+    void removeTags(@Nonnull Set<String> tagNames) {
+        for (var tag : tagNames) {
             var keys = tagToKeys.remove(tag);
             if (keys == null) {
                 continue;
@@ -96,12 +96,35 @@ public final class Tag<T extends Key> {
         }
     }
 
+    void removeTagKey(@Nonnull String tagName, @Nonnull T key) {
+        var keysForTag = tagToKeys.get(tagName);
+        if (keysForTag != null) {
+            keysForTag.remove(key);
+            if (keysForTag.isEmpty()) {
+                tagToKeys.remove(tagName);
+            }
+
+            var tagsForKey = keyToTags.get(key);
+            if (tagsForKey != null) {
+                tagsForKey.remove(tagName);
+                if (tagsForKey.isEmpty()) {
+                    keyToTags.remove(key);
+                }
+            }
+        }
+    }
+
+    void clear() {
+        tagToKeys.clear();
+        keyToTags.clear();
+    }
+
     @Nonnull
     Set<String> getAllTags() {
         return Collections.unmodifiableSet(tagToKeys.keySet());
     }
 
-    boolean doesTagNameExist(@Nonnull String tagName) {
+    boolean doesTagName(@Nonnull String tagName) {
         return tagToKeys.containsKey(tagName);
     }
 
@@ -113,20 +136,15 @@ public final class Tag<T extends Key> {
         return tagToKeys.size();
     }
 
-    int getUniqueKeyCount() {
+    int getKeyCount() {
         return keyToTags.size();
     }
 
-    int getTotalAssociations() {
+    int getAssociations() {
         int count = 0;
         for (var entry : tagToKeys.entrySet()) {
             count += entry.getValue().size();
         }
         return count;
-    }
-
-    void clear() {
-        tagToKeys.clear();
-        keyToTags.clear();
     }
 }

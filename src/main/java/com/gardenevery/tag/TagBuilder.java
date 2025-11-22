@@ -33,7 +33,8 @@ public abstract class TagBuilder {
         this.tagName = this.isValid ? tagName : null;
 
         if (registrationClosed && validateTagName(tagName)) {
-            LOGGER.warn("Tag registration is closed after FMLLoadCompleteEvent. Tag '{}' will not be registered.", tagName);
+            LOGGER.warn("Tag registration is closed after FMLLoadCompleteEvent. Tag '{}' will not be registered.",
+                    tagName);
         }
     }
 
@@ -111,7 +112,6 @@ public abstract class TagBuilder {
             LOGGER.warn("Invalid tag name '{}'. Only letters, numbers, :, _, / are allowed.", name);
             return false;
         }
-
         return true;
     }
 
@@ -123,7 +123,6 @@ public abstract class TagBuilder {
 
         Set<String> validNames = new LinkedHashSet<>();
         int invalidCount = 0;
-
         for (var name : names) {
             if (name == null || name.isEmpty()) {
                 invalidCount++;
@@ -134,7 +133,6 @@ public abstract class TagBuilder {
                 invalidCount++;
                 continue;
             }
-
             validNames.add(name);
         }
 
@@ -148,7 +146,6 @@ public abstract class TagBuilder {
             LOGGER.info("Tag names filtered. Total: {}, valid: {}, invalid: {}",
                     names.length, validNames.size(), invalidCount);
         }
-
         return Collections.unmodifiableSet(validNames);
     }
 
@@ -160,14 +157,11 @@ public abstract class TagBuilder {
         void remove();
     }
 
-    public interface InitialState<T> extends AddableState<T>, RemovableState {
-    }
+    public interface InitialState<T> extends AddableState<T>, RemovableState {}
 
-    public interface CompletedState {
-    }
+    public interface CompletedState {}
 
     public interface MultiAddableState<T> {
-
         MultiAddableState<T> add(@Nullable T element);
     }
 
@@ -175,11 +169,9 @@ public abstract class TagBuilder {
         void remove();
     }
 
-    public interface MultiInitialState<T> extends MultiAddableState<T>, MultiRemovableState {
-    }
+    public interface MultiInitialState<T> extends MultiAddableState<T>, MultiRemovableState {}
 
-    public interface MultiCompletedState {
-    }
+    public interface MultiCompletedState {}
 
     public static class ItemTagBuilder extends TagBuilder {
         private ItemTagBuilder(String tagName) {
@@ -187,7 +179,6 @@ public abstract class TagBuilder {
         }
 
         public class InitialState implements TagBuilder.InitialState<ItemStack> {
-
             @Override
             public AddableState<ItemStack> add(@Nullable ItemStack stack) {
                 if (!isValid) {
@@ -198,7 +189,6 @@ public abstract class TagBuilder {
                 if (key != null) {
                     TagManager.ITEM.createTag(tagName, key);
                 }
-
                 return new ItemTagAdder(tagName);
             }
 
@@ -207,15 +197,12 @@ public abstract class TagBuilder {
                 if (!isValid) {
                     return;
                 }
-
                 TagManager.ITEM.removeTag(tagName);
             }
-
 
             public AddableState<ItemStack> add(Item item) {
                 return add(new ItemStack(item));
             }
-
 
             public AddableState<ItemStack> add(Item item, int metadata) {
                 return add(new ItemStack(item, 1, metadata));
@@ -230,7 +217,6 @@ public abstract class TagBuilder {
             this.tagName = tagName;
         }
 
-
         @Override
         public AddableState<ItemStack> add(@Nullable ItemStack stack) {
             var key = ItemKey.from(stack);
@@ -240,11 +226,9 @@ public abstract class TagBuilder {
             return this;
         }
 
-
         public AddableState<ItemStack> add(Item item) {
             return add(new ItemStack(item));
         }
-
 
         public AddableState<ItemStack> add(Item item, int metadata) {
             return add(new ItemStack(item, 1, metadata));
@@ -252,7 +236,6 @@ public abstract class TagBuilder {
     }
 
     public static class InvalidItemTag implements AddableState<ItemStack>, RemovableState, CompletedState {
-
         @Override
         public AddableState<ItemStack> add(@Nullable ItemStack stack) {
             return this;
@@ -269,7 +252,6 @@ public abstract class TagBuilder {
         }
 
         public class InitialState implements TagBuilder.InitialState<FluidStack> {
-
             @Override
             public AddableState<FluidStack> add(@Nullable FluidStack stack) {
                 if (!isValid) {
@@ -280,7 +262,6 @@ public abstract class TagBuilder {
                 if (key != null) {
                     TagManager.FLUID.createTag(tagName, key);
                 }
-
                 return new FluidTagAdder(tagName);
             }
 
@@ -289,10 +270,8 @@ public abstract class TagBuilder {
                 if (!isValid) {
                     return;
                 }
-
                 TagManager.FLUID.removeTag(tagName);
             }
-
 
             public AddableState<FluidStack> add(Fluid fluid) {
                 return add(new FluidStack(fluid, 1000));
@@ -307,7 +286,6 @@ public abstract class TagBuilder {
             this.tagName = tagName;
         }
 
-
         @Override
         public AddableState<FluidStack> add(@Nullable FluidStack stack) {
             var key = FluidKey.from(stack);
@@ -317,14 +295,12 @@ public abstract class TagBuilder {
             return this;
         }
 
-
         public AddableState<FluidStack> add(Fluid fluid) {
             return add(new FluidStack(fluid, 1000));
         }
     }
 
     public static class InvalidFluidTag implements AddableState<FluidStack>, RemovableState, CompletedState {
-
         @Override
         public AddableState<FluidStack> add(@Nullable FluidStack stack) {
             return this;
@@ -341,7 +317,6 @@ public abstract class TagBuilder {
         }
 
         public class InitialState implements TagBuilder.InitialState<Block> {
-
             @Override
             public AddableState<Block> add(@Nullable Block block) {
                 if (!isValid) {
@@ -352,7 +327,6 @@ public abstract class TagBuilder {
                 if (key != null) {
                     TagManager.BLOCK.createTag(tagName, key);
                 }
-
                 return new BlockTagAdder(tagName);
             }
 
@@ -361,7 +335,6 @@ public abstract class TagBuilder {
                 if (!isValid) {
                     return;
                 }
-
                 TagManager.BLOCK.removeTag(tagName);
             }
         }
@@ -374,9 +347,8 @@ public abstract class TagBuilder {
             this.tagName = tagName;
         }
 
-
         @Override
-        public AddableState<Block> add( Block block) {
+        public AddableState<Block> add(@Nullable Block block) {
             var key = BlockKey.from(block);
             if (key != null) {
                 TagManager.BLOCK.createTag(tagName, key);
@@ -386,7 +358,6 @@ public abstract class TagBuilder {
     }
 
     public static class InvalidBlockTag implements AddableState<Block>, RemovableState, CompletedState {
-
         @Override
         public AddableState<Block> add(@Nullable Block block) {
             return this;
@@ -419,7 +390,6 @@ public abstract class TagBuilder {
         }
 
         public class InitialState implements TagBuilder.MultiInitialState<ItemStack> {
-
             @Override
             public MultiAddableState<ItemStack> add(@Nullable ItemStack stack) {
                 if (!isValid) {
@@ -430,7 +400,6 @@ public abstract class TagBuilder {
                 if (key != null) {
                     TagManager.ITEM.createTags(tagNames, key);
                 }
-
                 return new MultiItemTagAdder(tagNames);
             }
 
@@ -439,15 +408,12 @@ public abstract class TagBuilder {
                 if (!isValid) {
                     return;
                 }
-
                 TagManager.ITEM.removeTags(tagNames);
             }
-
 
             public MultiAddableState<ItemStack> add(Item item) {
                 return add(new ItemStack(item));
             }
-
 
             public MultiAddableState<ItemStack> add(Item item, int metadata) {
                 return add(new ItemStack(item, 1, metadata));
@@ -462,7 +428,6 @@ public abstract class TagBuilder {
             this.tagNames = tagNames;
         }
 
-
         @Override
         public MultiAddableState<ItemStack> add(@Nullable ItemStack stack) {
             var key = ItemKey.from(stack);
@@ -472,11 +437,9 @@ public abstract class TagBuilder {
             return this;
         }
 
-
         public MultiAddableState<ItemStack> add(Item item) {
             return add(new ItemStack(item));
         }
-
 
         public MultiAddableState<ItemStack> add(Item item, int metadata) {
             return add(new ItemStack(item, 1, metadata));
@@ -489,7 +452,6 @@ public abstract class TagBuilder {
         }
 
         public class InitialState implements TagBuilder.MultiInitialState<FluidStack> {
-
             @Override
             public MultiAddableState<FluidStack> add(@Nullable FluidStack stack) {
                 if (!isValid) {
@@ -500,7 +462,6 @@ public abstract class TagBuilder {
                 if (key != null) {
                     TagManager.FLUID.createTags(tagNames, key);
                 }
-
                 return new MultiFluidTagAdder(tagNames);
             }
 
@@ -509,10 +470,8 @@ public abstract class TagBuilder {
                 if (!isValid) {
                     return;
                 }
-
                 TagManager.FLUID.removeTags(tagNames);
             }
-
 
             public MultiAddableState<FluidStack> add(Fluid fluid) {
                 return add(new FluidStack(fluid, 1000));
@@ -527,7 +486,6 @@ public abstract class TagBuilder {
             this.tagNames = tagNames;
         }
 
-
         @Override
         public MultiAddableState<FluidStack> add(@Nullable FluidStack stack) {
             var key = FluidKey.from(stack);
@@ -536,7 +494,6 @@ public abstract class TagBuilder {
             }
             return this;
         }
-
 
         public MultiAddableState<FluidStack> add(Fluid fluid) {
             return add(new FluidStack(fluid, 1000));
@@ -549,7 +506,6 @@ public abstract class TagBuilder {
         }
 
         public class InitialState implements TagBuilder.MultiInitialState<Block> {
-
             @Override
             public MultiAddableState<Block> add(@Nullable Block block) {
                 if (!isValid) {
@@ -560,7 +516,6 @@ public abstract class TagBuilder {
                 if (key != null) {
                     TagManager.BLOCK.createTags(tagNames, key);
                 }
-
                 return new MultiBlockTagAdder(tagNames);
             }
 
@@ -569,7 +524,6 @@ public abstract class TagBuilder {
                 if (!isValid) {
                     return;
                 }
-
                 TagManager.BLOCK.removeTags(tagNames);
             }
         }
@@ -582,7 +536,6 @@ public abstract class TagBuilder {
             this.tagNames = tagNames;
         }
 
-
         @Override
         public MultiAddableState<Block> add(@Nullable Block block) {
             var key = BlockKey.from(block);
@@ -594,7 +547,6 @@ public abstract class TagBuilder {
     }
 
     public static class InvalidMultiItemTag implements MultiAddableState<ItemStack>, MultiCompletedState {
-
         @Override
         public MultiAddableState<ItemStack> add(@Nullable ItemStack stack) {
             return this;
@@ -602,7 +554,6 @@ public abstract class TagBuilder {
     }
 
     public static class InvalidMultiFluidTag implements MultiAddableState<FluidStack>, MultiCompletedState {
-
         @Override
         public MultiAddableState<FluidStack> add(@Nullable FluidStack stack) {
             return this;
@@ -610,7 +561,6 @@ public abstract class TagBuilder {
     }
 
     public static class InvalidMultiBlockTag implements MultiAddableState<Block>, MultiCompletedState {
-
         @Override
         public MultiAddableState<Block> add(@Nullable Block block) {
             return this;

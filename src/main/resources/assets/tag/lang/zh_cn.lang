@@ -1,6 +1,6 @@
 # Tag 命令
-com.gardenevery.tag.nopermission=§c您没有权限使用此命令。
-com.gardenevery.tag.noitem=§c您没有手持任何物品。
+com.gardenevery.tag.nopermission=§c没有权限使用此命令。
+com.gardenevery.tag.noitem=§c没有手持任何物品。
 com.gardenevery.tag.fluidtags=§a流体标签：%s
 com.gardenevery.tag.nofluidtags=§7该流体没有标签。
 com.gardenevery.tag.emptycontainer=§e该流体容器为空。
@@ -11,6 +11,11 @@ com.gardenevery.tag.statistics.items=§a物品标签：§f%s §7关联数：§f%
 com.gardenevery.tag.statistics.fluids=§b流体标签：§f%s §7关联数：§f%s （§f%s§7个唯一流体）
 com.gardenevery.tag.statistics.blocks=§e方块标签：§f%s §7关联数：§f%s （§f%s§7个唯一方块）
 com.gardenevery.tag.statistics.total=§6总标签数：§f%s §7总关联数：§f%s （§f%s§7个唯一元素）
+com.gardenevery.tag.help.title=§6=== Tag 命令帮助 ===
+com.gardenevery.tag.help.hand=§a/tag hand §7- 显示手持物品的标签
+com.gardenevery.tag.help.info=§b/tag info §7- 显示标签统计信息（需要权限等级 2）
+com.gardenevery.tag.mainhand=§6[主手]
+com.gardenevery.tag.offhand=§6[副手]
 
 # 提示
-tooltip.hold_shift_for_tags=按 Shift 显示标签
+tooltip.hold_shift_for_tags=按住 Shift 显示标签

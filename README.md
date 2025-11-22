@@ -45,7 +45,7 @@ Automatically synchronizes with Ore Dictionary.
 
 #### In-Game Command
 Use the `/tag info` command to view all tags  
-Use `/tag` while holding an item to see its tags:
+Use `/tag hand` while holding an item to see its tags:
 - If holding a **fluid container** (like a bucket), shows **fluid tags**
 - Otherwise, shows **item tags**
 
@@ -100,7 +100,7 @@ Use `/tag` while holding an item to see its tags:
 ### Tag Naming Rules
 - Can only contain: **letters**, **number**, **colon (`:`)**, **underscore (`_`)**, **slash (`/`)**
 - Cannot be null
-- Examples: `"minecraft:food"`, `"forge:ores/iron"`, `"Special_123"`
+- Examples: `"minecraft:food"`, `"forge:ore/iron"`, `"Special_123"`
 
 ### Important Limitations
 - **Tag registration must be completed before `FMLLoadCompleteEvent`**

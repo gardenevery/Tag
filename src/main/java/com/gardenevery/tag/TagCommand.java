@@ -1,14 +1,21 @@
 package com.gardenevery.tag;
 
+import java.util.List;
 import javax.annotation.Nonnull;
+
+import com.github.bsideup.jabel.Desugar;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class TagCommand extends CommandBase {
 
@@ -21,84 +28,115 @@ public class TagCommand extends CommandBase {
     @Nonnull
     @Override
     public String getUsage(@Nonnull ICommandSender sender) {
-        return "tag [info]";
+        return "tag [hand|info]";
     }
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) {
         if (args.length == 0) {
-            showHeldItemTags(sender);
+            showHelp(sender);
             return;
         }
 
-        if ("info".equalsIgnoreCase(args[0])) {
-            if (!sender.canUseCommand(2, this.getName())) {
-                sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.nopermission"));
-                return;
-            }
-            showTagStatistics(sender);
-        } else {
-            showHeldItemTags(sender);
+        switch (args[0].toLowerCase()) {
+            case "hand" -> showHeldItemTags(sender);
+            case "info" -> showTagStatistics(sender);
+            default -> showHelp(sender);
+        }
+    }
+
+    @Nonnull
+    @Override
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args,
+                                          BlockPos targetPos) {
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "hand", "info")
+                : super.getTabCompletions(server, sender, args, targetPos);
+    }
+
+    private void showHelp(@Nonnull ICommandSender sender) {
+        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.help.title"));
+        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.help.hand"));
+
+        if (sender.canUseCommand(2, this.getName())) {
+            sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.help.info"));
         }
     }
 
     private void showHeldItemTags(@Nonnull ICommandSender sender) {
-        if (sender instanceof EntityPlayer player) {
-            var heldStack = player.getHeldItem(EnumHand.MAIN_HAND);
+        if (!(sender instanceof EntityPlayer player)){
+            return;
+        }
 
-            if (heldStack.isEmpty()) {
-                player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.noitem"));
-                return;
+        for (var hand : EnumHand.values()) {
+            var stack = player.getHeldItem(hand);
+            if (!stack.isEmpty()) {
+                sendItemTagsMessage(player, hand, stack);
             }
+        }
 
-            if (heldStack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
-                var fluidHandler = heldStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-                if (fluidHandler != null) {
-                    var fluid = fluidHandler.drain(Integer.MAX_VALUE, false);
-                    if (fluid != null && fluid.amount > 0) {
-                        var fluidTags = TagHelper.tags(fluid);
-                        if (!fluidTags.isEmpty()) {
-                            player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.fluidtags", String.join(", ", fluidTags)));
-                        } else {
-                            player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.nofluidtags"));
-                        }
-                        return;
-                    } else {
-                        player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.emptycontainer"));
-                    }
-                }
-            }
-
-            var itemTags = TagHelper.tags(heldStack);
-            if (!itemTags.isEmpty()) {
-                player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.itemtags", String.join(", ", itemTags)));
-            } else {
-                player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.noitemtags"));
-            }
+        if (player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
+            player.sendMessage(new TextComponentTranslation("com.gardenevery.tag.noitem"));
         }
     }
 
+    private void sendItemTagsMessage(@Nonnull EntityPlayer player, EnumHand hand, @Nonnull ItemStack stack) {
+        String handName = hand == EnumHand.MAIN_HAND
+                ? new TextComponentTranslation("com.gardenevery.tag.mainhand").getUnformattedText()
+                : new TextComponentTranslation("com.gardenevery.tag.offhand").getUnformattedText();
+
+        var fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        if (fluidHandler != null) {
+            handleFluidTags(player, handName, fluidHandler);
+        } else {
+            handleItemTags(player, handName, stack);
+        }
+    }
+
+    private void handleFluidTags(@Nonnull EntityPlayer player, String handName, IFluidHandlerItem fluidHandler) {
+        var fluid = fluidHandler.drain(Integer.MAX_VALUE, false);
+        if (fluid != null && fluid.amount > 0) {
+            var fluidTags = TagHelper.tags(fluid);
+            sendFormattedMessage(player, handName, !fluidTags.isEmpty() ? "com.gardenevery.tag.fluidtags" :
+                    "com.gardenevery.tag.nofluidtags", String.join(", ", fluidTags));
+        } else {
+            sendFormattedMessage(player, handName, "com.gardenevery.tag.emptycontainer", "");
+        }
+    }
+
+    private void handleItemTags(@Nonnull EntityPlayer player, String handName, @Nonnull ItemStack stack) {
+        var itemTags = TagHelper.tags(stack);
+        sendFormattedMessage(player, handName, !itemTags.isEmpty() ? "com.gardenevery.tag.itemtags"
+                : "com.gardenevery.tag.noitemtags", String.join(", ", itemTags));
+    }
+
+    private void sendFormattedMessage(@Nonnull EntityPlayer player, String handName, String translationKey, String tags) {
+        var message = String.format("%s %s", handName, new TextComponentTranslation(translationKey, tags).getUnformattedText()).trim();
+        player.sendMessage(new TextComponentString(message));
+    }
+
+    @Desugar
+    private record TagStatistics(int tagCount, int elementCount, int uniqueElementCount) {}
+
     private void showTagStatistics(@Nonnull ICommandSender sender) {
-        int itemTagCount = TagHelper.getTagCount(TagType.ITEM);
-        int fluidTagCount = TagHelper.getTagCount(TagType.FLUID);
-        int blockTagCount = TagHelper.getTagCount(TagType.BLOCK);
-        int totalTagCount = TagHelper.getTagCount();
-
-        int itemElementCount = TagHelper.getTotalAssociations(TagType.ITEM);
-        int fluidElementCount = TagHelper.getTotalAssociations(TagType.FLUID);
-        int blockElementCount = TagHelper.getTotalAssociations(TagType.BLOCK);
-        int totalElementCount = TagHelper.getTotalAssociations();
-
-        int uniqueItemElements = TagHelper.getUniqueKeyCount(TagType.ITEM);
-        int uniqueFluidElements = TagHelper.getUniqueKeyCount(TagType.FLUID);
-        int uniqueBlockElements = TagHelper.getUniqueKeyCount(TagType.BLOCK);
-        int totalUniqueElements = TagHelper.getUniqueKeyCount();
+        if (!sender.canUseCommand(2, this.getName())) {
+            sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.nopermission"));
+            return;
+        }
 
         sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.title"));
-        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.items", itemTagCount, itemElementCount, uniqueItemElements));
-        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.fluids", fluidTagCount, fluidElementCount, uniqueFluidElements));
-        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.blocks", blockTagCount, blockElementCount, uniqueBlockElements));
-        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.total", totalTagCount, totalElementCount, totalUniqueElements));
+        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.items", new TagStatistics(TagHelper.getTagCount(TagType.ITEM),
+                        TagHelper.getTotalAssociations(TagType.ITEM), TagHelper.getUniqueKeyCount(TagType.ITEM)));
+        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.fluids", new TagStatistics(TagHelper.getTagCount(TagType.FLUID),
+                        TagHelper.getTotalAssociations(TagType.FLUID), TagHelper.getUniqueKeyCount(TagType.FLUID)));
+        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.blocks", new TagStatistics(TagHelper.getTagCount(TagType.BLOCK),
+                        TagHelper.getTotalAssociations(TagType.BLOCK), TagHelper.getUniqueKeyCount(TagType.BLOCK)));
+        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.total", new TagStatistics(TagHelper.getTagCount(),
+                        TagHelper.getAssociations(), TagHelper.getKeyCount()));
+    }
+
+    private void sendStatisticMessage(@Nonnull ICommandSender sender, String key, TagStatistics stats) {
+        sender.sendMessage(new TextComponentTranslation(
+                key, stats.tagCount(), stats.elementCount(), stats.uniqueElementCount()));
     }
 
     @Override
