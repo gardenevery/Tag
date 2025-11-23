@@ -211,7 +211,7 @@ public final class TagHelper {
      * Get all items that have the specified tag
      */
     @Nonnull
-    public static Set<ItemStack> getItemStacks(@Nullable String tagName) {
+    public static Set<ItemStack> getItemStack(@Nullable String tagName) {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
@@ -228,7 +228,7 @@ public final class TagHelper {
      * Get all fluids that have the specified tag
      */
     @Nonnull
-    public static Set<FluidStack> getFluidStacks(@Nullable String tagName) {
+    public static Set<FluidStack> getFluidStack(@Nullable String tagName) {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
@@ -245,7 +245,7 @@ public final class TagHelper {
      * Get all blocks that have the specified tag
      */
     @Nonnull
-    public static Set<Block> getBlocks(@Nullable String tagName) {
+    public static Set<Block> getBlock(@Nullable String tagName) {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
@@ -361,9 +361,7 @@ public final class TagHelper {
      * Get the total number of tags across all types
      */
     public static int getTagCount() {
-        return TagManager.ITEM.getTagCount() +
-                TagManager.FLUID.getTagCount() +
-                TagManager.BLOCK.getTagCount();
+        return TagManager.ITEM.getTagCount() + TagManager.FLUID.getTagCount() + TagManager.BLOCK.getTagCount();
     }
 
     /**
@@ -382,9 +380,7 @@ public final class TagHelper {
      * Get the total number of associations across all types
      */
     public static int getAssociations() {
-        return TagManager.ITEM.getAssociations() +
-                TagManager.FLUID.getAssociations() +
-                TagManager.BLOCK.getAssociations();
+        return TagManager.ITEM.getAssociations() + TagManager.FLUID.getAssociations() + TagManager.BLOCK.getAssociations();
     }
 
     /**
@@ -403,9 +399,7 @@ public final class TagHelper {
      * Get the total number of unique keys across all types
      */
     public static int getKeyCount() {
-        return TagManager.ITEM.getKeyCount() +
-                TagManager.FLUID.getKeyCount() +
-                TagManager.BLOCK.getKeyCount();
+        return TagManager.ITEM.getKeyCount() + TagManager.FLUID.getKeyCount() + TagManager.BLOCK.getKeyCount();
     }
 
     private static boolean isTagInvalid(@Nullable String tagName) {

@@ -26,7 +26,6 @@ package com.gardenevery.tag;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.lwjgl.input.Keyboard;
 
@@ -52,13 +51,12 @@ public class TagTooltip {
 
     private static void generateTagTooltip(ItemTooltipEvent event) {
         Set<String> tags = TagHelper.tags(event.getItemStack());
-
         if (tags.isEmpty()) {
             return;
         }
 
-        List<String> tagNames = tags.stream().map(tag -> " " + tag).sorted().collect(Collectors.toList());
-        event.getToolTip().add("Tags:");
-        event.getToolTip().addAll(tagNames);
+        List<String> tooltip = event.getToolTip();
+        tooltip.add("Tags:");
+        tags.stream().sorted().map(tag -> " " + tag).forEach(tooltip::add);
     }
 }

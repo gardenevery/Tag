@@ -1,5 +1,6 @@
 package com.gardenevery.tag;
 
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -78,11 +79,24 @@ interface Key {
 //            }
 //
 //            int metadata = stack.getHasSubtypes() ? stack.getMetadata() : 0;
-//            return new ItemKey(registryName, metadata);
+//            var initialKey = new ItemKey(registryName, metadata);
+//            return validateAndReturnKey(initialKey);
 //        }
 //
+//        @Nonnull
 //        public ItemStack toStack() {
-//            return new ItemStack(ForgeRegistries.ITEMS.getValue(item), 1, metadata);
+//            return new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(item)), 1, metadata);
+//        }
+//
+//        @Nullable
+//        private static ItemKey validateAndReturnKey(@Nonnull ItemKey initialKey) {
+//            var convertedStack = initialKey.toStack();
+//            var verifiedKey = ItemKey.from(convertedStack);
+//
+//            if (initialKey.equals(verifiedKey)) {
+//                return initialKey;
+//            }
+//            return null;
 //        }
 //    }
 //
@@ -98,16 +112,27 @@ interface Key {
 //            if (fluidName == null) {
 //                return null;
 //            }
-//            return new FluidKey(fluidName);
+//
+//            var initialKey = new FluidKey(fluidName);
+//            return validateAndReturnKey(initialKey);
 //        }
 //
+//        @Nonnull
 //        public FluidStack toStack() {
 //            var fluidName = fluid();
 //            var fluid = FluidRegistry.getFluid(fluidName);
-//            if (fluid == null) {
-//                return null;
-//            }
 //            return new FluidStack(fluid, 1000);
+//        }
+//
+//        @Nullable
+//        private static FluidKey validateAndReturnKey(@Nonnull FluidKey initialKey) {
+//            var convertedStack = initialKey.toStack();
+//            var verifiedKey = FluidKey.from(convertedStack);
+//
+//            if (initialKey.equals(verifiedKey)) {
+//                return initialKey;
+//            }
+//            return null;
 //        }
 //    }
 //
@@ -123,11 +148,25 @@ interface Key {
 //            if (registryName == null) {
 //                return null;
 //            }
-//            return new BlockKey(registryName);
+//
+//            var initialKey = new BlockKey(registryName);
+//            return validateAndReturnKey(initialKey);
 //        }
 //
+//        @Nonnull
 //        public Block toBlock() {
-//            return ForgeRegistries.BLOCKS.getValue(this.block);
+//            return Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(this.block));
+//        }
+//
+//        @Nullable
+//        private static BlockKey validateAndReturnKey(@Nonnull BlockKey initialKey) {
+//            var convertedBlock = initialKey.toBlock();
+//            var verifiedKey = BlockKey.from(convertedBlock);
+//
+//            if (initialKey.equals(verifiedKey)) {
+//                return initialKey;
+//            }
+//            return null;
 //        }
 //    }
 }

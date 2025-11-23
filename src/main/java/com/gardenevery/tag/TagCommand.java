@@ -47,8 +47,7 @@ public class TagCommand extends CommandBase {
 
     @Nonnull
     @Override
-    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args,
-                                          BlockPos targetPos) {
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args, BlockPos targetPos) {
         return args.length == 1 ? getListOfStringsMatchingLastWord(args, "hand", "info")
                 : super.getTabCompletions(server, sender, args, targetPos);
     }
@@ -124,20 +123,19 @@ public class TagCommand extends CommandBase {
         }
 
         sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.title"));
-        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.items", new TagStatistics(TagHelper.getTagCount(TagType.ITEM),
-                        TagHelper.getTotalAssociations(TagType.ITEM), TagHelper.getUniqueKeyCount(TagType.ITEM)));
-        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.fluids", new TagStatistics(TagHelper.getTagCount(TagType.FLUID),
-                        TagHelper.getTotalAssociations(TagType.FLUID), TagHelper.getUniqueKeyCount(TagType.FLUID)));
-        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.blocks", new TagStatistics(TagHelper.getTagCount(TagType.BLOCK),
-                        TagHelper.getTotalAssociations(TagType.BLOCK), TagHelper.getUniqueKeyCount(TagType.BLOCK)));
-        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.total", new TagStatistics(TagHelper.getTagCount(),
-                        TagHelper.getAssociations(), TagHelper.getKeyCount()));
+        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.items", createTagStatistics(TagType.ITEM));
+        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.fluids", createTagStatistics(TagType.FLUID));
+        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.blocks", createTagStatistics(TagType.BLOCK));
+        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.total",
+                new TagStatistics(TagHelper.getTagCount(), TagHelper.getAssociations(), TagHelper.getKeyCount()));
+    }
+
+    private TagStatistics createTagStatistics(TagType type) {
+        return new TagStatistics(TagHelper.getTagCount(type), TagHelper.getTotalAssociations(type), TagHelper.getUniqueKeyCount(type));
     }
 
     private void sendStatisticMessage(@Nonnull ICommandSender sender, String key, TagStatistics stats) {
-        sender.sendMessage(new TextComponentTranslation(
-                key, stats.tagCount(), stats.elementCount(), stats.uniqueElementCount()));
-    }
+        sender.sendMessage(new TextComponentTranslation(key, stats.tagCount(), stats.elementCount(), stats.uniqueElementCount()));}
 
     @Override
     public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender) {
