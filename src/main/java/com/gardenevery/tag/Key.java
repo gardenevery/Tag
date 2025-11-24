@@ -59,6 +59,7 @@ interface Key {
             return new BlockKey(block);
         }
 
+        @Nonnull
         public Block toBlock() {
             return block;
         }
@@ -83,17 +84,19 @@ interface Key {
 //            return validateKey(initialKey);
 //        }
 //
+//        @Nonnull
 //        public ItemStack toStack() {
-//            return new ItemStack(ForgeRegistries.ITEMS.getValue(item), 1, metadata);
+//            return new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(item)), 1, metadata);
 //        }
 //
+//        @SuppressWarnings("ConstantConditions")
 //        @Nullable
-//        private static ItemKey validateKey(@Nonnull ItemKey initialKey) {
-//            var convertedStack = initialKey.toStack();
+//        private static ItemKey validateKey(@Nonnull ItemKey key) {
+//            var convertedStack = new ItemStack(ForgeRegistries.ITEMS.getValue(key.item), 1, key.metadata);
 //            var verifiedKey = ItemKey.from(convertedStack);
 //
-//            if (initialKey.equals(verifiedKey)) {
-//                return initialKey;
+//            if (key.equals(verifiedKey)) {
+//                return key;
 //            }
 //            return null;
 //        }
@@ -116,6 +119,7 @@ interface Key {
 //            return validateKey(initialKey);
 //        }
 //
+//        @Nonnull
 //        public FluidStack toStack() {
 //            var fluidName = fluid();
 //            var fluid = FluidRegistry.getFluid(fluidName);
@@ -123,12 +127,14 @@ interface Key {
 //        }
 //
 //        @Nullable
-//        private static FluidKey validateKey(@Nonnull FluidKey initialKey) {
-//            var convertedStack = initialKey.toStack();
+//        private static FluidKey validateKey(@Nonnull FluidKey key) {
+//            var fluidName = key.fluid();
+//            var fluid = FluidRegistry.getFluid(fluidName);
+//            var convertedStack = new FluidStack(fluid, 1000);
 //            var verifiedKey = FluidKey.from(convertedStack);
 //
-//            if (initialKey.equals(verifiedKey)) {
-//                return initialKey;
+//            if (key.equals(verifiedKey)) {
+//                return key;
 //            }
 //            return null;
 //        }
@@ -151,17 +157,18 @@ interface Key {
 //            return validateKey(initialKey);
 //        }
 //
+//        @Nonnull
 //        public Block toBlock() {
-//            return ForgeRegistries.BLOCKS.getValue(this.block);
+//            return Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(this.block));
 //        }
 //
 //        @Nullable
-//        private static BlockKey validateKey(@Nonnull BlockKey initialKey) {
-//            var convertedBlock = initialKey.toBlock();
+//        private static BlockKey validateKey(@Nonnull BlockKey key) {
+//            var convertedBlock = ForgeRegistries.BLOCKS.getValue(key.block);
 //            var verifiedKey = BlockKey.from(convertedBlock);
 //
-//            if (initialKey.equals(verifiedKey)) {
-//                return initialKey;
+//            if (key.equals(verifiedKey)) {
+//                return key;
 //            }
 //            return null;
 //        }
