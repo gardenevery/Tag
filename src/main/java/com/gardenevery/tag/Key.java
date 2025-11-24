@@ -80,16 +80,15 @@ interface Key {
 //
 //            int metadata = stack.getHasSubtypes() ? stack.getMetadata() : 0;
 //            var initialKey = new ItemKey(registryName, metadata);
-//            return validateAndReturnKey(initialKey);
+//            return validateKey(initialKey);
 //        }
 //
-//        @Nonnull
 //        public ItemStack toStack() {
-//            return new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(item)), 1, metadata);
+//            return new ItemStack(ForgeRegistries.ITEMS.getValue(item), 1, metadata);
 //        }
 //
 //        @Nullable
-//        private static ItemKey validateAndReturnKey(@Nonnull ItemKey initialKey) {
+//        private static ItemKey validateKey(@Nonnull ItemKey initialKey) {
 //            var convertedStack = initialKey.toStack();
 //            var verifiedKey = ItemKey.from(convertedStack);
 //
@@ -114,10 +113,9 @@ interface Key {
 //            }
 //
 //            var initialKey = new FluidKey(fluidName);
-//            return validateAndReturnKey(initialKey);
+//            return validateKey(initialKey);
 //        }
 //
-//        @Nonnull
 //        public FluidStack toStack() {
 //            var fluidName = fluid();
 //            var fluid = FluidRegistry.getFluid(fluidName);
@@ -125,7 +123,7 @@ interface Key {
 //        }
 //
 //        @Nullable
-//        private static FluidKey validateAndReturnKey(@Nonnull FluidKey initialKey) {
+//        private static FluidKey validateKey(@Nonnull FluidKey initialKey) {
 //            var convertedStack = initialKey.toStack();
 //            var verifiedKey = FluidKey.from(convertedStack);
 //
@@ -150,16 +148,15 @@ interface Key {
 //            }
 //
 //            var initialKey = new BlockKey(registryName);
-//            return validateAndReturnKey(initialKey);
+//            return validateKey(initialKey);
 //        }
 //
-//        @Nonnull
 //        public Block toBlock() {
-//            return Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(this.block));
+//            return ForgeRegistries.BLOCKS.getValue(this.block);
 //        }
 //
 //        @Nullable
-//        private static BlockKey validateAndReturnKey(@Nonnull BlockKey initialKey) {
+//        private static BlockKey validateKey(@Nonnull BlockKey initialKey) {
 //            var convertedBlock = initialKey.toBlock();
 //            var verifiedKey = BlockKey.from(convertedBlock);
 //
