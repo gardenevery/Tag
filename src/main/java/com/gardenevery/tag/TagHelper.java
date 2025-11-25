@@ -63,12 +63,13 @@ public final class TagHelper {
     /**
      * Get all elements (keys) associated with a tag name and type
      */
-    public static Set<?> element(@Nullable String tagName, @Nonnull TagType type) {
+    @SuppressWarnings("unchecked")
+    public static <T> Set<T> element(@Nullable String tagName, @Nonnull TagType type) {
         if (isTagInvalid(tagName)) {
             return Collections.emptySet();
         }
 
-        return switch (type) {
+        return (Set<T>) switch (type) {
             case ITEM -> {
                 Set<ItemKey> keys = TagManager.ITEM.getKeys(tagName);
                 Set<ItemStack> result = new ObjectOpenHashSet<>();
