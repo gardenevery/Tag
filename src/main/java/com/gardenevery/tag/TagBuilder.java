@@ -242,8 +242,7 @@ public abstract class TagBuilder {
         }
 
         @Override
-        public void remove() {
-        }
+        public void remove() {}
     }
 
     public static class FluidTagBuilder extends TagBuilder {
@@ -307,8 +306,7 @@ public abstract class TagBuilder {
         }
 
         @Override
-        public void remove() {
-        }
+        public void remove() {}
     }
 
     public static class BlockTagBuilder extends TagBuilder {
@@ -364,8 +362,7 @@ public abstract class TagBuilder {
         }
 
         @Override
-        public void remove() {
-        }
+        public void remove() {}
     }
 
     public static abstract class MultiTagBuilder {

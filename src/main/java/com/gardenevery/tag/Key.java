@@ -92,8 +92,20 @@ interface Key {
 //        @SuppressWarnings("ConstantConditions")
 //        @Nullable
 //        private static ItemKey validateKey(@Nonnull ItemKey key) {
-//            var convertedStack = new ItemStack(ForgeRegistries.ITEMS.getValue(key.item), 1, key.metadata);
-//            var verifiedKey = ItemKey.from(convertedStack);
+//            var stack = new ItemStack(ForgeRegistries.ITEMS.getValue(key.item), 1, key.metadata);
+//
+//            if (stack.isEmpty()) {
+//                return null;
+//            }
+//
+//            var item = stack.getItem();
+//            var registryName = item.getRegistryName();
+//            if (registryName == null) {
+//                return null;
+//            }
+//
+//            int metadata = stack.getHasSubtypes() ? stack.getMetadata() : 0;
+//            var verifiedKey = new ItemKey(registryName, metadata);
 //
 //            if (key.equals(verifiedKey)) {
 //                return key;
@@ -128,11 +140,20 @@ interface Key {
 //
 //        @Nullable
 //        private static FluidKey validateKey(@Nonnull FluidKey key) {
-//            var fluidName = key.fluid();
-//            var fluid = FluidRegistry.getFluid(fluidName);
-//            var convertedStack = new FluidStack(fluid, 1000);
-//            var verifiedKey = FluidKey.from(convertedStack);
+//            var fluidName1 = key.fluid();
+//            var fluid = FluidRegistry.getFluid(fluidName1);
+//            var stack = new FluidStack(fluid, 1000);
 //
+//            if (stack.getFluid() == null) {
+//                return null;
+//            }
+//
+//            var fluidName2 = FluidRegistry.getFluidName(stack.getFluid());
+//            if (fluidName2 == null) {
+//                return null;
+//            }
+//
+//            var verifiedKey = new FluidKey(fluidName2);
 //            if (key.equals(verifiedKey)) {
 //                return key;
 //            }
@@ -164,9 +185,18 @@ interface Key {
 //
 //        @Nullable
 //        private static BlockKey validateKey(@Nonnull BlockKey key) {
-//            var convertedBlock = ForgeRegistries.BLOCKS.getValue(key.block);
-//            var verifiedKey = BlockKey.from(convertedBlock);
+//            var block = ForgeRegistries.BLOCKS.getValue(key.block);
 //
+//            if (block == null) {
+//                return null;
+//            }
+//
+//            var registryName = block.getRegistryName();
+//            if (registryName == null) {
+//                return null;
+//            }
+//
+//            var verifiedKey = new BlockKey(registryName);
 //            if (key.equals(verifiedKey)) {
 //                return key;
 //            }
