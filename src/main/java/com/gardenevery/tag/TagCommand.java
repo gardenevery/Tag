@@ -127,11 +127,11 @@ public class TagCommand extends CommandBase {
         sendStatisticMessage(sender, "com.gardenevery.tag.statistics.fluids", createTagStatistics(TagType.FLUID));
         sendStatisticMessage(sender, "com.gardenevery.tag.statistics.blocks", createTagStatistics(TagType.BLOCK));
         sendStatisticMessage(sender, "com.gardenevery.tag.statistics.total",
-                new TagStatistics(TagHelper.getTagCount(), TagHelper.getAssociations(), TagHelper.getKeyCount()));
+                new TagStatistics(TagHelper.tagCount(), TagHelper.associations(), TagHelper.keyCount()));
     }
 
     private TagStatistics createTagStatistics(TagType type) {
-        return new TagStatistics(TagHelper.getTagCount(type), TagHelper.getTotalAssociations(type), TagHelper.getUniqueKeyCount(type));
+        return new TagStatistics(TagHelper.tagCount(type), TagHelper.totalAssociations(type), TagHelper.uniqueKeyCount(type));
     }
 
     private void sendStatisticMessage(@Nonnull ICommandSender sender, String key, TagStatistics stats) {

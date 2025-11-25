@@ -27,41 +27,121 @@ public final class TagHelper {
     /**
      * Get all tags associated with an item
      */
-    @Nonnull
     public static Set<String> tags(@Nullable ItemStack stack) {
-        var key = ItemKey.from(stack);
+        var key = ItemKey.toKey(stack);
         return key != null ? TagManager.ITEM.getTags(key) : Collections.emptySet();
     }
 
     /**
      * Get all tags associated with a fluid
      */
-    @Nonnull
     public static Set<String> tags(@Nullable FluidStack stack) {
-        var key = FluidKey.from(stack);
+        var key = FluidKey.toKey(stack);
         return key != null ? TagManager.FLUID.getTags(key) : Collections.emptySet();
     }
 
     /**
      * Get all tags associated with a block
      */
-    @Nonnull
     public static Set<String> tags(@Nullable Block block) {
-        var key = BlockKey.from(block);
+        var key = BlockKey.toKey(block);
         return key != null ? TagManager.BLOCK.getTags(key) : Collections.emptySet();
     }
 
     /**
      * Get all tags associated with a block state
      */
-    @Nonnull
     public static Set<String> tags(@Nullable IBlockState blockState) {
         if (blockState == null) {
             return Collections.emptySet();
         }
 
-        var key = BlockKey.from(blockState.getBlock());
+        var key = BlockKey.toKey(blockState.getBlock());
         return key != null ? TagManager.BLOCK.getTags(key) : Collections.emptySet();
+    }
+
+    /**
+     * Get all elements (keys) associated with a tag name and type
+     */
+    public static Set<?> element(@Nullable String tagName, @Nonnull TagType type) {
+        if (isTagInvalid(tagName)) {
+            return Collections.emptySet();
+        }
+
+        return switch (type) {
+            case ITEM -> {
+                Set<ItemKey> keys = TagManager.ITEM.getKeys(tagName);
+                Set<ItemStack> result = new ObjectOpenHashSet<>();
+                for (var key : keys) {
+                    result.add(key.toElement());
+                }
+                yield Collections.unmodifiableSet(result);
+            }
+            case FLUID -> {
+                Set<FluidKey> keys = TagManager.FLUID.getKeys(tagName);
+                Set<FluidStack> result = new ObjectOpenHashSet<>();
+                for (var key : keys) {
+                    result.add(key.toElement());
+                }
+                yield Collections.unmodifiableSet(result);
+            }
+            case BLOCK -> {
+                Set<BlockKey> keys = TagManager.BLOCK.getKeys(tagName);
+                Set<Block> result = new ObjectOpenHashSet<>();
+                for (var key : keys) {
+                    result.add(key.toElement());
+                }
+                yield Collections.unmodifiableSet(result);
+            }
+        };
+    }
+
+    /**
+     * Get all item elements associated with a tag name
+     */
+    public static Set<ItemStack> itemElement(@Nullable String tagName) {
+        if (isTagInvalid(tagName)) {
+            return Collections.emptySet();
+        }
+
+        Set<ItemKey> keys = TagManager.ITEM.getKeys(tagName);
+        Set<ItemStack> result = new ObjectOpenHashSet<>();
+        for (var key : keys) {
+            result.add(key.toElement());
+        }
+        return Collections.unmodifiableSet(result);
+    }
+
+    /**
+     * Get all fluid elements associated with a tag name
+     */
+    public static Set<FluidStack> fluidElement(@Nullable String tagName) {
+        if (isTagInvalid(tagName)) {
+            return Collections.emptySet();
+        }
+
+        Set<FluidKey> keys = TagManager.FLUID.getKeys(tagName);
+        Set<FluidStack> result = new ObjectOpenHashSet<>();
+        for (var key : keys) {
+            result.add(key.toElement());
+        }
+        return Collections.unmodifiableSet(result);
+    }
+
+    /**
+     * Get all block elements associated with a tag name
+     */
+    public static Set<Block> blockElement(@Nullable String tagName) {
+        if (isTagInvalid(tagName)) {
+            return Collections.emptySet();
+        }
+
+        Set<BlockKey> keys = TagManager.BLOCK.getKeys(tagName);
+        Set<Block> result = new ObjectOpenHashSet<>();
+        for (var key : keys) {
+            result.add(key.toElement());
+        }
+        return Collections.unmodifiableSet(result);
     }
 
     /**
@@ -72,7 +152,7 @@ public final class TagHelper {
             return false;
         }
 
-        var key = ItemKey.from(stack);
+        var key = ItemKey.toKey(stack);
         return key != null && TagManager.ITEM.hasTag(key, tagName);
     }
 
@@ -84,7 +164,7 @@ public final class TagHelper {
             return false;
         }
 
-        var key = FluidKey.from(stack);
+        var key = FluidKey.toKey(stack);
         return key != null && TagManager.FLUID.hasTag(key, tagName);
     }
 
@@ -96,7 +176,7 @@ public final class TagHelper {
             return false;
         }
 
-        var key = BlockKey.from(block);
+        var key = BlockKey.toKey(block);
         return key != null && TagManager.BLOCK.hasTag(key, tagName);
     }
 
@@ -108,7 +188,7 @@ public final class TagHelper {
             return false;
         }
 
-        var key = BlockKey.from(blockState.getBlock());
+        var key = BlockKey.toKey(blockState.getBlock());
         return key != null && TagManager.BLOCK.hasTag(key, tagName);
     }
 
@@ -119,7 +199,7 @@ public final class TagHelper {
         if (areTagsInvalid(tagNames)) {
             return false;
         }
-        var key = ItemKey.from(stack);
+        var key = ItemKey.toKey(stack);
         return key != null && TagManager.ITEM.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
     }
 
@@ -131,7 +211,7 @@ public final class TagHelper {
             return false;
         }
 
-        var key = ItemKey.from(stack);
+        var key = ItemKey.toKey(stack);
         return key != null && TagManager.ITEM.hasAnyTag(key, tagNames);
     }
 
@@ -143,7 +223,7 @@ public final class TagHelper {
             return false;
         }
 
-        var key = FluidKey.from(stack);
+        var key = FluidKey.toKey(stack);
         return key != null && TagManager.FLUID.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
     }
 
@@ -155,7 +235,7 @@ public final class TagHelper {
             return false;
         }
 
-        var key = FluidKey.from(stack);
+        var key = FluidKey.toKey(stack);
         return key != null && TagManager.FLUID.hasAnyTag(key, tagNames);
     }
 
@@ -167,7 +247,7 @@ public final class TagHelper {
             return false;
         }
 
-        var key = BlockKey.from(block);
+        var key = BlockKey.toKey(block);
         return key != null && TagManager.BLOCK.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
     }
 
@@ -179,7 +259,7 @@ public final class TagHelper {
             return false;
         }
 
-        var key = BlockKey.from(block);
+        var key = BlockKey.toKey(block);
         return key != null && TagManager.BLOCK.hasAnyTag(key, tagNames);
     }
 
@@ -191,7 +271,7 @@ public final class TagHelper {
             return false;
         }
 
-        var key = BlockKey.from(blockState.getBlock());
+        var key = BlockKey.toKey(blockState.getBlock());
         return key != null && TagManager.BLOCK.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
     }
 
@@ -203,65 +283,13 @@ public final class TagHelper {
             return false;
         }
 
-        var key = BlockKey.from(blockState.getBlock());
+        var key = BlockKey.toKey(blockState.getBlock());
         return key != null && TagManager.BLOCK.hasAnyTag(key, tagNames);
-    }
-
-    /**
-     * Get all items that have the specified tag
-     */
-    @Nonnull
-    public static Set<ItemStack> getItemStack(@Nullable String tagName) {
-        if (isTagInvalid(tagName)) {
-            return Collections.emptySet();
-        }
-
-        Set<ItemKey> keys = TagManager.ITEM.getKeys(tagName);
-        Set<ItemStack> result = new ObjectOpenHashSet<>();
-        for (var key : keys) {
-            result.add(key.toStack());
-        }
-        return Collections.unmodifiableSet(result);
-    }
-
-    /**
-     * Get all fluids that have the specified tag
-     */
-    @Nonnull
-    public static Set<FluidStack> getFluidStack(@Nullable String tagName) {
-        if (isTagInvalid(tagName)) {
-            return Collections.emptySet();
-        }
-
-        Set<FluidKey> keys = TagManager.FLUID.getKeys(tagName);
-        Set<FluidStack> result = new ObjectOpenHashSet<>();
-        for (var key : keys) {
-            result.add(key.toStack());
-        }
-        return Collections.unmodifiableSet(result);
-    }
-
-    /**
-     * Get all blocks that have the specified tag
-     */
-    @Nonnull
-    public static Set<Block> getBlock(@Nullable String tagName) {
-        if (isTagInvalid(tagName)) {
-            return Collections.emptySet();
-        }
-
-        Set<BlockKey> keys = TagManager.BLOCK.getKeys(tagName);
-        Set<Block> result = new ObjectOpenHashSet<>();
-        for (var key : keys) {
-            result.add(key.toBlock());
-        }
-        return Collections.unmodifiableSet(result);
     }
 
     /**
      * Get all registered tag names for the specified type
      */
-    @Nonnull
     public static Set<String> getAllTags(@Nonnull TagType type) {
         return switch (type) {
             case ITEM -> TagManager.ITEM.getAllTags();
@@ -303,18 +331,14 @@ public final class TagHelper {
         if (isTagInvalid(tagName)) {
             return false;
         }
-
-        return (TagManager.ITEM.doesTagName(tagName) ||
-                TagManager.FLUID.doesTagName(tagName) ||
-                TagManager.BLOCK.doesTagName(tagName)
-        );
+        return (TagManager.ITEM.doesTagName(tagName) || TagManager.FLUID.doesTagName(tagName) || TagManager.BLOCK.doesTagName(tagName));
     }
 
     /**
      * Check if an item exists in the tag system (has at least one tag)
      */
     public static boolean contains(@Nullable ItemStack stack) {
-        var key = ItemKey.from(stack);
+        var key = ItemKey.toKey(stack);
         return key != null && TagManager.ITEM.containsKey(key);
     }
 
@@ -322,7 +346,7 @@ public final class TagHelper {
      * Check if a fluid exists in the tag system (has at least one tag)
      */
     public static boolean contains(@Nullable FluidStack stack) {
-        var key = FluidKey.from(stack);
+        var key = FluidKey.toKey(stack);
         return key != null && TagManager.FLUID.containsKey(key);
     }
 
@@ -330,7 +354,7 @@ public final class TagHelper {
      * Check if a block exists in the tag system (has at least one tag)
      */
     public static boolean contains(@Nullable Block block) {
-        var key = BlockKey.from(block);
+        var key = BlockKey.toKey(block);
         return key != null && TagManager.BLOCK.containsKey(key);
     }
 
@@ -342,14 +366,14 @@ public final class TagHelper {
             return false;
         }
 
-        var key = BlockKey.from(blockState.getBlock());
+        var key = BlockKey.toKey(blockState.getBlock());
         return key != null && TagManager.BLOCK.containsKey(key);
     }
 
     /**
      * Get the total number of tags for the specified type
      */
-    public static int getTagCount(@Nonnull TagType type) {
+    public static int tagCount(@Nonnull TagType type) {
         return switch (type) {
             case ITEM -> TagManager.ITEM.getTagCount();
             case FLUID -> TagManager.FLUID.getTagCount();
@@ -360,7 +384,7 @@ public final class TagHelper {
     /**
      * Get the total number of tags across all types
      */
-    public static int getTagCount() {
+    public static int tagCount() {
         return TagManager.ITEM.getTagCount() + TagManager.FLUID.getTagCount() + TagManager.BLOCK.getTagCount();
     }
 
@@ -368,7 +392,7 @@ public final class TagHelper {
      * Get the total number of associations for the specified type
      * (sum of all keys across all tags)
      */
-    public static int getTotalAssociations(@Nonnull TagType type) {
+    public static int totalAssociations(@Nonnull TagType type) {
         return switch (type) {
             case ITEM -> TagManager.ITEM.getAssociations();
             case FLUID -> TagManager.FLUID.getAssociations();
@@ -379,7 +403,7 @@ public final class TagHelper {
     /**
      * Get the total number of associations across all types
      */
-    public static int getAssociations() {
+    public static int associations() {
         return TagManager.ITEM.getAssociations() + TagManager.FLUID.getAssociations() + TagManager.BLOCK.getAssociations();
     }
 
@@ -387,7 +411,7 @@ public final class TagHelper {
      * Get the number of unique keys for the specified type
      * (count of distinct keys across all tags)
      */
-    public static int getUniqueKeyCount(@Nonnull TagType type) {
+    public static int uniqueKeyCount(@Nonnull TagType type) {
         return switch (type) {
             case ITEM -> TagManager.ITEM.getKeyCount();
             case FLUID -> TagManager.FLUID.getKeyCount();
@@ -398,7 +422,7 @@ public final class TagHelper {
     /**
      * Get the total number of unique keys across all types
      */
-    public static int getKeyCount() {
+    public static int keyCount() {
         return TagManager.ITEM.getKeyCount() + TagManager.FLUID.getKeyCount() + TagManager.BLOCK.getKeyCount();
     }
 

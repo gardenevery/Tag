@@ -19,7 +19,7 @@ interface Key {
     @Desugar
     record ItemKey(@Nonnull Item item, int metadata) implements Key {
         @Nullable
-        public static ItemKey from(@Nullable ItemStack stack) {
+        public static ItemKey toKey(@Nullable ItemStack stack) {
             if (stack == null || stack.isEmpty()) {
                 return null;
             }
@@ -28,7 +28,7 @@ interface Key {
         }
 
         @Nonnull
-        public ItemStack toStack() {
+        public ItemStack toElement() {
             return new ItemStack(item, 1, metadata);
         }
     }
@@ -36,7 +36,7 @@ interface Key {
     @Desugar
     record FluidKey(@Nonnull Fluid fluid) implements Key {
         @Nullable
-        public static FluidKey from(@Nullable FluidStack stack) {
+        public static FluidKey toKey(@Nullable FluidStack stack) {
             if (stack == null || stack.getFluid() == null) {
                 return null;
             }
@@ -44,7 +44,7 @@ interface Key {
         }
 
         @Nonnull
-        public FluidStack toStack() {
+        public FluidStack toElement() {
             return new FluidStack(fluid, 1000);
         }
     }
@@ -52,7 +52,7 @@ interface Key {
     @Desugar
     record BlockKey(@Nonnull Block block) implements Key {
         @Nullable
-        public static BlockKey from(@Nullable Block block) {
+        public static BlockKey toKey(@Nullable Block block) {
             if (block == null) {
                 return null;
             }
@@ -60,7 +60,7 @@ interface Key {
         }
 
         @Nonnull
-        public Block toBlock() {
+        public Block toElement() {
             return block;
         }
     }
@@ -68,7 +68,7 @@ interface Key {
 //    @Desugar
 //    record ItemKey(@Nonnull ResourceLocation item, int metadata) implements Key {
 //        @Nullable
-//        public static ItemKey from(@Nullable ItemStack stack) {
+//        public static ItemKey toKey(@Nullable ItemStack stack) {
 //            if (stack == null || stack.isEmpty()) {
 //                return null;
 //            }
@@ -85,7 +85,7 @@ interface Key {
 //        }
 //
 //        @Nonnull
-//        public ItemStack toStack() {
+//        public ItemStack toElement() {
 //            return new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(item)), 1, metadata);
 //        }
 //
@@ -117,7 +117,7 @@ interface Key {
 //    @Desugar
 //    record FluidKey(@Nonnull String fluid) implements Key {
 //        @Nullable
-//        public static FluidKey from(@Nullable FluidStack stack) {
+//        public static FluidKey toKey(@Nullable FluidStack stack) {
 //            if (stack == null || stack.getFluid() == null) {
 //                return null;
 //            }
@@ -132,7 +132,7 @@ interface Key {
 //        }
 //
 //        @Nonnull
-//        public FluidStack toStack() {
+//        public FluidStack toElement() {
 //            var fluidName = fluid();
 //            var fluid = FluidRegistry.getFluid(fluidName);
 //            return new FluidStack(fluid, 1000);
@@ -164,7 +164,7 @@ interface Key {
 //    @Desugar
 //    record BlockKey(@Nonnull ResourceLocation block) implements Key {
 //        @Nullable
-//        public static BlockKey from(@Nullable Block block) {
+//        public static BlockKey toKey(@Nullable Block block) {
 //            if (block == null) {
 //                return null;
 //            }
@@ -179,7 +179,7 @@ interface Key {
 //        }
 //
 //        @Nonnull
-//        public Block toBlock() {
+//        public Block toElement() {
 //            return Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(this.block));
 //        }
 //
