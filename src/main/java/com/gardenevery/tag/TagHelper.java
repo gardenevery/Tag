@@ -52,11 +52,10 @@ public final class TagHelper {
      * Get all tags associated with a block state
      */
     public static Set<String> tags(@Nullable IBlockState blockState) {
-        if (blockState == null) {
-            return Collections.emptySet();
+        BlockKey key = null;
+        if (blockState != null) {
+            key = BlockKey.toKey(blockState.getBlock());
         }
-
-        var key = BlockKey.toKey(blockState.getBlock());
         return key != null ? TagManager.BLOCK.getTags(key) : Collections.emptySet();
     }
 

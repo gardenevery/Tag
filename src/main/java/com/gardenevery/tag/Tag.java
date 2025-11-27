@@ -14,13 +14,11 @@ final class Tag<T extends Key> {
     private final Object2ReferenceOpenHashMap<String, ObjectOpenHashSet<T>> tagToKeys = new Object2ReferenceOpenHashMap<>();
     private final Object2ReferenceOpenHashMap<T, ObjectOpenHashSet<String>> keyToTags = new Object2ReferenceOpenHashMap<>();
 
-    @Nonnull
     public Set<T> getKeys(@Nonnull String tagName) {
         var keys = tagToKeys.get(tagName);
         return keys != null ? Collections.unmodifiableSet(keys) : Collections.emptySet();
     }
 
-    @Nonnull
     public Set<String> getTags(@Nonnull T key) {
         var tags = keyToTags.get(key);
         return tags != null ? Collections.unmodifiableSet(tags) : Collections.emptySet();
@@ -124,7 +122,6 @@ final class Tag<T extends Key> {
 
     public void removeTagKeys(@Nonnull String tagName, @Nonnull Set<T> keys) {
         var keysForTag = tagToKeys.get(tagName);
-
         if (keysForTag == null) {
             return;
         }
@@ -150,7 +147,6 @@ final class Tag<T extends Key> {
         keyToTags.clear();
     }
 
-    @Nonnull
     public Set<String> getAllTags() {
         return Collections.unmodifiableSet(tagToKeys.keySet());
     }
