@@ -18,7 +18,7 @@ public class TagMod {
     @Mod.EventHandler
     public void onFMLoadComplete(FMLLoadCompleteEvent event) {
         OreSync.oreDictionarySync();
-        TagBuilder.closeRegistration();
+        AbstractTagBuilder.closeRegistration();
     }
 
     @Mod.EventHandler
