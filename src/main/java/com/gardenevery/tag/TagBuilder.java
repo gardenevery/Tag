@@ -22,9 +22,9 @@ public final class TagBuilder {
     /**
      * Create an item tag builder
      * @param tagName Tag name (only letters, numbers, :, _, / allowed)
-     * Example: TagBuilder.item("minecraft:weapons").add(itemStack).add(itemStack);
-     *          TagBuilder.item("minecraft:weapons").removeTag();
-     *          TagBuilder.item("minecraft:weapons").removeKey(itemStack).removeKey(itemStack);
+     * Example: TagBuilder.item("minecraft:weapon").add(itemStack).add(itemStack);
+     *          TagBuilder.item("minecraft:weapon").removeTag();
+     *          TagBuilder.item("minecraft:weapon").removeKey(itemStack).removeKey(itemStack);
      */
     public static ItemInitialState item(@Nullable String tagName) {
         return new ItemTagBuilder(tagName).initialState();
@@ -44,9 +44,9 @@ public final class TagBuilder {
     /**
      * Create a block tag builder
      * @param tagName Tag name (only letters, numbers, :, _, / allowed)
-     * Example: TagBuilder.block("minecraft:logs").add(block).add(block);
-     *          TagBuilder.block("minecraft:logs").removeTag();
-     *          TagBuilder.block("minecraft:logs").removeKey(block).removeKey(block);
+     * Example: TagBuilder.block("minecraft:log").add(block).add(block);
+     *          TagBuilder.block("minecraft:log").removeTag();
+     *          TagBuilder.block("minecraft:log").removeKey(block).removeKey(block);
      */
     public static BlockInitialState block(@Nullable String tagName) {
         return new BlockTagBuilder(tagName).initialState();
@@ -55,9 +55,9 @@ public final class TagBuilder {
     /**
      * Create an item tag builder with multiple tags
      * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
-     * Example: TagBuilder.item("minecraft:tools", "minecraft:diggers", "mod:iron_tier").add(itemStack).add(itemStack);
-     *          TagBuilder.item("minecraft:tools", "minecraft:diggers", "mod:iron_tier").removeTag();
-     *          TagBuilder.item("minecraft:tools", "minecraft:diggers", "mod:iron_tier").removeKey(itemStack).removeKey(itemStack);
+     * Example: TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").add(itemStack).add(itemStack);
+     *          TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").removeTag();
+     *          TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").removeKey(itemStack).removeKey(itemStack);
      */
     public static MultiItemInitialState item(@Nullable String... tagNames) {
         return new MultiItemTagBuilder(tagNames).initialState();
@@ -66,9 +66,9 @@ public final class TagBuilder {
     /**
      * Create a fluid tag builder with multiple tags
      * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
-     * Example: TagBuilder.fluid("forge:liquids", "mod:coolant", "pack:hazardous").add(fluidStack);
-     *          TagBuilder.fluid("forge:liquids", "mod:coolant", "pack:hazardous").removeTag();
-     *          TagBuilder.fluid("forge:liquids", "mod:coolant", "pack:hazardous").removeKey(fluidStack).removeKey(fluidStack);
+     * Example: TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").add(fluidStack);
+     *          TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").removeTag();
+     *          TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").removeKey(fluidStack).removeKey(fluidStack);
      */
     public static MultiFluidInitialState fluid(@Nullable String... tagNames) {
         return new MultiFluidTagBuilder(tagNames).initialState();
@@ -77,9 +77,9 @@ public final class TagBuilder {
     /**
      * Create a block tag builder with multiple tags
      * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
-     * Example: TagBuilder.block("forge:ores", "mod:world_gen", "pack:rare_blocks").add(block);
-     *          TagBuilder.block("forge:ores", "mod:world_gen", "pack:rare_blocks").removeTag();
-     *          TagBuilder.block("forge:ores", "mod:world_gen", "pack:rare_blocks").removeKey(block).removeKey(block);
+     * Example: TagBuilder.block("forge:ore", "pack:rare_blocks").add(block);
+     *          TagBuilder.block("forge:ore", "pack:rare_blocks").removeTag();
+     *          TagBuilder.block("forge:ore", "pack:rare_blocks").removeKey(block).removeKey(block);
      */
     public static MultiBlockInitialState block(@Nullable String... tagNames) {
         return new MultiBlockTagBuilder(tagNames).initialState();

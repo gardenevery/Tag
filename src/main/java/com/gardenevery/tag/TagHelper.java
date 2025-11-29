@@ -1,8 +1,6 @@
 package com.gardenevery.tag;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -193,17 +191,6 @@ public final class TagHelper {
     /**
      * Check if an item has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable ItemStack stack, @Nullable String... tagNames) {
-        if (areTagsInvalid(tagNames)) {
-            return false;
-        }
-        var key = ItemKey.toKey(stack);
-        return key != null && TagManager.ITEM.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
-    }
-
-    /**
-     * Check if an item has any of the specified tags
-     */
     public static boolean hasAnyTags(@Nullable ItemStack stack, @Nullable Set<String> tagNames) {
         if (areTagsInvalid(tagNames)) {
             return false;
@@ -211,18 +198,6 @@ public final class TagHelper {
 
         var key = ItemKey.toKey(stack);
         return key != null && TagManager.ITEM.hasAnyTag(key, tagNames);
-    }
-
-    /**
-     * Check if a fluid has any of the specified tags
-     */
-    public static boolean hasAnyTags(@Nullable FluidStack stack, @Nullable String... tagNames) {
-        if (areTagsInvalid(tagNames)) {
-            return false;
-        }
-
-        var key = FluidKey.toKey(stack);
-        return key != null && TagManager.FLUID.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
     }
 
     /**
@@ -240,18 +215,6 @@ public final class TagHelper {
     /**
      * Check if a block has any of the specified tags
      */
-    public static boolean hasAnyTags(@Nullable Block block, @Nullable String... tagNames) {
-        if (areTagsInvalid(tagNames)) {
-            return false;
-        }
-
-        var key = BlockKey.toKey(block);
-        return key != null && TagManager.BLOCK.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
-    }
-
-    /**
-     * Check if a block has any of the specified tags
-     */
     public static boolean hasAnyTags(@Nullable Block block, @Nullable Set<String> tagNames) {
         if (areTagsInvalid(tagNames)) {
             return false;
@@ -259,18 +222,6 @@ public final class TagHelper {
 
         var key = BlockKey.toKey(block);
         return key != null && TagManager.BLOCK.hasAnyTag(key, tagNames);
-    }
-
-    /**
-     * Check if a blockState has any of the specified tags
-     */
-    public static boolean hasAnyTags(@Nullable IBlockState blockState, @Nullable String... tagNames) {
-        if (areTagsInvalid(tagNames) || blockState == null) {
-            return false;
-        }
-
-        var key = BlockKey.toKey(blockState.getBlock());
-        return key != null && TagManager.BLOCK.hasAnyTag(key, new HashSet<>(Arrays.asList(tagNames)));
     }
 
     /**

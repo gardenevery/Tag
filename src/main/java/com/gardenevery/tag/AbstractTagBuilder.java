@@ -15,7 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class AbstractTagBuilder {
+abstract class AbstractTagBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger("TagBuilder");
     private static final Pattern NAME_PATTERN = Pattern.compile("[a-zA-Z0-9:_/]+");
