@@ -21,10 +21,14 @@ public final class TagBuilder {
 
     /**
      * Create an item tag builder
+     * <p>
+     * Example:TagBuilder.item("minecraft:weapon").add(itemStack).add(itemStack);
+     * <p>
+     * TagBuilder.item("minecraft:weapon").removeTag();
+     * <p>
+     * TagBuilder.item("minecraft:weapon").removeKey(itemStack).removeKey(itemStack);
+     *
      * @param tagName Tag name (only letters, numbers, :, _, / allowed)
-     * Example: TagBuilder.item("minecraft:weapon").add(itemStack).add(itemStack);
-     *          TagBuilder.item("minecraft:weapon").removeTag();
-     *          TagBuilder.item("minecraft:weapon").removeKey(itemStack).removeKey(itemStack);
      */
     public static ItemInitialState item(@Nullable String tagName) {
         return new ItemTagBuilder(tagName).initialState();
@@ -32,10 +36,14 @@ public final class TagBuilder {
 
     /**
      * Create a fluid tag builder
-     * @param tagName Tag name (only letters, numbers, :, _, / allowed)
+     * <p>
      * Example: TagBuilder.fluid("forge:lava").add(fluidStack).add(fluidStack);
-     *          TagBuilder.fluid("forge:lava").removeTag();
-     *          TagBuilder.fluid("forge:lava").removeKey(fluidStack).removeKey(fluidStack);
+     * <p>
+     * TagBuilder.fluid("forge:lava").removeTag();
+     * <p>
+     * TagBuilder.fluid("forge:lava").removeKey(fluidStack).removeKey(fluidStack);
+     *
+     * @param tagName Tag name (only letters, numbers, :, _, / allowed)
      */
     public static FluidInitialState fluid(@Nullable String tagName) {
         return new FluidTagBuilder(tagName).initialState();
@@ -43,10 +51,14 @@ public final class TagBuilder {
 
     /**
      * Create a block tag builder
-     * @param tagName Tag name (only letters, numbers, :, _, / allowed)
+     * <p>
      * Example: TagBuilder.block("minecraft:log").add(block).add(block);
-     *          TagBuilder.block("minecraft:log").removeTag();
-     *          TagBuilder.block("minecraft:log").removeKey(block).removeKey(block);
+     * <p>
+     * TagBuilder.block("minecraft:log").removeTag();
+     * <p>
+     * TagBuilder.block("minecraft:log").removeKey(block).removeKey(block);
+     *
+     * @param tagName Tag name (only letters, numbers, :, _, / allowed)
      */
     public static BlockInitialState block(@Nullable String tagName) {
         return new BlockTagBuilder(tagName).initialState();
@@ -54,10 +66,14 @@ public final class TagBuilder {
 
     /**
      * Create an item tag builder with multiple tags
-     * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
+     * <p>
      * Example: TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").add(itemStack).add(itemStack);
-     *          TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").removeTag();
-     *          TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").removeKey(itemStack).removeKey(itemStack);
+     * <p>
+     * TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").removeTag();
+     * <p>
+     * TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").removeKey(itemStack).removeKey(itemStack);
+     *
+     * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
      */
     public static MultiItemInitialState item(@Nullable String... tagNames) {
         return new MultiItemTagBuilder(tagNames).initialState();
@@ -65,10 +81,14 @@ public final class TagBuilder {
 
     /**
      * Create a fluid tag builder with multiple tags
-     * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
+     * <p>
      * Example: TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").add(fluidStack);
-     *          TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").removeTag();
-     *          TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").removeKey(fluidStack).removeKey(fluidStack);
+     * <p>
+     * TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").removeTag();
+     * <p>
+     * TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").removeKey(fluidStack).removeKey(fluidStack);
+     *
+     * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
      */
     public static MultiFluidInitialState fluid(@Nullable String... tagNames) {
         return new MultiFluidTagBuilder(tagNames).initialState();
@@ -76,10 +96,14 @@ public final class TagBuilder {
 
     /**
      * Create a block tag builder with multiple tags
-     * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
+     * <p>
      * Example: TagBuilder.block("forge:ore", "pack:rare_blocks").add(block);
-     *          TagBuilder.block("forge:ore", "pack:rare_blocks").removeTag();
-     *          TagBuilder.block("forge:ore", "pack:rare_blocks").removeKey(block).removeKey(block);
+     * <p>
+     * TagBuilder.block("forge:ore", "pack:rare_blocks").removeTag();
+     * <p>
+     * TagBuilder.block("forge:ore", "pack:rare_blocks").removeKey(block).removeKey(block);
+     *
+     * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
      */
     public static MultiBlockInitialState block(@Nullable String... tagNames) {
         return new MultiBlockTagBuilder(tagNames).initialState();
