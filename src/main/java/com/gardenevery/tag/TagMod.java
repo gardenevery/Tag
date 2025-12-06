@@ -1,6 +1,7 @@
 package com.gardenevery.tag;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -13,6 +14,7 @@ public class TagMod {
     public void postInit(FMLPostInitializationEvent event) {
         var tooltipEventHandler = new TagTooltip();
         MinecraftForge.EVENT_BUS.register(tooltipEventHandler);
+        TagBuilder.fluid("minecraft:water").add(FluidRegistry.WATER);
     }
 
     @Mod.EventHandler

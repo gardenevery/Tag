@@ -14,14 +14,18 @@ final class Tag<T extends Key> {
     private final Object2ReferenceOpenHashMap<String, ObjectOpenHashSet<T>> tagToKeys = new Object2ReferenceOpenHashMap<>();
     private final Object2ReferenceOpenHashMap<T, ObjectOpenHashSet<String>> keyToTags = new Object2ReferenceOpenHashMap<>();
 
+    public Set<String> getTag(@Nonnull T key) {
+        var tags = keyToTags.get(key);
+        return tags != null ? Collections.unmodifiableSet(tags) : Collections.emptySet();
+    }
+
     public Set<T> getKey(@Nonnull String tagName) {
         var keys = tagToKeys.get(tagName);
         return keys != null ? Collections.unmodifiableSet(keys) : Collections.emptySet();
     }
 
-    public Set<String> getTag(@Nonnull T key) {
-        var tags = keyToTags.get(key);
-        return tags != null ? Collections.unmodifiableSet(tags) : Collections.emptySet();
+    public Set<String> getAllTag() {
+        return Collections.unmodifiableSet(tagToKeys.keySet());
     }
 
     public boolean hasTag(@Nonnull T key, @Nonnull String tagName) {
@@ -57,27 +61,6 @@ final class Tag<T extends Key> {
         }
     }
 
-    public void createTag(@Nonnull String tagName, @Nonnull Set<T> keys) {
-        Set<T> tagKeys = tagToKeys.computeIfAbsent(tagName, k -> new ObjectOpenHashSet<>());
-        tagKeys.addAll(keys);
-
-        for (T key : keys) {
-            keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>()).add(tagName);
-        }
-    }
-
-    public void createTag(@Nonnull Set<String> tagNames, @Nonnull Set<T> keys) {
-        for (var tagName : tagNames) {
-            Set<T> tagKeys = tagToKeys.computeIfAbsent(tagName, k -> new ObjectOpenHashSet<>());
-            tagKeys.addAll(keys);
-        }
-
-        for (T key : keys) {
-            Set<String> tagsForKey = keyToTags.computeIfAbsent(key, k -> new ObjectOpenHashSet<>());
-            tagsForKey.addAll(tagNames);
-        }
-    }
-
     public void removeTag(@Nonnull String tagName) {
         var keys = tagToKeys.remove(tagName);
         if (keys == null) {
@@ -97,7 +80,6 @@ final class Tag<T extends Key> {
 
     public void removeTag(@Nonnull Set<String> tagNames) {
         var removals = new Object2ReferenceOpenHashMap<T, ObjectOpenHashSet<String>>();
-
         for (var tag : tagNames) {
             var keys = tagToKeys.remove(tag);
             if (keys == null) {
@@ -161,50 +143,6 @@ final class Tag<T extends Key> {
         }
     }
 
-    public void removeTagKey(@Nonnull String tagName, @Nonnull Set<T> keys) {
-        var keysForTag = tagToKeys.get(tagName);
-        if (keysForTag == null) {
-            return;
-        }
-
-        keysForTag.removeAll(keys);
-        if (keysForTag.isEmpty()) {
-            tagToKeys.remove(tagName);
-        }
-
-        for (T key : keys) {
-            var tagsForKey = keyToTags.get(key);
-            if (tagsForKey != null) {
-                tagsForKey.remove(tagName);
-                if (tagsForKey.isEmpty()) {
-                    keyToTags.remove(key);
-                }
-            }
-        }
-    }
-
-    public void removeTagKey(@Nonnull Set<String> tagNames, @Nonnull Set<T> keys) {
-        for (T key : keys) {
-            var tagsForKey = keyToTags.get(key);
-            if (tagsForKey != null) {
-                tagsForKey.removeAll(tagNames);
-                if (tagsForKey.isEmpty()) {
-                    keyToTags.remove(key);
-                }
-            }
-        }
-
-        for (var tagName : tagNames) {
-            var keysForTag = tagToKeys.get(tagName);
-            if (keysForTag != null) {
-                keysForTag.removeAll(keys);
-                if (keysForTag.isEmpty()) {
-                    tagToKeys.remove(tagName);
-                }
-            }
-        }
-    }
-
     public boolean doesTagExist(@Nonnull String tagName) {
         return tagToKeys.containsKey(tagName);
     }
@@ -223,7 +161,6 @@ final class Tag<T extends Key> {
 
     public int getAssociations() {
         int count = 0;
-
         for (var entry : tagToKeys.entrySet()) {
             count += entry.getValue().size();
         }

@@ -237,7 +237,7 @@ public class TagCommand extends CommandBase {
     }
 
     private void displayStatisticsForType(@Nonnull ICommandSender sender, String translationKey, TagType type) {
-        TagStatistics stats = createTagStatistics(type);
+        var stats = createTagStatistics(type);
         sendStatisticMessage(sender, translationKey, stats);
     }
 
@@ -247,7 +247,7 @@ public class TagCommand extends CommandBase {
     }
 
     private TagStatistics createTagStatistics(TagType type) {
-        return new TagStatistics(TagHelper.tagCount(type), TagHelper.totalAssociations(type), TagHelper.uniqueKeyCount(type));
+        return new TagStatistics(TagHelper.tagCount(type), TagHelper.associations(type), TagHelper.keyCount(type));
     }
 
     private void sendStatisticMessage(@Nonnull ICommandSender sender, String key, TagStatistics stats) {

@@ -27,21 +27,32 @@ package com.gardenevery.tag;
 import java.util.List;
 import java.util.Set;
 
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import org.lwjgl.input.Keyboard;
+
+@SideOnly(Side.CLIENT)
 public class TagTooltip {
 
     @SubscribeEvent
     public void onItemTooltip(ItemTooltipEvent event) {
+        var stack = event.getItemStack();
+        if (stack.isEmpty()) {
+            return;
+        }
+
+        List<String> tooltip = event.getToolTip();
         if (isShiftKeyDown()) {
-            generateTagTooltip(event);
+            generateDetailedTooltip(stack, tooltip);
         } else {
-            event.getToolTip().add(TextFormatting.GRAY + I18n.format("tooltip.hold_shift_for_tags"));
+            tooltip.add(TextFormatting.GRAY + I18n.format("tooltip.hold_shift_for_tags"));
         }
     }
 
@@ -49,14 +60,37 @@ public class TagTooltip {
         return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
     }
 
-    private static void generateTagTooltip(ItemTooltipEvent event) {
-        Set<String> tags = TagHelper.tags(event.getItemStack());
-        if (tags.isEmpty()) {
+    private static void generateDetailedTooltip(ItemStack stack, List<String> tooltip) {
+        Set<String> itemTags = TagHelper.tags(stack);
+        Set<String> fluidTags = null;
+
+        if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+            var fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+            if (fluidHandler != null) {
+                var fluid = fluidHandler.drain(Integer.MAX_VALUE, false);
+                if (fluid != null && fluid.amount > 0) {
+                    fluidTags = TagHelper.tags(fluid);
+                }
+            }
+        }
+
+        boolean hasItemTags = !itemTags.isEmpty();
+        boolean hasFluidTags = fluidTags != null && !fluidTags.isEmpty();
+
+        if (!hasItemTags && !hasFluidTags) {
             return;
         }
 
-        List<String> tooltip = event.getToolTip();
         tooltip.add("Tags:");
-        tags.stream().sorted().map(tag -> " " + tag).forEach(tooltip::add);
+        if (hasItemTags) {
+            itemTags.stream().sorted().map(tag -> "  " + tag).forEach(tooltip::add);
+        }
+
+        if (hasFluidTags) {
+            if (hasItemTags) {
+                tooltip.add("");
+            }
+            fluidTags.stream().sorted().map(tag -> "  " + tag).forEach(tooltip::add);
+        }
     }
 }
