@@ -44,10 +44,7 @@ Automatically synchronizes with Ore Dictionary.
 ### Querying Tags
 
 #### In-Game Command
-Use the `/tag info` command to view all tags  
-Use `/tag hand` while holding an item to see its tags:
-- If holding a **fluid container** (like a bucket), shows **fluid tags**
-- Otherwise, shows **item tags**
+Use the `/tag info` command to view all tags.
 
 #### Code API
 

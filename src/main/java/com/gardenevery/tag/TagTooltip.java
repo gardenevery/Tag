@@ -27,7 +27,9 @@ package com.gardenevery.tag;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -62,8 +64,8 @@ public class TagTooltip {
 
     private static void generateDetailedTooltip(ItemStack stack, List<String> tooltip) {
         Set<String> itemTags = TagHelper.tags(stack);
-        Set<String> fluidTags = null;
 
+        Set<String> fluidTags = null;
         if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
             var fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
             if (fluidHandler != null) {
@@ -74,23 +76,32 @@ public class TagTooltip {
             }
         }
 
+        Set<String> blockTags = null;
+        var block = Block.getBlockFromItem(stack.getItem());
+
+        if (block != Blocks.AIR) {
+            blockTags = TagHelper.tags(block);
+        }
+
         boolean hasItemTags = !itemTags.isEmpty();
         boolean hasFluidTags = fluidTags != null && !fluidTags.isEmpty();
+        boolean hasBlockTags = blockTags != null && !blockTags.isEmpty();
 
-        if (!hasItemTags && !hasFluidTags) {
+        if (!hasItemTags && !hasFluidTags && !hasBlockTags) {
             return;
         }
 
         tooltip.add("Tags:");
         if (hasItemTags) {
-            itemTags.stream().sorted().map(tag -> "  " + tag).forEach(tooltip::add);
+            itemTags.stream().sorted().map(tag -> TextFormatting.WHITE + "  " + tag).forEach(tooltip::add);
         }
 
         if (hasFluidTags) {
-            if (hasItemTags) {
-                tooltip.add("");
-            }
-            fluidTags.stream().sorted().map(tag -> "  " + tag).forEach(tooltip::add);
+            fluidTags.stream().sorted().map(tag -> TextFormatting.BLUE + "  " + tag).forEach(tooltip::add);
+        }
+
+        if (hasBlockTags) {
+            blockTags.stream().sorted().map(tag -> TextFormatting.YELLOW + "  " + tag).forEach(tooltip::add);
         }
     }
 }

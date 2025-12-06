@@ -7,22 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
 import com.github.bsideup.jabel.Desugar;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class TagCommand extends CommandBase {
 
@@ -106,25 +99,13 @@ public class TagCommand extends CommandBase {
     }
 
     private void registerCommands() {
-        commandManager.registerCommand(new CommandHandler("hand", LEVEL0,
-                (server, sender) -> showHeldItemTags(sender), TranslationKeys.HELP_HAND));
-
         commandManager.registerCommand(new CommandHandler("info", LEVEL2,
                 (server, sender) -> showTagStatistics(sender), TranslationKeys.HELP_INFO));
     }
 
     private static final class TranslationKeys {
         static final String HELP_TITLE = "com.gardenevery.tag.help.title";
-        static final String HELP_HAND = "com.gardenevery.tag.help.hand";
         static final String HELP_INFO = "com.gardenevery.tag.help.info";
-        static final String NO_ITEM = "com.gardenevery.tag.noitem";
-        static final String MAIN_HAND = "com.gardenevery.tag.mainhand";
-        static final String OFF_HAND = "com.gardenevery.tag.offhand";
-        static final String FLUID_TAGS = "com.gardenevery.tag.fluidtags";
-        static final String NO_FLUID_TAGS = "com.gardenevery.tag.nofluidtags";
-        static final String EMPTY_CONTAINER = "com.gardenevery.tag.emptycontainer";
-        static final String ITEM_TAGS = "com.gardenevery.tag.itemtags";
-        static final String NO_ITEM_TAGS = "com.gardenevery.tag.noitemtags";
         static final String NO_PERMISSION = "com.gardenevery.tag.nopermission";
         static final String STATISTICS_TITLE = "com.gardenevery.tag.statistics.title";
         static final String STATISTICS_ITEMS = "com.gardenevery.tag.statistics.items";
@@ -142,7 +123,7 @@ public class TagCommand extends CommandBase {
     @Nonnull
     @Override
     public String getUsage(@Nonnull ICommandSender sender) {
-        return "tag [hand|info]";
+        return "tag [info]";
     }
 
     @Override
@@ -166,66 +147,6 @@ public class TagCommand extends CommandBase {
                 .map(Optional::get)
                 .filter(handler -> handler.permission().hasPermission(sender, "tag"))
                 .forEach(handler -> sender.sendMessage(new TextComponentTranslation(handler.descriptionKey())));
-    }
-
-    private void showHeldItemTags(@Nonnull ICommandSender sender) {
-        if (!(sender instanceof EntityPlayer player)) {
-            return;
-        }
-
-        boolean hasItems = Stream.of(EnumHand.values()).map(player::getHeldItem).anyMatch(stack -> !stack.isEmpty());
-        if (!hasItems) {
-            player.sendMessage(new TextComponentTranslation(TranslationKeys.NO_ITEM));
-            return;
-        }
-
-        for (var hand : EnumHand.values()) {
-            var stack = player.getHeldItem(hand);
-            if (!stack.isEmpty()) {
-                processItemStack(player, hand, stack);
-            }
-        }
-    }
-
-    private void processItemStack(@Nonnull EntityPlayer player, EnumHand hand, @Nonnull ItemStack stack) {
-        var handName = getHandDisplayName(hand);
-        var fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-
-        if (fluidHandler != null) {
-            handleFluidContainer(player, handName, fluidHandler);
-        } else {
-            handleRegularItem(player, handName, stack);
-        }
-    }
-
-    private String getHandDisplayName(EnumHand hand) {
-        return hand == EnumHand.MAIN_HAND ? new TextComponentTranslation(TranslationKeys.MAIN_HAND).getUnformattedText()
-                : new TextComponentTranslation(TranslationKeys.OFF_HAND).getUnformattedText();
-    }
-
-    private void handleFluidContainer(@Nonnull EntityPlayer player, String handName, IFluidHandlerItem fluidHandler) {
-        var fluid = fluidHandler.drain(Integer.MAX_VALUE, false);
-
-        if (fluid != null && fluid.amount > 0) {
-            var fluidTags = TagHelper.tags(fluid);
-            var translationKey = !fluidTags.isEmpty() ? TranslationKeys.FLUID_TAGS : TranslationKeys.NO_FLUID_TAGS;
-            sendFormattedMessage(player, handName, translationKey, String.join(", ", fluidTags));
-        } else {
-            sendFormattedMessage(player, handName, TranslationKeys.EMPTY_CONTAINER, "");
-        }
-    }
-
-    private void handleRegularItem(@Nonnull EntityPlayer player, String handName, @Nonnull ItemStack stack) {
-        var itemTags = TagHelper.tags(stack);
-        var translationKey = !itemTags.isEmpty() ? TranslationKeys.ITEM_TAGS : TranslationKeys.NO_ITEM_TAGS;
-        sendFormattedMessage(player, handName, translationKey, String.join(", ", itemTags));
-    }
-
-    private void sendFormattedMessage(@Nonnull EntityPlayer player, String handName,
-                                      String translationKey, String tags) {
-        var translatedPart = new TextComponentTranslation(translationKey, tags).getUnformattedText();
-        var message = String.format("%s %s", handName, translatedPart).trim();
-        player.sendMessage(new TextComponentString(message));
     }
 
     private void showTagStatistics(@Nonnull ICommandSender sender) {
