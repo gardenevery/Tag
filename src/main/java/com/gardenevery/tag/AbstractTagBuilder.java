@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+@SuppressWarnings("UnusedReturnValue")
 abstract class AbstractTagBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger("TagBuilder");
@@ -50,8 +51,8 @@ abstract class AbstractTagBuilder {
     }
 
     static Set<String> validateTagName(@Nullable String[] names) {
-        if (names == null || names.length < 2) {
-            LOGGER.warn("At least 2 tag names are required.");
+        if (names == null || names.length == 0) {
+            LOGGER.warn("Tag names array cannot be null or empty.");
             return Collections.emptySet();
         }
 
@@ -200,7 +201,7 @@ abstract class AbstractTagBuilder {
                     return new InvalidItemTag();
                 }
 
-                var key = Key.ItemKey.toKey(stack);
+                var key = ItemKey.toKey(stack);
                 if (key != null) {
                     TagManager.ITEM.createTag(tagName, key);
                 }
@@ -213,7 +214,7 @@ abstract class AbstractTagBuilder {
                     return new InvalidItemTag();
                 }
 
-                var key = Key.ItemKey.toKey(stack);
+                var key = ItemKey.toKey(stack);
                 if (key != null) {
                     TagManager.ITEM.removeTagKey(tagName, key);
                 }
@@ -259,7 +260,7 @@ abstract class AbstractTagBuilder {
 
         @Override
         public ItemRemoveKey removeKey(@Nullable ItemStack stack) {
-            var key = Key.ItemKey.toKey(stack);
+            var key = ItemKey.toKey(stack);
             if (key != null) {
                 TagManager.ITEM.removeTagKey(tagName, key);
             }
@@ -286,7 +287,7 @@ abstract class AbstractTagBuilder {
 
         @Override
         public ItemAddable add(@Nullable ItemStack stack) {
-            var key = Key.ItemKey.toKey(stack);
+            var key = ItemKey.toKey(stack);
             if (key != null) {
                 TagManager.ITEM.createTag(tagName, key);
             }
@@ -352,9 +353,8 @@ abstract class AbstractTagBuilder {
                     return new InvalidFluidTag();
                 }
 
-                var key = Key.FluidKey.toKey(stack);
-                if (key != null) {
-                    TagManager.FLUID.createTag(tagName, key);
+                if (stack != null) {
+                    TagManager.FLUID.createTag(tagName, stack.getFluid());
                 }
                 return new FluidTagAdder(tagName);
             }
@@ -365,9 +365,8 @@ abstract class AbstractTagBuilder {
                     return new InvalidFluidTag();
                 }
 
-                var key = Key.FluidKey.toKey(stack);
-                if (key != null) {
-                    TagManager.FLUID.removeTagKey(tagName, key);
+                if (stack != null) {
+                    TagManager.FLUID.removeTagKey(tagName, stack.getFluid());
                 }
                 return new FluidTagRemover(tagName);
             }
@@ -401,9 +400,8 @@ abstract class AbstractTagBuilder {
 
         @Override
         public FluidRemoveKey removeKey(@Nullable FluidStack stack) {
-            var key = Key.FluidKey.toKey(stack);
-            if (key != null) {
-                TagManager.FLUID.removeTagKey(tagName, key);
+            if (stack != null) {
+                TagManager.FLUID.removeTagKey(tagName, stack.getFluid());
             }
             return this;
         }
@@ -423,9 +421,8 @@ abstract class AbstractTagBuilder {
 
         @Override
         public FluidAddable add(@Nullable FluidStack stack) {
-            var key = Key.FluidKey.toKey(stack);
-            if (key != null) {
-                TagManager.FLUID.createTag(tagName, key);
+            if (stack != null) {
+                TagManager.FLUID.createTag(tagName, stack.getFluid());
             }
             return this;
         }
@@ -474,9 +471,8 @@ abstract class AbstractTagBuilder {
                     return new InvalidBlockTag();
                 }
 
-                var key = Key.BlockKey.toKey(block);
-                if (key != null) {
-                    TagManager.BLOCK.createTag(tagName, key);
+                if (block != null) {
+                    TagManager.BLOCK.createTag(tagName, block);
                 }
                 return new BlockTagAdder(tagName);
             }
@@ -487,9 +483,8 @@ abstract class AbstractTagBuilder {
                     return new InvalidBlockTag();
                 }
 
-                var key = Key.BlockKey.toKey(block);
-                if (key != null) {
-                    TagManager.BLOCK.removeTagKey(tagName, key);
+                if (block != null) {
+                    TagManager.BLOCK.removeTagKey(tagName, block);
                 }
                 return new BlockTagRemover(tagName);
             }
@@ -513,9 +508,8 @@ abstract class AbstractTagBuilder {
 
         @Override
         public BlockRemoveKey removeKey(@Nullable Block block) {
-            var key = Key.BlockKey.toKey(block);
-            if (key != null) {
-                TagManager.BLOCK.removeTagKey(tagName, key);
+            if (block != null) {
+                TagManager.BLOCK.removeTagKey(tagName, block);
             }
             return this;
         }
@@ -530,9 +524,8 @@ abstract class AbstractTagBuilder {
 
         @Override
         public BlockAddable add(@Nullable Block block) {
-            var key = Key.BlockKey.toKey(block);
-            if (key != null) {
-                TagManager.BLOCK.createTag(tagName, key);
+            if (block != null) {
+                TagManager.BLOCK.createTag(tagName, block);
             }
             return this;
         }
@@ -583,7 +576,7 @@ abstract class AbstractTagBuilder {
                     return new InvalidMultiItemTag();
                 }
 
-                var key = Key.ItemKey.toKey(stack);
+                var key = ItemKey.toKey(stack);
                 if (key != null) {
                     TagManager.ITEM.createTag(tagNames, key);
                 }
@@ -596,7 +589,7 @@ abstract class AbstractTagBuilder {
                     return new InvalidMultiItemTag();
                 }
 
-                var key = Key.ItemKey.toKey(stack);
+                var key = ItemKey.toKey(stack);
                 if (key != null) {
                     TagManager.ITEM.removeTagKey(tagNames, key);
                 }
@@ -642,7 +635,7 @@ abstract class AbstractTagBuilder {
 
         @Override
         public MultiItemRemoveKey removeKey(@Nullable ItemStack stack) {
-            var key = Key.ItemKey.toKey(stack);
+            var key = ItemKey.toKey(stack);
             if (key != null) {
                 TagManager.ITEM.removeTagKey(tagNames, key);
             }
@@ -669,7 +662,7 @@ abstract class AbstractTagBuilder {
 
         @Override
         public MultiItemAddable add(@Nullable ItemStack stack) {
-            var key = Key.ItemKey.toKey(stack);
+            var key = ItemKey.toKey(stack);
             if (key != null) {
                 TagManager.ITEM.createTag(tagNames, key);
             }
@@ -703,9 +696,8 @@ abstract class AbstractTagBuilder {
                     return new InvalidMultiFluidTag();
                 }
 
-                var key = Key.FluidKey.toKey(stack);
-                if (key != null) {
-                    TagManager.FLUID.createTag(tagNames, key);
+                if (stack != null) {
+                    TagManager.FLUID.createTag(tagNames, stack.getFluid());
                 }
                 return new MultiFluidTagAdder(tagNames);
             }
@@ -716,9 +708,8 @@ abstract class AbstractTagBuilder {
                     return new InvalidMultiFluidTag();
                 }
 
-                var key = Key.FluidKey.toKey(stack);
-                if (key != null) {
-                    TagManager.FLUID.removeTagKey(tagNames, key);
+                if (stack != null) {
+                    TagManager.FLUID.removeTagKey(tagNames, stack.getFluid());
                 }
                 return new MultiFluidTagRemover(tagNames);
             }
@@ -752,9 +743,8 @@ abstract class AbstractTagBuilder {
 
         @Override
         public MultiFluidRemoveKey removeKey(@Nullable FluidStack stack) {
-            var key = Key.FluidKey.toKey(stack);
-            if (key != null) {
-                TagManager.FLUID.removeTagKey(tagNames, key);
+            if (stack != null) {
+                TagManager.FLUID.removeTagKey(tagNames, stack.getFluid());
             }
             return this;
         }
@@ -774,9 +764,8 @@ abstract class AbstractTagBuilder {
 
         @Override
         public MultiFluidAddable add(@Nullable FluidStack stack) {
-            var key = Key.FluidKey.toKey(stack);
-            if (key != null) {
-                TagManager.FLUID.createTag(tagNames, key);
+            if (stack != null) {
+                TagManager.FLUID.createTag(tagNames, stack.getFluid());
             }
             return this;
         }
@@ -803,9 +792,8 @@ abstract class AbstractTagBuilder {
                     return new InvalidMultiBlockTag();
                 }
 
-                var key = Key.BlockKey.toKey(block);
-                if (key != null) {
-                    TagManager.BLOCK.createTag(tagNames, key);
+                if (block != null) {
+                    TagManager.BLOCK.createTag(tagNames, block);
                 }
                 return new MultiBlockTagAdder(tagNames);
             }
@@ -816,9 +804,8 @@ abstract class AbstractTagBuilder {
                     return new InvalidMultiBlockTag();
                 }
 
-                var key = Key.BlockKey.toKey(block);
-                if (key != null) {
-                    TagManager.BLOCK.removeTagKey(tagNames, key);
+                if (block != null) {
+                    TagManager.BLOCK.removeTagKey(tagNames, block);
                 }
                 return new MultiBlockTagRemover(tagNames);
             }
@@ -842,9 +829,8 @@ abstract class AbstractTagBuilder {
 
         @Override
         public MultiBlockRemoveKey removeKey(@Nullable Block block) {
-            var key = Key.BlockKey.toKey(block);
-            if (key != null) {
-                TagManager.BLOCK.removeTagKey(tagNames, key);
+            if (block != null) {
+                TagManager.BLOCK.removeTagKey(tagNames, block);
             }
             return this;
         }
@@ -859,9 +845,8 @@ abstract class AbstractTagBuilder {
 
         @Override
         public MultiBlockAddable add(@Nullable Block block) {
-            var key = Key.BlockKey.toKey(block);
-            if (key != null) {
-                TagManager.BLOCK.createTag(tagNames, key);
+            if (block != null) {
+                TagManager.BLOCK.createTag(tagNames, block);
             }
             return this;
         }

@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
-final class Tag<T extends Key> {
+final class Tag<T> {
 
     Tag() {}
 

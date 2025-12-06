@@ -21,12 +21,9 @@ public final class TagBuilder {
 
     /**
      * Create an item tag builder
-     * <p>
-     * Example:TagBuilder.item("minecraft:weapon").add(itemStack).add(itemStack);
-     * <p>
-     * TagBuilder.item("minecraft:weapon").removeTag();
-     * <p>
-     * TagBuilder.item("minecraft:weapon").removeKey(itemStack).removeKey(itemStack);
+     * <p> Example:TagBuilder.item("minecraft:weapon").add(itemStack).add(itemStack);
+     * <p> TagBuilder.item("minecraft:weapon").removeTag();
+     * <p> TagBuilder.item("minecraft:weapon").removeKey(itemStack).removeKey(itemStack);
      *
      * @param tagName Tag name (only letters, numbers, :, _, / allowed)
      */
@@ -36,12 +33,9 @@ public final class TagBuilder {
 
     /**
      * Create a fluid tag builder
-     * <p>
-     * Example: TagBuilder.fluid("forge:lava").add(fluidStack).add(fluidStack);
-     * <p>
-     * TagBuilder.fluid("forge:lava").removeTag();
-     * <p>
-     * TagBuilder.fluid("forge:lava").removeKey(fluidStack).removeKey(fluidStack);
+     * <p> Example: TagBuilder.fluid("forge:lava").add(fluidStack).add(fluidStack);
+     * <p> TagBuilder.fluid("forge:lava").removeTag();
+     * <p> TagBuilder.fluid("forge:lava").removeKey(fluidStack).removeKey(fluidStack);
      *
      * @param tagName Tag name (only letters, numbers, :, _, / allowed)
      */
@@ -51,12 +45,9 @@ public final class TagBuilder {
 
     /**
      * Create a block tag builder
-     * <p>
-     * Example: TagBuilder.block("minecraft:log").add(block).add(block);
-     * <p>
-     * TagBuilder.block("minecraft:log").removeTag();
-     * <p>
-     * TagBuilder.block("minecraft:log").removeKey(block).removeKey(block);
+     * <p> Example: TagBuilder.block("minecraft:log").add(block).add(block);
+     * <p> TagBuilder.block("minecraft:log").removeTag();
+     * <p> TagBuilder.block("minecraft:log").removeKey(block).removeKey(block);
      *
      * @param tagName Tag name (only letters, numbers, :, _, / allowed)
      */
@@ -66,12 +57,9 @@ public final class TagBuilder {
 
     /**
      * Create an item tag builder with multiple tags
-     * <p>
-     * Example: TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").add(itemStack).add(itemStack);
-     * <p>
-     * TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").removeTag();
-     * <p>
-     * TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").removeKey(itemStack).removeKey(itemStack);
+     * <p> Example: TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").add(itemStack).add(itemStack);
+     * <p> TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").removeTag();
+     * <p> TagBuilder.item("minecraft:tool", "minecraft:diggers", "mod:iron_tier").removeKey(itemStack).removeKey(itemStack);
      *
      * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
      */
@@ -81,12 +69,9 @@ public final class TagBuilder {
 
     /**
      * Create a fluid tag builder with multiple tags
-     * <p>
-     * Example: TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").add(fluidStack);
-     * <p>
-     * TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").removeTag();
-     * <p>
-     * TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").removeKey(fluidStack).removeKey(fluidStack);
+     * <p> Example: TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").add(fluidStack);
+     * <p> TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").removeTag();
+     * <p> TagBuilder.fluid("forge:liquid", "mod:coolant", "pack:hazardous").removeKey(fluidStack).removeKey(fluidStack);
      *
      * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
      */
@@ -96,12 +81,9 @@ public final class TagBuilder {
 
     /**
      * Create a block tag builder with multiple tags
-     * <p>
-     * Example: TagBuilder.block("forge:ore", "pack:rare_blocks").add(block);
-     * <p>
-     * TagBuilder.block("forge:ore", "pack:rare_blocks").removeTag();
-     * <p>
-     * TagBuilder.block("forge:ore", "pack:rare_blocks").removeKey(block).removeKey(block);
+     * <p> Example: TagBuilder.block("forge:ore", "pack:rare_blocks").add(block);
+     * <p> TagBuilder.block("forge:ore", "pack:rare_blocks").removeTag();
+     * <p> TagBuilder.block("forge:ore", "pack:rare_blocks").removeKey(block).removeKey(block);
      *
      * @param tagNames Multiple tag names (only letters, numbers, :, _, / allowed)
      */

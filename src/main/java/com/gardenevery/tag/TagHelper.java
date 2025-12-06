@@ -8,13 +8,10 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-
-import com.gardenevery.tag.Key.BlockKey;
-import com.gardenevery.tag.Key.FluidKey;
-import com.gardenevery.tag.Key.ItemKey;
 
 public final class TagHelper {
 
@@ -32,27 +29,21 @@ public final class TagHelper {
      * Get all tags associated with a fluid
      */
     public static Set<String> tags(@Nullable FluidStack stack) {
-        var key = FluidKey.toKey(stack);
-        return key != null ? TagManager.FLUID.getTag(key) : Collections.emptySet();
+        return stack != null ? TagManager.FLUID.getTag(stack.getFluid()) : Collections.emptySet();
     }
 
     /**
      * Get all tags associated with a block
      */
     public static Set<String> tags(@Nullable Block block) {
-        var key = BlockKey.toKey(block);
-        return key != null ? TagManager.BLOCK.getTag(key) : Collections.emptySet();
+        return block != null ? TagManager.BLOCK.getTag(block) : Collections.emptySet();
     }
 
     /**
      * Get all tags associated with a block state
      */
     public static Set<String> tags(@Nullable IBlockState blockState) {
-        BlockKey key = null;
-        if (blockState != null) {
-            key = BlockKey.toKey(blockState.getBlock());
-        }
-        return key != null ? TagManager.BLOCK.getTag(key) : Collections.emptySet();
+        return blockState != null ? TagManager.BLOCK.getTag(blockState.getBlock()) : Collections.emptySet();
     }
 
     /**
@@ -85,21 +76,14 @@ public final class TagHelper {
                 yield Collections.unmodifiableSet(result);
             }
             case FLUID -> {
-                Set<FluidKey> keys = TagManager.FLUID.getKey(tagName);
+                Set<Fluid> fluids = TagManager.FLUID.getKey(tagName);
                 Set<FluidStack> result = new ObjectOpenHashSet<>();
-                for (var key : keys) {
-                    result.add(key.toElement());
+                for (var fluid : fluids) {
+                    result.add(new FluidStack(fluid, 1000));
                 }
                 yield Collections.unmodifiableSet(result);
             }
-            case BLOCK -> {
-                Set<BlockKey> keys = TagManager.BLOCK.getKey(tagName);
-                Set<Block> result = new ObjectOpenHashSet<>();
-                for (var key : keys) {
-                    result.add(key.toElement());
-                }
-                yield Collections.unmodifiableSet(result);
-            }
+            case BLOCK -> TagManager.BLOCK.getKey(tagName);
         };
     }
 
@@ -127,10 +111,10 @@ public final class TagHelper {
             return Collections.emptySet();
         }
 
-        Set<FluidKey> keys = TagManager.FLUID.getKey(tagName);
+        Set<Fluid> fluids = TagManager.FLUID.getKey(tagName);
         Set<FluidStack> result = new ObjectOpenHashSet<>();
-        for (var key : keys) {
-            result.add(key.toElement());
+        for (var fluid : fluids) {
+            result.add(new FluidStack(fluid, 1000));
         }
         return Collections.unmodifiableSet(result);
     }
@@ -142,13 +126,7 @@ public final class TagHelper {
         if (tagInvalid(tagName)) {
             return Collections.emptySet();
         }
-
-        Set<BlockKey> keys = TagManager.BLOCK.getKey(tagName);
-        Set<Block> result = new ObjectOpenHashSet<>();
-        for (var key : keys) {
-            result.add(key.toElement());
-        }
-        return Collections.unmodifiableSet(result);
+        return TagManager.BLOCK.getKey(tagName);
     }
 
     /**
@@ -170,9 +148,7 @@ public final class TagHelper {
         if (tagInvalid(tagName)) {
             return false;
         }
-
-        var key = FluidKey.toKey(stack);
-        return key != null && TagManager.FLUID.hasTag(key, tagName);
+        return stack != null && TagManager.FLUID.hasTag(stack.getFluid(), tagName);
     }
 
     /**
@@ -182,9 +158,7 @@ public final class TagHelper {
         if (tagInvalid(tagName)) {
             return false;
         }
-
-        var key = BlockKey.toKey(block);
-        return key != null && TagManager.BLOCK.hasTag(key, tagName);
+        return block != null && TagManager.BLOCK.hasTag(block, tagName);
     }
 
     /**
@@ -194,9 +168,7 @@ public final class TagHelper {
         if (tagInvalid(tagName) || blockState == null) {
             return false;
         }
-
-        var key = BlockKey.toKey(blockState.getBlock());
-        return TagManager.BLOCK.hasTag(key, tagName);
+        return TagManager.BLOCK.hasTag(blockState.getBlock(), tagName);
     }
 
     /**
@@ -218,9 +190,7 @@ public final class TagHelper {
         if (tagInvalid(tagNames)) {
             return false;
         }
-
-        var key = FluidKey.toKey(stack);
-        return key != null && TagManager.FLUID.hasAnyTag(key, tagNames);
+        return stack != null && TagManager.FLUID.hasAnyTag(stack.getFluid(), tagNames);
     }
 
     /**
@@ -230,9 +200,7 @@ public final class TagHelper {
         if (tagInvalid(tagNames)) {
             return false;
         }
-
-        var key = BlockKey.toKey(block);
-        return key != null && TagManager.BLOCK.hasAnyTag(key, tagNames);
+        return block != null && TagManager.BLOCK.hasAnyTag(block, tagNames);
     }
 
     /**
@@ -242,9 +210,7 @@ public final class TagHelper {
         if (tagInvalid(tagNames) || blockState == null) {
             return false;
         }
-
-        var key = BlockKey.toKey(blockState.getBlock());
-        return TagManager.BLOCK.hasAnyTag(key, tagNames);
+        return TagManager.BLOCK.hasAnyTag(blockState.getBlock(), tagNames);
     }
 
     /**
@@ -284,16 +250,14 @@ public final class TagHelper {
      * Check if a fluid exists in the tag system (has at least one tag)
      */
     public static boolean contains(@Nullable FluidStack stack) {
-        var key = FluidKey.toKey(stack);
-        return key != null && TagManager.FLUID.containsKey(key);
+        return stack != null && TagManager.FLUID.containsKey(stack.getFluid());
     }
 
     /**
      * Check if a block exists in the tag system (has at least one tag)
      */
     public static boolean contains(@Nullable Block block) {
-        var key = BlockKey.toKey(block);
-        return key != null && TagManager.BLOCK.containsKey(key);
+        return block != null && TagManager.BLOCK.containsKey(block);
     }
 
     /**
@@ -303,9 +267,7 @@ public final class TagHelper {
         if (blockState == null) {
             return false;
         }
-
-        var key = BlockKey.toKey(blockState.getBlock());
-        return TagManager.BLOCK.containsKey(key);
+        return TagManager.BLOCK.containsKey(blockState.getBlock());
     }
 
     /**

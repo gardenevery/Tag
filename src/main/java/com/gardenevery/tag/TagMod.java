@@ -14,7 +14,6 @@ public class TagMod {
     public void postInit(FMLPostInitializationEvent event) {
         var tooltipEventHandler = new TagTooltip();
         MinecraftForge.EVENT_BUS.register(tooltipEventHandler);
-        TagBuilder.fluid("minecraft:water").add(FluidRegistry.WATER);
     }
 
     @Mod.EventHandler
