@@ -15,7 +15,12 @@ record ItemKey(@Nonnull Item item, int metadata) {
         if (stack == null || stack.isEmpty()) {
             return null;
         }
-        int metadata = stack.getHasSubtypes() ? stack.getMetadata() : 0;
+
+        int metadata = 0;
+        if (stack.getHasSubtypes()) {
+            metadata = stack.getMetadata();
+        }
+
         return new ItemKey(stack.getItem(), metadata);
     }
 

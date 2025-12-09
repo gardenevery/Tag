@@ -16,12 +16,22 @@ final class Tag<T> {
 
     public Set<String> getTag(@Nonnull T key) {
         var tags = keyToTags.get(key);
-        return tags != null ? Collections.unmodifiableSet(tags) : Collections.emptySet();
+
+        if (tags != null) {
+            return Collections.unmodifiableSet(tags);
+        } else {
+            return Collections.emptySet();
+        }
     }
 
     public Set<T> getKey(@Nonnull String tagName) {
         var keys = tagToKeys.get(tagName);
-        return keys != null ? Collections.unmodifiableSet(keys) : Collections.emptySet();
+
+        if (keys != null) {
+            return Collections.unmodifiableSet(keys);
+        } else {
+            return Collections.emptySet();
+        }
     }
 
     public Set<String> getAllTag() {
@@ -161,6 +171,7 @@ final class Tag<T> {
 
     public int getAssociations() {
         int count = 0;
+
         for (var entry : tagToKeys.entrySet()) {
             count += entry.getValue().size();
         }

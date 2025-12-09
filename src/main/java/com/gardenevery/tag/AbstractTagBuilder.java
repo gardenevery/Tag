@@ -353,7 +353,7 @@ abstract class AbstractTagBuilder {
                     return new InvalidFluidTag();
                 }
 
-                if (stack != null) {
+                if (stack != null && stack.getFluid() != null) {
                     TagManager.FLUID.createTag(tagName, stack.getFluid());
                 }
                 return new FluidTagAdder(tagName);
@@ -365,7 +365,7 @@ abstract class AbstractTagBuilder {
                     return new InvalidFluidTag();
                 }
 
-                if (stack != null) {
+                if (stack != null && stack.getFluid() != null) {
                     TagManager.FLUID.removeTagKey(tagName, stack.getFluid());
                 }
                 return new FluidTagRemover(tagName);
@@ -400,7 +400,7 @@ abstract class AbstractTagBuilder {
 
         @Override
         public FluidRemoveKey removeKey(@Nullable FluidStack stack) {
-            if (stack != null) {
+            if (stack != null && stack.getFluid() != null) {
                 TagManager.FLUID.removeTagKey(tagName, stack.getFluid());
             }
             return this;
@@ -421,7 +421,7 @@ abstract class AbstractTagBuilder {
 
         @Override
         public FluidAddable add(@Nullable FluidStack stack) {
-            if (stack != null) {
+            if (stack != null && stack.getFluid() != null) {
                 TagManager.FLUID.createTag(tagName, stack.getFluid());
             }
             return this;
@@ -696,7 +696,7 @@ abstract class AbstractTagBuilder {
                     return new InvalidMultiFluidTag();
                 }
 
-                if (stack != null) {
+                if (stack != null && stack.getFluid() != null) {
                     TagManager.FLUID.createTag(tagNames, stack.getFluid());
                 }
                 return new MultiFluidTagAdder(tagNames);
@@ -708,7 +708,7 @@ abstract class AbstractTagBuilder {
                     return new InvalidMultiFluidTag();
                 }
 
-                if (stack != null) {
+                if (stack != null && stack.getFluid() != null) {
                     TagManager.FLUID.removeTagKey(tagNames, stack.getFluid());
                 }
                 return new MultiFluidTagRemover(tagNames);
@@ -743,7 +743,7 @@ abstract class AbstractTagBuilder {
 
         @Override
         public MultiFluidRemoveKey removeKey(@Nullable FluidStack stack) {
-            if (stack != null) {
+            if (stack != null && stack.getFluid() != null) {
                 TagManager.FLUID.removeTagKey(tagNames, stack.getFluid());
             }
             return this;
@@ -764,7 +764,7 @@ abstract class AbstractTagBuilder {
 
         @Override
         public MultiFluidAddable add(@Nullable FluidStack stack) {
-            if (stack != null) {
+            if (stack != null && stack.getFluid() != null) {
                 TagManager.FLUID.createTag(tagNames, stack.getFluid());
             }
             return this;

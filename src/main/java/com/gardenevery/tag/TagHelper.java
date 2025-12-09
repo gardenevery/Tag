@@ -22,28 +22,44 @@ public final class TagHelper {
      */
     public static Set<String> tags(@Nullable ItemStack stack) {
         var key = ItemKey.toKey(stack);
-        return key != null ? TagManager.ITEM.getTag(key) : Collections.emptySet();
+
+        if (key != null) {
+            return TagManager.ITEM.getTag(key);
+        } else {
+            return Collections.emptySet();
+        }
     }
 
     /**
      * Get all tags associated with a fluid
      */
     public static Set<String> tags(@Nullable FluidStack stack) {
-        return stack != null ? TagManager.FLUID.getTag(stack.getFluid()) : Collections.emptySet();
+        if (stack == null || stack.getFluid() == null) {
+            return Collections.emptySet();
+        }
+        return TagManager.FLUID.getTag(stack.getFluid());
     }
 
     /**
      * Get all tags associated with a block
      */
     public static Set<String> tags(@Nullable Block block) {
-        return block != null ? TagManager.BLOCK.getTag(block) : Collections.emptySet();
+        if (block != null) {
+            return TagManager.BLOCK.getTag(block);
+        } else {
+            return Collections.emptySet();
+        }
     }
 
     /**
      * Get all tags associated with a block state
      */
     public static Set<String> tags(@Nullable IBlockState blockState) {
-        return blockState != null ? TagManager.BLOCK.getTag(blockState.getBlock()) : Collections.emptySet();
+        if (blockState != null) {
+            return TagManager.BLOCK.getTag(blockState.getBlock());
+        } else {
+            return Collections.emptySet();
+        }
     }
 
     /**
@@ -138,7 +154,11 @@ public final class TagHelper {
         }
 
         var key = ItemKey.toKey(stack);
-        return key != null && TagManager.ITEM.hasTag(key, tagName);
+        if (key != null) {
+            return TagManager.ITEM.hasTag(key, tagName);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -148,7 +168,12 @@ public final class TagHelper {
         if (tagInvalid(tagName)) {
             return false;
         }
-        return stack != null && TagManager.FLUID.hasTag(stack.getFluid(), tagName);
+
+        if (stack != null && stack.getFluid() != null) {
+            return TagManager.FLUID.hasTag(stack.getFluid(), tagName);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -158,7 +183,12 @@ public final class TagHelper {
         if (tagInvalid(tagName)) {
             return false;
         }
-        return block != null && TagManager.BLOCK.hasTag(block, tagName);
+
+        if (block != null) {
+            return TagManager.BLOCK.hasTag(block, tagName);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -180,7 +210,11 @@ public final class TagHelper {
         }
 
         var key = ItemKey.toKey(stack);
-        return key != null && TagManager.ITEM.hasAnyTag(key, tagNames);
+        if (key != null) {
+            return TagManager.ITEM.hasAnyTag(key, tagNames);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -190,7 +224,12 @@ public final class TagHelper {
         if (tagInvalid(tagNames)) {
             return false;
         }
-        return stack != null && TagManager.FLUID.hasAnyTag(stack.getFluid(), tagNames);
+
+        if (stack != null && stack.getFluid() != null) {
+            return TagManager.FLUID.hasAnyTag(stack.getFluid(), tagNames);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -200,7 +239,12 @@ public final class TagHelper {
         if (tagInvalid(tagNames)) {
             return false;
         }
-        return block != null && TagManager.BLOCK.hasAnyTag(block, tagNames);
+
+        if (block != null) {
+            return TagManager.BLOCK.hasAnyTag(block, tagNames);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -243,21 +287,34 @@ public final class TagHelper {
      */
     public static boolean contains(@Nullable ItemStack stack) {
         var key = ItemKey.toKey(stack);
-        return key != null && TagManager.ITEM.containsKey(key);
+
+        if (key != null) {
+            return TagManager.ITEM.containsKey(key);
+        } else {
+            return false;
+        }
     }
 
     /**
      * Check if a fluid exists in the tag system (has at least one tag)
      */
     public static boolean contains(@Nullable FluidStack stack) {
-        return stack != null && TagManager.FLUID.containsKey(stack.getFluid());
+        if (stack != null && stack.getFluid() != null) {
+            return TagManager.FLUID.containsKey(stack.getFluid());
+        } else {
+            return false;
+        }
     }
 
     /**
      * Check if a block exists in the tag system (has at least one tag)
      */
     public static boolean contains(@Nullable Block block) {
-        return block != null && TagManager.BLOCK.containsKey(block);
+        if (block != null) {
+            return TagManager.BLOCK.containsKey(block);
+        } else {
+            return false;
+        }
     }
 
     /**
