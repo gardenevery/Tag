@@ -87,31 +87,23 @@ public class TagCommand extends CommandBase {
 
         private void executeHandler(MinecraftServer server, ICommandSender sender, CommandHandler handler) {
             if (!handler.permission().hasPermission(sender, "tag")) {
-                sender.sendMessage(new TextComponentTranslation(TranslationKeys.NO_PERMISSION));
+                sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.nopermission"));
                 return;
             }
             handler.executor().accept(server, sender);
         }
 
         public List<String> getTabCompletions(String[] args) {
-            return args.length == 1 ? getListOfStringsMatchingLastWord(args, getSubCommandNames()) : Collections.emptyList();
+            if (args.length == 1) {
+                return getListOfStringsMatchingLastWord(args, getSubCommandNames());
+            }
+            return Collections.emptyList();
         }
     }
 
     private void registerCommands() {
         commandManager.registerCommand(new CommandHandler("info", LEVEL2,
-                (server, sender) -> showTagStatistics(sender), TranslationKeys.HELP_INFO));
-    }
-
-    private static final class TranslationKeys {
-        static final String HELP_TITLE = "com.gardenevery.tag.help.title";
-        static final String HELP_INFO = "com.gardenevery.tag.help.info";
-        static final String NO_PERMISSION = "com.gardenevery.tag.nopermission";
-        static final String STATISTICS_TITLE = "com.gardenevery.tag.statistics.title";
-        static final String STATISTICS_ITEMS = "com.gardenevery.tag.statistics.items";
-        static final String STATISTICS_FLUIDS = "com.gardenevery.tag.statistics.fluids";
-        static final String STATISTICS_BLOCKS = "com.gardenevery.tag.statistics.blocks";
-        static final String STATISTICS_TOTAL = "com.gardenevery.tag.statistics.total";
+                (server, sender) -> showTagStatistics(sender), "com.gardenevery.tag.help.info"));
     }
 
     @Nonnull
@@ -139,7 +131,7 @@ public class TagCommand extends CommandBase {
     }
 
     private void showHelp(@Nonnull ICommandSender sender) {
-        sender.sendMessage(new TextComponentTranslation(TranslationKeys.HELP_TITLE));
+        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.help.title"));
 
         commandManager.getSubCommandNames().stream()
                 .map(commandManager::getHandler)
@@ -150,10 +142,10 @@ public class TagCommand extends CommandBase {
     }
 
     private void showTagStatistics(@Nonnull ICommandSender sender) {
-        sender.sendMessage(new TextComponentTranslation(TranslationKeys.STATISTICS_TITLE));
-        displayStatisticsForType(sender, TranslationKeys.STATISTICS_ITEMS, TagType.ITEM);
-        displayStatisticsForType(sender, TranslationKeys.STATISTICS_FLUIDS, TagType.FLUID);
-        displayStatisticsForType(sender, TranslationKeys.STATISTICS_BLOCKS, TagType.BLOCK);
+        sender.sendMessage(new TextComponentTranslation("com.gardenevery.tag.statistics.title"));
+        displayStatisticsForType(sender, "com.gardenevery.tag.statistics.items", TagType.ITEM);
+        displayStatisticsForType(sender, "com.gardenevery.tag.statistics.fluids", TagType.FLUID);
+        displayStatisticsForType(sender, "com.gardenevery.tag.statistics.blocks", TagType.BLOCK);
         displayTotalStatistics(sender);
     }
 
@@ -164,7 +156,7 @@ public class TagCommand extends CommandBase {
 
     private void displayTotalStatistics(@Nonnull ICommandSender sender) {
         var totalStats = new TagStatistics(TagHelper.tagCount(), TagHelper.associations(), TagHelper.keyCount());
-        sendStatisticMessage(sender, TranslationKeys.STATISTICS_TOTAL, totalStats);
+        sendStatisticMessage(sender, "com.gardenevery.tag.statistics.total", totalStats);
     }
 
     private TagStatistics createTagStatistics(TagType type) {

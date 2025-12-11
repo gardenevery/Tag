@@ -17,20 +17,20 @@ final class Tag<T> {
     public Set<String> getTag(@Nonnull T key) {
         var tags = keyToTags.get(key);
 
-        if (tags != null) {
-            return Collections.unmodifiableSet(tags);
-        } else {
+        if (tags == null) {
             return Collections.emptySet();
+        } else {
+            return Collections.unmodifiableSet(tags);
         }
     }
 
     public Set<T> getKey(@Nonnull String tagName) {
         var keys = tagToKeys.get(tagName);
 
-        if (keys != null) {
-            return Collections.unmodifiableSet(keys);
-        } else {
+        if (keys == null) {
             return Collections.emptySet();
+        } else {
+            return Collections.unmodifiableSet(keys);
         }
     }
 
@@ -38,9 +38,17 @@ final class Tag<T> {
         return Collections.unmodifiableSet(tagToKeys.keySet());
     }
 
+    public Set<T> getAllKey() {
+        return Collections.unmodifiableSet(keyToTags.keySet());
+    }
+
     public boolean hasTag(@Nonnull T key, @Nonnull String tagName) {
         var tags = keyToTags.get(key);
-        return tags != null && tags.contains(tagName);
+
+        if (tags == null) {
+            return false;
+        }
+        return tags.contains(tagName);
     }
 
     public boolean hasAnyTag(@Nonnull T key, @Nonnull Set<String> tagNames) {
@@ -151,6 +159,11 @@ final class Tag<T> {
                 }
             }
         }
+    }
+
+    public void clean() {
+        tagToKeys.clear();
+        keyToTags.clear();
     }
 
     public boolean doesTagExist(@Nonnull String tagName) {
